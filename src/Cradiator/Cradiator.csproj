@@ -1,0 +1,248 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4CC715FF-1B56-46BA-AD68-ECB5E1B5CDDA}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <RootNamespace>Cradiator</RootNamespace>
+    <AssemblyName>Cradiator</AssemblyName>
+    <WarningLevel>4</WarningLevel>
+    <OutputType>winexe</OutputType>
+    <MinFrameworkVersionRequired>3.0</MinFrameworkVersionRequired>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ApplicationIcon>Images\Cradiator.ico</ApplicationIcon>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <StartupObject>Cradiator.App.CradiatorApp</StartupObject>
+    <TargetFrameworkSubset>Full</TargetFrameworkSubset>
+    <PublishUrl>Publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>false</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="Ninject, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Speech, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.Speech.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.IdentityModel" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Audio\AudioPlayer.cs" />
+    <Compile Include="App\Bootstrapper.cs" />
+    <Compile Include="Audio\CradiatorInstalledVoice.cs" />
+    <Compile Include="Audio\CradiatorSpeechSynthesizer.cs" />
+    <Compile Include="Audio\SpeechMaker.cs" />
+    <Compile Include="Audio\SpeechTextParser.cs" />
+    <Compile Include="Audio\VoiceSelector.cs" />
+    <Compile Include="Config\ChangeHandlers\IConfigChangeHandler.cs" />
+    <Compile Include="Config\ChangeHandlers\ConfigChangeHandlerFarm.cs" />
+    <Compile Include="Config\IConfigObserver.cs" />
+    <Compile Include="Config\IConfigSettings.cs" />
+    <Compile Include="Config\ChangeHandlers\SkinChangeHandler.cs" />
+    <Compile Include="App\CradiatorApp.cs" />
+    <Compile Include="Config\ConfigLocation.cs" />
+    <Compile Include="Config\UsernameMappingReader.cs" />
+    <Compile Include="Converters\InstalledVoiceConverter.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Model\BuildBuster.cs" />
+    <Compile Include="Extensions\XmlExtensions.cs" />
+    <Compile Include="Model\BuildBusterImageDecorator.cs" />
+    <Compile Include="Model\BuildBusterFullNameDecorator.cs" />
+    <Compile Include="Model\GuiltFactory.cs" />
+    <Compile Include="Model\GuiltStrategies.cs" />
+    <Compile Include="Model\BuildBusterAttributes.cs" />
+    <Compile Include="Services\Ninjector.cs" />
+    <Compile Include="Views\ICradiatorView.cs" />
+    <Compile Include="Model\FetchExceptionHandler.cs" />
+    <Compile Include="Model\PollTimer.cs" />
+    <Compile Include="Converters\ImagePathConverter.cs" />
+    <Compile Include="Converters\ImageSizeConverter.cs" />
+    <Compile Include="Converters\OneBreakerConverter.cs" />
+    <Compile Include="Model\CountdownTimer.cs" />
+    <Compile Include="Model\DateTimeNow.cs" />
+    <Compile Include="Model\Skin.cs" />
+    <Compile Include="Model\SkinLoader.cs" />
+    <Compile Include="Model\SkinResourceLoader.cs" />
+    <Compile Include="Config\ChangeHandlers\ShowCountdownChangeHandler.cs" />
+    <Compile Include="Config\ChangeHandlers\PollIntervalChangeHandler.cs" />
+    <Compile Include="Model\BuildDataTransformer.cs" />
+    <Compile Include="Extensions\ConfigExtensions.cs" />
+    <Compile Include="Services\CradiatorNinjaModule.cs" />
+    <Compile Include="Model\ScreenUpdater.cs" />
+    <Compile Include="Services\WebClientFactory.cs" />
+    <Compile Include="Views\CradiatorPresenter.cs" />
+    <Compile Include="Views\CradiatorWindow.xaml.cs">
+      <DependentUpon>CradiatorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Commands\RefreshCommand.cs" />
+    <Compile Include="Commands\ShowSettingsCommand.cs" />
+    <Compile Include="Config\ConfigSettings.cs" />
+    <Compile Include="Config\ConfigFileWatcher.cs" />
+    <Compile Include="Converters\BuildNameToMessageConverter.cs" />
+    <Compile Include="Converters\StateToColorConverter.cs" />
+    <Compile Include="Commands\CommandContainer.cs" />
+    <Compile Include="Commands\FullscreenCommand.cs" />
+    <Compile Include="Converters\StateToGradientConverter.cs" />
+    <Compile Include="Converters\SecondsToTimeConverter.cs" />
+    <Compile Include="Model\ProjectActivity.cs" />
+    <Compile Include="Audio\DiscJockey.cs" />
+    <Compile Include="Commands\InputBindingAdder.cs" />
+    <Compile Include="Views\MessageWindow.xaml.cs">
+      <DependentUpon>MessageWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\CruiseAddress.cs" />
+    <Compile Include="Services\HttpWebClient.cs" />
+    <Compile Include="Model\FetchException.cs" />
+    <Compile Include="Model\BuildDataFetcher.cs" />
+    <Compile Include="Services\IWebClient.cs" />
+    <Compile Include="Model\ProjectStatus.cs" />
+    <Compile Include="Services\SandboxWebClient.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\SettingsWindow.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <None Include="app.config" />
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Skins\StackPhotoSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Page Include="Views\CradiatorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MessageWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Resource Include="Skins\StackSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Skins\GridSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\GridIcon.png" />
+    <Resource Include="Images\StackedIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DummyProjectStatus.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Cradiator.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\StackedPhotoIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

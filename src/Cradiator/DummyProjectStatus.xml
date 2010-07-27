@@ -1,0 +1,42 @@
+<Projects CCType="CCNet">
+<Project name="Project 1" category="" 
+		 activity="Sleeping" 
+		 lastBuildStatus="Failure" 
+		 lastBuildLabel="1.4.1.3844" 
+		 lastBuildTime="2008-12-12T12:08:24.796875-06:00" nextBuildTime="2008-12-12T21:09:30.234375-06:00" 
+		 webUrl="http://ccnetlive.thoughtworks.com/ccnet/" 
+		 CurrentMessage="Breakers: bsimpson, jsmith" 
+		 
+		 BuildStage="">
+		 <messages>
+		 	<message text="bobble, harry" kind="Breakers"/>
+		 </messages>
+</Project>
+	
+<Project name="Project 2" category="" 
+		 activity="Sleeping" 
+		 lastBuildStatus="Success" 
+		 lastBuildLabel="1.0.0.39" 
+		 lastBuildTime="2008-12-10T11:44:21.5-06:00" nextBuildTime="2008-12-12T21:05:24.09375-06:00" 
+		 webUrl="http://ccnetlive.thoughtworks.com/ccnet/" 
+		 CurrentMessage="" 
+		 BuildStage=""/>
+	
+<Project name="Project 3" category="" 
+		 activity="Building" 
+		 lastBuildStatus="Success" 
+		 lastBuildLabel="0.0.0.7" 
+		 lastBuildTime="2008-12-08T09:28:47.765625-06:00" nextBuildTime="2008-12-12T21:09:26.234375-06:00" 
+		 webUrl="http://ccnetlive.thoughtworks.com/ccnet/" 
+		 CurrentMessage="" 
+		 BuildStage=""/>
+	
+<Project name="Deploy (Prod)" category="" 
+		 activity="Sleeping" 
+		 lastBuildStatus="Success" 
+		 lastBuildLabel="469" 
+		 lastBuildTime="2008-12-10T11:47:09.9375-06:00" nextBuildTime="2008-12-12T21:09:27.234375-06:00" 
+		 webUrl="http://CCNETLIVE/ccnet" 
+		 CurrentMessage="" 
+		 BuildStage=""/>
+</Projects>
