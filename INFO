@@ -3,6 +3,7 @@
 ###############################################################################
 
 The home for Cradiator is http://codeplex.com/Cradiator
+The source home for Cradiator is http://github.com/PandaWood/Cradiator
 
 Cradiator uses the REST-style service exposed by cruise control. 
 To test that your installation of CruiseControl supports this, try and browse to 

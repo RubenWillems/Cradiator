@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cradiator", "src\Cradiator\Cradiator.csproj", "{4CC715FF-1B56-46BA-AD68-ECB5E1B5CDDA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cradiator.Tests", "src\Cradiator.Tests\Cradiator.Tests.csproj", "{06C5E10D-303D-4C61-806A-C8F190B68027}"
