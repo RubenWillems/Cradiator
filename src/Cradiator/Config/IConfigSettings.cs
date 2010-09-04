@@ -26,6 +26,5 @@ namespace Cradiator.Config
 		void Load();
 		void NotifyObservers();
 		void Save();
-
 	}
 }

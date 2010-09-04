@@ -10,7 +10,7 @@
     AllowsTransparency="False"    
     ShowInTaskbar="False" 
     Topmost="False"
-    Icon="../Images/Cradiator.ico" 
+    Icon="../images/Cradiator.ico" 
     ResizeMode="CanResize" Width="500">
 
     <Window.Resources>

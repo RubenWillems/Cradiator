@@ -37,7 +37,7 @@ namespace Cradiator.App
 		    }
 		    catch (Exception exception)
 		    {
-		        _log.Error(exception.Message, exception);
+                _log.Error(exception.Message, exception);
 
 		        var messageWindow = new MessageWindow(null);
 				messageWindow.ShowMessage(5, "Application Exception - see log for details\nShutting down...");

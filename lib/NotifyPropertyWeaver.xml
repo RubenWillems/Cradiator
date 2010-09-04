@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NotifyPropertyWeaver</name>
+    </assembly>
+    <members>
+        <member name="T:NotifyPropertyWeaver.NotifyBase">
+            <summary>
+            Optionaly can be used as a base class for classes wanting to implement <see cref="T:System.ComponentModel.INotifyPropertyChanged"/>.
+            </summary>
+        </member>
+        <member name="M:NotifyPropertyWeaver.NotifyBase.OnPropertyChanged(System.String)">
+            <summary>
+            Performs <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> functionality for specified property.
+            </summary>
+            <param name="propertyName">The name of the property to fire notification for.</param>
+        </member>
+        <member name="M:NotifyPropertyWeaver.NotifyBase.OnPropertyChanged``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Performs <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> functionality for specified property.
+            </summary>
+            <param name="expression">The <see cref="T:System.Linq.Expressions.Expression`1"/> representing the property to fire notification for.</param>
+        </member>
+        <member name="M:NotifyPropertyWeaver.NotifyBase.GetMemberName``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Get the name of a member from an <see cref="T:System.Linq.Expressions.Expression`1"/>.
+            </summary>
+            <typeparam name="TMember">The <see cref="T:System.Type"/> of the member.</typeparam>
+            <param name="expression">The lambda <see cref="T:System.Linq.Expressions.Expression`1"/> representing the member.</param>
+            <returns>The name of the member.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="expression"/> is a null reference.</exception>
+        </member>
+        <member name="E:NotifyPropertyWeaver.NotifyBase.PropertyChanged">
+            <inheritdoc />
+        </member>
+        <member name="T:NotifyPropertyWeaver.NotifyForAllAttribute">
+            <summary>
+            Enables property notification for all properties on the <see cref="T:System.Type"/> or <see cref="T:System.Reflection.Assembly"/>.
+            </summary>
+        </member>
+        <member name="T:NotifyPropertyWeaver.NotifyIgnoreAttribute">
+            <summary>
+            Exclude a <see cref="T:System.Type"/> or property from notification.
+            </summary>
+            <remarks>
+            Used when <see cref="T:NotifyPropertyWeaver.NotifyForAllAttribute"/> is used.
+            </remarks>
+        </member>
+        <member name="T:NotifyPropertyWeaver.NotifyPropertyAttribute">
+            <summary>
+            Enables property notification.
+            </summary>
+        </member>
+        <member name="P:NotifyPropertyWeaver.NotifyPropertyAttribute.PerformEqualityCheck">
+            <summary>
+            <b>true</b> to perform an equality check before firing property notification; otherwise <b>false</b>.
+            </summary>
+        </member>
+        <member name="P:NotifyPropertyWeaver.NotifyPropertyAttribute.AlsoNotifyFor">
+            <summary>
+            The names of other properties to perform notification for.
+            </summary>
+        </member>
+    </members>
+</doc>
