@@ -6,8 +6,7 @@ namespace Cradiator.Config.ChangeHandlers
 {
 	/// <summary>
 	/// The Farm takes care of ChangeHandlers - who do not subscribe to config change events themselves
-	/// They are animals, who require herding... infact, I'm wondering
-	/// whether to change this class to ConfigChangeSheepDog
+	/// They are animals, who require herding... could also be called ConfigChangeSheepDog
 	/// </summary>
 	public class ConfigChangeHandlerFarm
 	{
@@ -23,7 +22,7 @@ namespace Cradiator.Config.ChangeHandlers
 
 		public void UpdateAll(ConfigSettings newSettings)
 		{
-			_log.InfoFormat("New settings: {0}", newSettings.ToString());
+			_log.InfoFormat("New settings: {0}", newSettings);
 
 			foreach (var handler in _changeHandlers)
 			{

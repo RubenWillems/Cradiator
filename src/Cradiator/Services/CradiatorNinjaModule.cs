@@ -5,6 +5,7 @@ using Cradiator.Config.ChangeHandlers;
 using Cradiator.Model;
 using Cradiator.Views;
 using Cradiator.Extensions;
+using Ninject;
 using Ninject.Modules;
 
 namespace Cradiator.Services

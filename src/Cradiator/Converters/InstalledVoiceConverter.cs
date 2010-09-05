@@ -15,7 +15,6 @@ namespace Cradiator.Converters
 		/// <summary>
 		/// xaml insists on this - DO NOT USE
 		/// </summary>
-		[Obsolete]
 		public InstalledVoiceConverter() {}
 
 		public InstalledVoiceConverter(VoiceSelector voiceSelector)
