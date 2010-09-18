@@ -4,6 +4,7 @@ using Cradiator.Config;
 using Cradiator.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Audio
 {
@@ -20,7 +21,7 @@ namespace Cradiator.Tests.Audio
 		[SetUp]
 		public void SetUp()
 		{
-			MockRepository.GenerateStub<IBuildBuster>();
+			Create.Stub<IBuildBuster>();
 			_speechTextParser = MockRepository.GenerateMock<ISpeechTextParser>();
 
 			_projectStatusList = new List<ProjectStatus>
@@ -44,7 +45,7 @@ namespace Cradiator.Tests.Audio
 			_speechTextParser.Expect(s => s.Parse(null, null)).IgnoreArguments().Return(ProjectFixedText);
 
 			var speech = _speaker.BuildIsFixed(_projectStatusList);
-			Assert.That(speech.ToXml(), Text.Contains(ProjectFixedText));
+			Assert.That(speech.ToXml(), Is.StringContaining(ProjectFixedText));
 		}
 
 		[Test]
@@ -53,7 +54,7 @@ namespace Cradiator.Tests.Audio
 			_speechTextParser.Expect(s => s.Parse(null, null)).IgnoreArguments().Return(ProjectBrokenText);
 
 			var speech = _speaker.BuildIsBroken(_projectStatusList);
-			Assert.That(speech.ToXml(), Text.Contains(ProjectBrokenText));
+            Assert.That(speech.ToXml(), Is.StringContaining(ProjectBrokenText));
 		}
 
 		[Test]

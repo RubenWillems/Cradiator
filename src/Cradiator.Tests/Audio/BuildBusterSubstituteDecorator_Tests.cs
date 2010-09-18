@@ -3,6 +3,7 @@ using Cradiator.Config;
 using Cradiator.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Audio
 {
@@ -15,7 +16,7 @@ namespace Cradiator.Tests.Audio
 		[SetUp]
 		public void SetUp()
 		{
-			_buildBuster = MockRepository.GenerateStub<IBuildBuster>();
+			_buildBuster = Create.Stub<IBuildBuster>();
 
 			_buildBusterDecorator =
 				new BuildBusterFullNameDecorator(_buildBuster, new ConfigSettings
@@ -33,20 +34,18 @@ namespace Cradiator.Tests.Audio
 		public void CanSubstitute_Username_1stEntry()
 		{
 			_buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return("jbloggs");
-
 			var breaker = _buildBusterDecorator.FindBreaker("ignored");
 
-			Assert.That(breaker, Is.EqualTo("Joe Bloggs"));
+			breaker.ShouldBe("Joe Bloggs");
 		}
 
 		[Test]
 		public void CanSubstitute_Username_2ndEntry()
 		{
 			_buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return("am");
-
 			var breaker = _buildBusterDecorator.FindBreaker("ignored");
 
-			Assert.That(breaker, Is.EqualTo("Ace McAwesome"));
+			breaker.ShouldBe("Ace McAwesome");
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using Cradiator.Model;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Cradiator.Tests.Model
 {
@@ -11,7 +12,8 @@ namespace Cradiator.Tests.Model
 		{
 			var cruiseAddress = new CruiseAddress("http://mycruise/ccnet");
 
-			Assert.That(cruiseAddress.Uri.ToString(), Text.EndsWith("/XmlStatusReport.aspx"));
+            cruiseAddress.Uri.ToString().ShouldContain("/XmlStatusReport.aspx");
+			cruiseAddress.Uri.ToString().ShouldContain("/XmlStatusReport.aspx");
 		}
 
 		[Test]
@@ -19,7 +21,7 @@ namespace Cradiator.Tests.Model
 		{
 			var cruiseAddress = new CruiseAddress("http://mycruise/ccnet/XmlStatusReport.aspx");
 
-			Assert.That(cruiseAddress.Uri.ToString(), Text.EndsWith("mycruise/ccnet/XmlStatusReport.aspx"));
+            cruiseAddress.Uri.ToString().ShouldContain("mycruise/ccnet/XmlStatusReport.aspx");
 		}
 
 		[Test]
@@ -27,36 +29,36 @@ namespace Cradiator.Tests.Model
 		{
 			var cruiseAddress = new CruiseAddress("http://www.spice-3d.org/cruise/xml");
 
-			Assert.That(cruiseAddress.Uri.ToString(), Text.EndsWith("www.spice-3d.org/cruise/xml"));
+			cruiseAddress.Uri.ToString().ShouldContain("www.spice-3d.org/cruise/xml");
 		}
 
 		[Test]
 		public void doesnot_prepend_http_if_already_exists()
 		{
 			var cruiseAddress = new CruiseAddress("http://mycruise/ccnet");
-			Assert.That(cruiseAddress.Uri.ToString(), Text.StartsWith("http://mycruise/ccnet"));
+			cruiseAddress.Uri.ToString().ShouldContain("http://mycruise/ccnet");
 		}
 
 		[Test]
 		public void isvalid_false_if_uri_emptystring()
 		{
 			var cruiseAddress = new CruiseAddress("");
-			Assert.That(cruiseAddress.IsValid, Is.False);
+			cruiseAddress.IsValid.ShouldBe(false);
 		}
 
 		[Test]
 		public void isvalid_true_if_url_valid()
 		{
 			var cruiseAddress = new CruiseAddress("http://valid");
-			Assert.That(cruiseAddress.IsValid, Is.True);
+			cruiseAddress.IsValid.ShouldBe(true);
 		}
 
 		[Test]
 		public void isvalid_if_debug()
 		{
 			var cruiseAddress = new CruiseAddress("debug");
-			Assert.That(cruiseAddress.IsValid, Is.True);
-			Assert.That(cruiseAddress.IsDebug, Is.True);
+			cruiseAddress.IsValid.ShouldBe(true);
+			cruiseAddress.IsDebug.ShouldBe(true);
 		}
 	}
 }

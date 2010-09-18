@@ -4,6 +4,7 @@ using Cradiator.Audio;
 using Cradiator.Config;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Audio
 {
@@ -16,8 +17,8 @@ namespace Cradiator.Tests.Audio
 		[SetUp]
 		public void SetUp()
 		{
-			_speechSynth = MockRepository.GenerateMock<ISpeechSynthesizer>();
-			_appLocation = MockRepository.GenerateMock<IAppLocation>();
+			_speechSynth = Create.Mock<ISpeechSynthesizer>();
+            _appLocation = Create.Mock<IAppLocation>();
 			_appLocation.Stub(a => a.DirectoryName).Return(@"c:\bla");
 		}
 
@@ -44,7 +45,7 @@ namespace Cradiator.Tests.Audio
 			                                  new ConfigSettings { PlaySpeech = true, SpeechVoiceName = "Bob" },
 											  new VoiceSelector(_speechSynth), _appLocation);
 			audioPlayer.Say(new PromptBuilder());
-			_speechSynth.AssertWasCalled(s => s.SpeakAsync(Arg<PromptBuilder>.Is.Anything));
+			_speechSynth.ShouldHaveBeenCalled(s => s.SpeakAsync(Arg<PromptBuilder>.Is.Anything));
 		}
 
 		[Test]

@@ -4,6 +4,7 @@ using Cradiator.Model;
 using Cradiator.Services;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Model
 {
@@ -16,8 +17,8 @@ namespace Cradiator.Tests.Model
 		[SetUp]
 		public void SetUp()
 		{
-			_webClientFactory = MockRepository.GenerateStub<IWebClientFactory>();
-			_webClient = MockRepository.GenerateMock<IWebClient>();
+			_webClientFactory = Create.Stub<IWebClientFactory>();
+			_webClient = Create.Mock<IWebClient>();
 			_webClientFactory.Stub(w => w.GetWebClient(Arg<string>.Is.Anything)).Return(_webClient);
 		}
 

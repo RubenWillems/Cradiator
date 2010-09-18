@@ -2,6 +2,7 @@ using Cradiator.Config;
 using Cradiator.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Model
 {
@@ -34,7 +35,7 @@ namespace Cradiator.Tests.Model
 			// we want to test the decoration of the string 'bob' - nothing else
 			var breaker = _buildBusterDecorator.FindBreaker("don't care - the internal BuildBuster is stubbed to return 'bob'");
 
-			Assert.That(breaker, Is.EqualTo(DirectoryName + @"\images\bob.jpg"));
+			breaker.ShouldBe(DirectoryName + @"\images\bob.jpg");
 		}
 
         [Test]
@@ -44,7 +45,7 @@ namespace Cradiator.Tests.Model
 
             var breaker = _buildBusterDecorator.FindBreaker("dontcare");
 
-            Assert.That(breaker, Is.EqualTo(DirectoryName + @"\images\bsmith.jpg"));
+            breaker.ShouldBe(DirectoryName + @"\images\bsmith.jpg");
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace Cradiator.Tests.Model
 
             var breaker = _buildBusterDecorator.FindBreaker("dontcare");
 
-            Assert.That(breaker, Is.EqualTo(DirectoryName + @"\images\bsmith.jpg"));
+            breaker.ShouldBe(DirectoryName + @"\images\bsmith.jpg");
         }
 	}
 }

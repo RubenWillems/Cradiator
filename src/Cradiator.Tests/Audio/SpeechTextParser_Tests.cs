@@ -2,6 +2,7 @@ using Cradiator.Audio;
 using Cradiator.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Audio
 {
@@ -15,7 +16,7 @@ namespace Cradiator.Tests.Audio
 		[SetUp]
 		public void SetUp()
 		{
-			_buildBuster = MockRepository.GenerateStub<IBuildBuster>();
+			_buildBuster = Create.Stub<IBuildBuster>();
 			_speechTextParser = new SpeechTextParser(_buildBuster);
 
 			_failedProject = new ProjectStatus("ProjectZombie")
@@ -32,7 +33,7 @@ namespace Cradiator.Tests.Audio
 			var parsedSentence = _speechTextParser.Parse(
 				"$ProjectName$, is broken.$Breaker$, you're fired!", _failedProject);
 
-			Assert.That(parsedSentence, Is.EqualTo("ProjectZombie, is broken.PandaWood, you're fired!"));
+			parsedSentence.ShouldBe("ProjectZombie, is broken.PandaWood, you're fired!");
 		}
 
 		[Test]
@@ -42,7 +43,7 @@ namespace Cradiator.Tests.Audio
 
 			var parsedSentence = _speechTextParser.Parse("is broken", _failedProject);
 
-			Assert.That(parsedSentence, Is.EqualTo("ProjectZombie, is broken"));
+			parsedSentence.ShouldBe("ProjectZombie, is broken");
 		}
 	}
 }

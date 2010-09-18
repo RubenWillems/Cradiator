@@ -2,6 +2,7 @@ using Cradiator.Config;
 using Cradiator.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Model
 {
@@ -16,7 +17,7 @@ namespace Cradiator.Tests.Model
 		[SetUp]
 		public void SetUp()
 		{
-			_configSettings = MockRepository.GenerateStub<IConfigSettings>();
+			_configSettings = Create.Stub<IConfigSettings>();
 			_guiltFactory = new GuiltFactory();
 		}
 
@@ -31,7 +32,7 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.Last);
 
-			Assert.That(_buildBuster.FindBreaker("Breakers: bob"), Is.EqualTo("bob"));
+			_buildBuster.FindBreaker("Breakers: bob").ShouldBe("bob");
 		}
 
 		[Test]
@@ -39,7 +40,7 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.Last);
 
-			Assert.That(_buildBuster.FindBreaker("Breakers: bob, mary"), Is.EqualTo("mary"));
+            _buildBuster.FindBreaker("Breakers: bob, mary").ShouldBe("mary");
 		}
 
 		[Test]
@@ -47,7 +48,7 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.Last);
 
-			Assert.That(_buildBuster.FindBreaker("Breakers: bob, mary, joseph"), Is.EqualTo("joseph"));
+			_buildBuster.FindBreaker("Breakers: bob, mary, joseph").ShouldBe("joseph");
 		}
 
 		[Test]
@@ -55,7 +56,7 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.Last);
 
-			Assert.That(_buildBuster.FindBreaker("Bombers: bob, mary"), Is.EqualTo("mary"));
+			_buildBuster.FindBreaker("Bombers: bob, mary").ShouldBe("mary");
 		}
 
 		[Test]
@@ -63,7 +64,7 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.Last);
 
-			Assert.That(_buildBuster.FindBreaker("john is fixing the build"), Is.EqualTo("john"));
+			_buildBuster.FindBreaker("john is fixing the build").ShouldBe("john");
 		}
 
 		[Test]
@@ -71,19 +72,19 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.First);
 
-			Assert.That(_buildBuster.FindBreaker("john is fixing the build"), Is.EqualTo("john"));
+			_buildBuster.FindBreaker("john is fixing the build").ShouldBe("john");
 		}
 
 		[Test]
 		public void CanBust_Nobody_If_EmptyString()
 		{
-			Assert.That(_buildBuster.FindBreaker(""), Is.EqualTo(string.Empty));
+			_buildBuster.FindBreaker("").ShouldBe(string.Empty);
 		}
 
 		[Test]
 		public void CanBust_Nobody_If_Null()
 		{
-			Assert.That(_buildBuster.FindBreaker(null), Is.EqualTo(string.Empty));
+			_buildBuster.FindBreaker(null).ShouldBe(string.Empty);
 		}
 
 		[Test]
@@ -91,7 +92,7 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.First);
 
-			Assert.That(_buildBuster.FindBreaker("Breakers: bob"), Is.EqualTo("bob"));
+			_buildBuster.FindBreaker("Breakers: bob").ShouldBe("bob");
 		}
 
 		[Test]
@@ -99,7 +100,7 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.First);
 
-			Assert.That(_buildBuster.FindBreaker("Breakers: bob, mary"), Is.EqualTo("bob"));
+			_buildBuster.FindBreaker("Breakers: bob, mary").ShouldBe("bob");
 		}
 
 		[Test]
@@ -107,7 +108,7 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.First);
 
-			Assert.That(_buildBuster.FindBreaker("Breakers: zombie, freak, smurf"), Is.EqualTo("zombie"));
+			_buildBuster.FindBreaker("Breakers: zombie, freak, smurf").ShouldBe("zombie");
 		}
 
         [Test]
@@ -115,7 +116,7 @@ namespace Cradiator.Tests.Model
         {
             SetUpBreaker(GuiltStrategyType.First);
 
-            Assert.That(_buildBuster.FindBreaker("zombie, freak, smurf"), Is.EqualTo("zombie"));
+            _buildBuster.FindBreaker("zombie, freak, smurf").ShouldBe("zombie");
         }
 
         [Test]
@@ -123,7 +124,7 @@ namespace Cradiator.Tests.Model
         {
             SetUpBreaker(GuiltStrategyType.Last);
 
-            Assert.That(_buildBuster.FindBreaker("zombie, freak, smurf"), Is.EqualTo("smurf"));
+            _buildBuster.FindBreaker("zombie, freak, smurf").ShouldBe("smurf");
         }
 	}
 }
