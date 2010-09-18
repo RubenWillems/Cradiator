@@ -18,7 +18,7 @@ namespace Cradiator.Tests.Audio
 		public void SetUp()
 		{
 			_speechSynth = Create.Mock<ISpeechSynthesizer>();
-            _appLocation = Create.Mock<IAppLocation>();
+            _appLocation = Create.Stub<IAppLocation>();
 			_appLocation.Stub(a => a.DirectoryName).Return(@"c:\bla");
 		}
 

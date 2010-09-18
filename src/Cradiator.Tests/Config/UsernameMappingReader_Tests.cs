@@ -1,7 +1,7 @@
 using System.Linq;
 using Cradiator.Config;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Config
 {
@@ -14,7 +14,7 @@ namespace Cradiator.Tests.Config
 		[SetUp]
 		public void SetUp()
 		{
-			_configLocation = MockRepository.GenerateStub<IConfigLocation>();
+			_configLocation = Create.Stub<IConfigLocation>();
 
 			_reader = new UserNameMappingReader(_configLocation)
 			{
@@ -28,8 +28,8 @@ namespace Cradiator.Tests.Config
 			var usernameMappings = _reader.Read();
 			var jsmiths = usernameMappings.Where(u => u.Key == "jsmith");
 
-			Assert.That(jsmiths.Any());
-			Assert.That(jsmiths.First().Value, Is.EqualTo("John Smith"));
+			jsmiths.Any().ShouldBe(true);
+			jsmiths.First().Value.ShouldBe("John Smith");
 		}
 	}
 }

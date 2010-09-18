@@ -3,6 +3,7 @@ using Cradiator.Commands;
 using Cradiator.Views;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Commands
 {
@@ -33,10 +34,10 @@ namespace Cradiator.Tests.Commands
 			var command = new FullscreenCommand(_view);
 			command.Execute(null);
 
-			Assert.That(command.CanExecute(null), Is.True);
-			Assert.That(window.WindowStyle == WindowStyle.None);
-			Assert.That(window.Topmost, Is.True);
-			Assert.That(window.WindowState == WindowState.Maximized);
+		    command.CanExecute(null).ShouldBe(true);
+			window.WindowStyle.ShouldBe(WindowStyle.None);
+			window.Topmost.ShouldBe(true);
+			window.WindowState.ShouldBe(WindowState.Maximized);
 		}
 
 		[Test]
@@ -55,9 +56,9 @@ namespace Cradiator.Tests.Commands
 			var command = new FullscreenCommand(_view);
 			command.Execute(null);
 
-			Assert.That(window.WindowStyle, Is.EqualTo(WindowStyle.SingleBorderWindow));
-			Assert.That(window.Topmost, Is.EqualTo(false));
-			Assert.That(window.WindowState, Is.EqualTo(WindowState.Normal));
+			window.WindowStyle.ShouldBe(WindowStyle.SingleBorderWindow);
+			window.Topmost.ShouldBe(false);
+			window.WindowState.ShouldBe(WindowState.Normal);
 		}
 
 		[Test]
@@ -66,7 +67,7 @@ namespace Cradiator.Tests.Commands
 			var command = new RefreshCommand(_view);
 			command.Execute(null);
 
-			Assert.That(command.CanExecute(null), Is.True);
+			command.CanExecute(null).ShouldBe(true);
 			_view.AssertWasCalled(v=>v.UpdateScreen());
 		}
 
@@ -78,7 +79,7 @@ namespace Cradiator.Tests.Commands
 			var command = new ShowSettingsCommand(_view, settingsWindow);
 			command.Execute(null);
 
-			Assert.That(command.CanExecute(null), Is.True);
+			command.CanExecute(null).ShouldBe(true);
 			settingsWindow.AssertWasCalled(s => s.ShowDialog());
 		}
 	}

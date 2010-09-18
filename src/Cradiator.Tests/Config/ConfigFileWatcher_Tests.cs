@@ -1,5 +1,6 @@
 using Cradiator.Config;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Cradiator.Tests.Config
 {
@@ -15,7 +16,7 @@ namespace Cradiator.Tests.Config
 			const string file = @"c:\windows\win.ini";
 			var configFileWatcher = new ConfigFileWatcher(settings, file);
 			configFileWatcher.Start();
-			Assert.That(configFileWatcher.FileSystemWatcher.Filter, Is.EqualTo("win.ini"));
+			configFileWatcher.FileSystemWatcher.Filter.ShouldBe("win.ini");
 		}
 	}
 }

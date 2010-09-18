@@ -4,6 +4,7 @@ using Cradiator.Converters;
 using Cradiator.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Converters
 {
@@ -23,22 +24,23 @@ namespace Cradiator.Tests.Converters
 		{
 			// NB we only test what is the responsibility of the OneBreakerConverter 
 			// which is just formatting the results of IBuildBuster (which is already tested, DRY)
+
 			_buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return("bob");
-			Assert.That(DoConvert("irrelevant"), Is.EqualTo("(bob)"));
+			DoConvert("irrelevant").ShouldBe("(bob)");
 		}
 
 		[Test]
 		public void CanConvert_If_CurrentMessage_IsEmptyString()
 		{
 			_buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return("");
-			Assert.That(DoConvert("irrelevant"), Is.EqualTo(""));
+			DoConvert("irrelevant").ShouldBe("");
 		}
 
 		[Test]
 		public void CanConvert_If_CurrentMessage_IsNull()
 		{
 			_buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return(null);
-			Assert.That(DoConvert("irrelevant"), Is.EqualTo(""));
+			DoConvert("irrelevant").ShouldBe("");
 		}
 
 		[Test]

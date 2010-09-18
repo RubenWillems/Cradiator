@@ -5,6 +5,7 @@ using Cradiator.Model;
 using Cradiator.Views;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Config
 {
@@ -18,8 +19,8 @@ namespace Cradiator.Tests.Config
 		[SetUp]
 		public void SetUp()
 		{
-			_view = MockRepository.GenerateMock<ICradiatorView>();
-			_timer = MockRepository.GenerateMock<ICountdownTimer>();
+            _view = Create.Mock<ICradiatorView>();
+            _timer = Create.Mock<ICountdownTimer>();
 			_changeHandler = new ShowCountdownChangeHandler(_timer, _view);
 		}
 
@@ -40,8 +41,8 @@ namespace Cradiator.Tests.Config
 
 			_changeHandler.ConfigUpdated(new ConfigSettings { ShowCountdown = true });
 
-			_timer.AssertWasCalled(t => t.SwitchOn());
-			_view.AssertWasCalled(v => v.Invoke(Arg<Action>.Is.Anything));
+			_timer.ShouldHaveBeenCalled(t => t.SwitchOn());
+            _view.ShouldHaveBeenCalled(v => v.Invoke(Arg<Action>.Is.Anything));
 		}
 
 		[Test]
@@ -51,8 +52,8 @@ namespace Cradiator.Tests.Config
 
 			_changeHandler.ConfigUpdated(new ConfigSettings { ShowCountdown = false });
 
-			_timer.AssertWasCalled(t => t.SwitchOff());
-			_view.AssertWasCalled(v => v.Invoke(Arg<Action>.Is.Anything));
+            _timer.ShouldHaveBeenCalled(t => t.SwitchOff());
+            _view.ShouldHaveBeenCalled(v => v.Invoke(Arg<Action>.Is.Anything));
 		}
 	}
 }

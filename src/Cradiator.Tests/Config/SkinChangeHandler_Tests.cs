@@ -1,9 +1,9 @@
 using Cradiator.Config;
 using Cradiator.Config.ChangeHandlers;
 using Cradiator.Model;
-using Cradiator.Views;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Config
 {
@@ -16,9 +16,7 @@ namespace Cradiator.Tests.Config
 		[SetUp]
 		public void SetUp()
 		{
-			MockRepository.GenerateMock<ICradiatorView>();
-			MockRepository.GenerateMock<IConfigSettings>();
-			_skinLoader = MockRepository.GenerateMock<ISkinLoader>();
+            _skinLoader = Create.Mock<ISkinLoader>();
 			_skinChangeHandler = new SkinChangeHandler(_skinLoader);
 		}
 
@@ -27,7 +25,7 @@ namespace Cradiator.Tests.Config
 		{
 			_skinChangeHandler.ConfigUpdated(new ConfigSettings { SkinName = "newSkin"});
 
-			_skinLoader.AssertWasCalled(l => l.Load(Arg<Skin>.Matches(s => s.Name == "newSkin")));
+			_skinLoader.ShouldHaveBeenCalled(l => l.Load(Arg<Skin>.Matches(s => s.Name == "newSkin")));
 		}
 
 		[Test]
@@ -35,7 +33,9 @@ namespace Cradiator.Tests.Config
 		{
 			_skinChangeHandler.ConfigUpdated(new ConfigSettings { SkinName = "newSkin" });
 			_skinChangeHandler.ConfigUpdated(new ConfigSettings { SkinName = "newSkin" });
-			_skinLoader.AssertWasCalled(sl => sl.Load(Arg<Skin>.Matches(s => s.Name == "newSkin")), x => x.Repeat.Once());
+
+            _skinLoader.AssertWasCalled(sl => sl.Load(Arg<Skin>.Matches(s => s.Name == "newSkin")), x => x.Repeat.Once());
+//            _skinLoader.ShouldHaveBeenCalled(sl => sl.Load(Arg<Skin>.Matches(s => s.Name == "newSkin")), x => x.Repeat.Once());
 		}
 
 		[Test]
@@ -44,7 +44,8 @@ namespace Cradiator.Tests.Config
 			_skinChangeHandler.ConfigUpdated(new ConfigSettings { SkinName = "newSkin" });
 			_skinChangeHandler.ConfigUpdated(new ConfigSettings { SkinName = "newSkin" });
 			_skinChangeHandler.ConfigUpdated(new ConfigSettings { SkinName = "newSkin" });
-			_skinLoader.AssertWasCalled(sl => sl.Load(Arg<Skin>.Matches(s => s.Name == "newSkin")), x => x.Repeat.Once());
+
+            _skinLoader.AssertWasCalled(sl => sl.Load(Arg<Skin>.Matches(s => s.Name == "newSkin")), x => x.Repeat.Once());
 		}
 
 		[Test]
@@ -53,10 +54,10 @@ namespace Cradiator.Tests.Config
 			_skinChangeHandler.ConfigUpdated(new ConfigSettings { SkinName = "newSkin"});
 
 			_skinChangeHandler.ConfigUpdated(new ConfigSettings { SkinName = "newerSkin"});
-			_skinLoader.AssertWasCalled(sl => sl.Load(Arg<Skin>.Matches(s => s.Name == "newerSkin")));
+            _skinLoader.ShouldHaveBeenCalled(sl => sl.Load(Arg<Skin>.Matches(s => s.Name == "newerSkin")));
 
 			_skinChangeHandler.ConfigUpdated(new ConfigSettings { SkinName = "yetNewerSkin"});
-			_skinLoader.AssertWasCalled(sl => sl.Load(Arg<Skin>.Matches(s => s.Name == "yetNewerSkin")));
+            _skinLoader.ShouldHaveBeenCalled(sl => sl.Load(Arg<Skin>.Matches(s => s.Name == "yetNewerSkin")));
 		}
 	}
 }

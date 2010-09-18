@@ -1,6 +1,7 @@
 using System;
 using Cradiator.Converters;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Cradiator.Tests.Converters
 {
@@ -23,7 +24,7 @@ namespace Cradiator.Tests.Converters
 		[Test]
 		public void CanConvert_If_ValueIs_EmptyString()
 		{
-			Assert.That(DoConvert(""), Is.EqualTo(0));
+			DoConvert("").ShouldBe(0);
 		}
 
 		[Test]

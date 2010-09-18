@@ -3,6 +3,7 @@ using System.Windows.Media;
 using Cradiator.Converters;
 using Cradiator.Model;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Cradiator.Tests.Converters
 {
@@ -21,68 +22,68 @@ namespace Cradiator.Tests.Converters
 		[Test]
 		public void build_status_of_building_is_yellow()
 		{
-			var convertedValue = _colorConverter.Convert(ProjectStatus.BUILDING, null, null, null);
-			var gradientValue = _gradientConverter.Convert(ProjectStatus.BUILDING, null, null, null);
+			var color = _colorConverter.Convert(ProjectStatus.BUILDING, null, null, null);
+			var gradient = _gradientConverter.Convert(ProjectStatus.BUILDING, null, null, null);
 
-			Assert.That(convertedValue, Is.EqualTo(Colors.Yellow));
-			Assert.That(gradientValue, Is.EqualTo(Color.FromArgb(255, 255, 255, 200)));
+			color.ShouldBe(Colors.Yellow);
+			gradient.ShouldBe(Color.FromArgb(255, 255, 255, 200));
 		}
 
 		[Test]
 		public void build_status_of_exception_is_red()
 		{
-			var convertedValue = _colorConverter.Convert(ProjectStatus.FAILURE, null, null, null);
-			var gradientValue = _gradientConverter.Convert(ProjectStatus.FAILURE, null, null, null);
+			var color = _colorConverter.Convert(ProjectStatus.FAILURE, null, null, null);
+			var gradient = _gradientConverter.Convert(ProjectStatus.FAILURE, null, null, null);
 
-			Assert.That(convertedValue, Is.EqualTo(Colors.Red));
-			Assert.That(gradientValue, Is.EqualTo(Color.FromArgb(255, 255, 150, 150)));
+			color.ShouldBe(Colors.Red);
+			gradient.ShouldBe(Color.FromArgb(255, 255, 150, 150));
 		}
 
 		[Test]
 		public void build_status_of_failure_is_red()
 		{
-			var convertedValue = _colorConverter.Convert(ProjectStatus.EXCEPTION, null, null, null);
-			var gradientValue = _gradientConverter.Convert(ProjectStatus.EXCEPTION, null, null, null);
+			var color = _colorConverter.Convert(ProjectStatus.EXCEPTION, null, null, null);
+			var gradient = _gradientConverter.Convert(ProjectStatus.EXCEPTION, null, null, null);
 
-			Assert.That(convertedValue, Is.EqualTo(Colors.Red));
-			Assert.That(gradientValue, Is.EqualTo(Color.FromArgb(255, 255, 150, 150)));
+			color.ShouldBe(Colors.Red);
+			gradient.ShouldBe(Color.FromArgb(255, 255, 150, 150));
 		}
 
 		[Test]
 		public void build_status_of_success_is_green()
 		{
-			var convertedValue = _colorConverter.Convert(ProjectStatus.SUCCESS, null, null, null);
-			var gradientValue = _gradientConverter.Convert(ProjectStatus.SUCCESS, null, null, null);
+			var color = _colorConverter.Convert(ProjectStatus.SUCCESS, null, null, null);
+			var gradient = _gradientConverter.Convert(ProjectStatus.SUCCESS, null, null, null);
 
-			Assert.That(convertedValue, Is.EqualTo(Colors.LimeGreen));
-			Assert.That(gradientValue, Is.EqualTo(Colors.LightGreen));
+			color.ShouldBe(Colors.LimeGreen);
+			gradient.ShouldBe(Colors.LightGreen);
 		}
 
 		[Test]
 		public void build_status_of_unknown_is_white()
 		{
-			var convertedValue = _colorConverter.Convert("Unknown", null, null, null);
-			var gradientValue = _gradientConverter.Convert("Unknown", null, null, null);
+			var color = _colorConverter.Convert("Unknown", null, null, null);
+			var gradient = _gradientConverter.Convert("Unknown", null, null, null);
 
-			Assert.That(convertedValue, Is.EqualTo(Colors.White));
-			Assert.That(gradientValue, Is.EqualTo(Colors.White));
+			color.ShouldBe(Colors.White);
+			gradient.ShouldBe(Colors.White);
 		}
 
 		[Test]
 		public void convertback_returns_null()
 		{
-			Assert.That(_colorConverter.ConvertBack("ThomasTheTankEngine", null, null, null), Is.Null);
-			Assert.That(_gradientConverter.ConvertBack("ThomasTheTankEngine", null, null, null), Is.Null);
+			_colorConverter.ConvertBack("ThomasTheTankEngine", null, null, null).ShouldBe(null);
+			_gradientConverter.ConvertBack("ThomasTheTankEngine", null, null, null).ShouldBe(null);
 		}
 
 		[Test]
 		public void any_other_color_that_we_havent_considered_will_be_white()
 		{
-			var convertedValue = _colorConverter.Convert("ThomasTheTankEngine", null, null, null);
-			var gradientValue = _gradientConverter.Convert("Rumplestiltskin", null, null, null);
+			var color = _colorConverter.Convert("ThomasTheTankEngine", null, null, null);
+			var gradient = _gradientConverter.Convert("Rumplestiltskin", null, null, null);
 
-			Assert.That(convertedValue, Is.EqualTo(Colors.White));
-			Assert.That(gradientValue, Is.EqualTo(Colors.White));
+			color.ShouldBe(Colors.White);
+			gradient.ShouldBe(Colors.White);
 		}
 	}
 }

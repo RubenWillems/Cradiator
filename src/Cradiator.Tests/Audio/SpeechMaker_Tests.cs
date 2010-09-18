@@ -45,7 +45,7 @@ namespace Cradiator.Tests.Audio
 			_speechTextParser.Expect(s => s.Parse(null, null)).IgnoreArguments().Return(ProjectFixedText);
 
 			var speech = _speaker.BuildIsFixed(_projectStatusList);
-			Assert.That(speech.ToXml(), Is.StringContaining(ProjectFixedText));
+			speech.ToXml().ShouldContain(ProjectFixedText);
 		}
 
 		[Test]
@@ -54,7 +54,7 @@ namespace Cradiator.Tests.Audio
 			_speechTextParser.Expect(s => s.Parse(null, null)).IgnoreArguments().Return(ProjectBrokenText);
 
 			var speech = _speaker.BuildIsBroken(_projectStatusList);
-            Assert.That(speech.ToXml(), Is.StringContaining(ProjectBrokenText));
+            speech.ToXml().ShouldContain(ProjectBrokenText);
 		}
 
 		[Test]
@@ -69,7 +69,6 @@ namespace Cradiator.Tests.Audio
 				.Return("dont care");
 
 			_speaker.ConfigUpdated(new ConfigSettings { FixedBuildText = "is different" });
-
 			_speaker.BuildIsFixed(_projectStatusList);
 
 			_speechTextParser.VerifyAllExpectations();

@@ -4,6 +4,7 @@ using Cradiator.Converters;
 using Cradiator.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Converters
 {
@@ -14,7 +15,7 @@ namespace Cradiator.Tests.Converters
 
 		protected override IValueConverter CreateConverter()
 		{
-			_buildBuster = MockRepository.GenerateMock<IBuildBuster>();
+			_buildBuster = Create.Mock<IBuildBuster>();
 			return new ImagePathConverter(_buildBuster);
 		}
 
@@ -27,7 +28,7 @@ namespace Cradiator.Tests.Converters
 
 			// this is all we want to know - the fact that the BuildBuster "is called" (with the correct arguments)
 			// (the BuildBuster is tested elsewhere - ie DRY)
-			_buildBuster.AssertWasCalled(b => b.FindBreaker(currentMessage));
+			_buildBuster.ShouldHaveBeenCalled(b => b.FindBreaker(currentMessage));
 		}
 
 		[Test]

@@ -5,7 +5,7 @@ using Cradiator.Config;
 using Cradiator.Model;
 using Cradiator.Views;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Model
 {
@@ -15,8 +15,8 @@ namespace Cradiator.Tests.Model
 		[Test]
 		public void CanGet_AlreadyLoaded_Resource()
 		{
-			var boot = new Bootstrapper(MockRepository.GenerateStub<IConfigSettings>(),
-			                            MockRepository.GenerateStub<ICradiatorView>());
+			var boot = new Bootstrapper(Create.Stub<IConfigSettings>(),
+                                        Create.Stub<ICradiatorView>());
 			boot.CreateKernel();
 
 			var skin1 = new Skin("Stack"); // these tests are reliant on xaml file names in the main assembly (Skin folder)

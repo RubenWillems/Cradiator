@@ -1,11 +1,14 @@
 using Cradiator.Converters;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Cradiator.Tests.Converters
 {
 	[TestFixture]
 	public class InstalledVoiceConverter_Tests
 	{
+        const string dummy = "dummy";
+
 		InstalledVoiceConverter _converter;
 
 		[SetUp]
@@ -17,8 +20,7 @@ namespace Cradiator.Tests.Converters
 		[Test]
 		public void CanConvertBack()
 		{
-			const string dummy = "dummy";
-			Assert.That(_converter.ConvertBack(dummy, null, null, null), Is.EqualTo(dummy));
+			_converter.ConvertBack(dummy, null, null, null).ShouldBe(dummy);
 		}
 	}
 }

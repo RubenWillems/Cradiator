@@ -12,7 +12,7 @@ namespace Cradiator.Converters
 			var secondsValue = (double) value;
 			var timeString = string.Empty;
 
-			if (secondsValue == 60)
+			if (secondsValue >= 60 && secondsValue < 61)
 			{
 				timeString = "1 minute";
 			}

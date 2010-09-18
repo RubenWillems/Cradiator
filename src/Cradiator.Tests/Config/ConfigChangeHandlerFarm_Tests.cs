@@ -3,6 +3,7 @@ using Cradiator.Config;
 using Cradiator.Config.ChangeHandlers;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Config
 {
@@ -25,7 +26,7 @@ namespace Cradiator.Tests.Config
 			var configUpdater = new ConfigChangeHandlerFarm(new List<IConfigChangeHandler> { _updater });
 			configUpdater.UpdateAll(_configSettings);
 
-			_updater.AssertWasCalled(u=>u.ConfigUpdated(_configSettings));
+			_updater.ShouldHaveBeenCalled(u=>u.ConfigUpdated(_configSettings));
 		}
 
 		[Test]
@@ -36,8 +37,8 @@ namespace Cradiator.Tests.Config
 			var configUpdater = new ConfigChangeHandlerFarm(new List<IConfigChangeHandler> { _updater, updater2 });
 			configUpdater.UpdateAll(_configSettings);
 
-			_updater.AssertWasCalled(u => u.ConfigUpdated(_configSettings));
-			updater2.AssertWasCalled(u => u.ConfigUpdated(_configSettings));
+            _updater.ShouldHaveBeenCalled(u => u.ConfigUpdated(_configSettings));
+            updater2.ShouldHaveBeenCalled(u => u.ConfigUpdated(_configSettings));
 		}
 	}
 }

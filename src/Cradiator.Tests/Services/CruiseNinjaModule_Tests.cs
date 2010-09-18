@@ -3,6 +3,7 @@ using Cradiator.Config;
 using Cradiator.Views;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Services
 {
@@ -19,7 +20,7 @@ namespace Cradiator.Tests.Services
             var boot = new Bootstrapper(configSettings, view);
             boot.CreateKernel();
 
-            configSettings.AssertWasCalled(c=>c.Load());
+            configSettings.ShouldHaveBeenCalled(c=>c.Load());
         }
     }
 }

@@ -5,6 +5,7 @@ using Cradiator.Views;
 using Ninject;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Views
 {
@@ -21,14 +22,14 @@ namespace Cradiator.Tests.Views
 		[SetUp]
 		public void SetUp()
 		{
-			_view = MockRepository.GenerateMock<ICradiatorView>();
-			_configSettings = MockRepository.GenerateMock<IConfigSettings>();
+			_view = Create.Mock<ICradiatorView>();
+			_configSettings = Create.Mock<IConfigSettings>();
 			_configSettings.Expect(c => c.ProjectNameRegEx).Return(".*").Repeat.Any();
 			_configSettings.Expect(c => c.CategoryRegEx).Return(".*").Repeat.Any();
 
-			_skinLoader = MockRepository.GenerateMock<ISkinLoader>();
-			_screenUpdater = MockRepository.GenerateMock<IScreenUpdater>();
-			_configFileWatcher = MockRepository.GenerateMock<IConfigFileWatcher>();
+			_skinLoader = Create.Mock<ISkinLoader>();
+			_screenUpdater = Create.Mock<IScreenUpdater>();
+			_configFileWatcher = Create.Mock<IConfigFileWatcher>();
 
 			var bootstrapper = new Bootstrapper(_configSettings, _view);
 			_kernel = bootstrapper.CreateKernel();
@@ -37,17 +38,17 @@ namespace Cradiator.Tests.Views
 			_kernel.Rebind<IConfigFileWatcher>().ToConstant(_configFileWatcher);
 		}
 
-		//TODO this test takes 3.5 seconds... can this be avoided?
+		//TODO this test takes ages... can this be avoided?
 		[Test]
 		public void CanCreatePresenter()
 		{
 			var presenter = _kernel.Get<CradiatorPresenter>();
 			presenter.Init();
 
-			_configSettings.AssertWasCalled(c => c.AddObserver(presenter));
-			_skinLoader.AssertWasCalled(s=>s.Load(Arg<Skin>.Is.Anything));
-			_screenUpdater.AssertWasCalled(s=>s.Update());
-			_configFileWatcher.AssertWasCalled(c => c.Start());
+			_configSettings.ShouldHaveBeenCalled(c => c.AddObserver(presenter));
+            _skinLoader.ShouldHaveBeenCalled(s => s.Load(Arg<Skin>.Is.Anything));
+            _screenUpdater.ShouldHaveBeenCalled(s => s.Update());
+            _configFileWatcher.ShouldHaveBeenCalled(c => c.Start());
 		}
 	}
 }

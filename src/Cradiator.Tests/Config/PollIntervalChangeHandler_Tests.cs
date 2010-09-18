@@ -4,6 +4,7 @@ using Cradiator.Config.ChangeHandlers;
 using Cradiator.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Shouldly;
 
 namespace Cradiator.Tests.Config
 {
@@ -17,8 +18,8 @@ namespace Cradiator.Tests.Config
 		[SetUp]
 		public void SetUp()
 		{
-			_pollTimer = MockRepository.GenerateMock<IPollTimer>();
-			_countdownChangeHandler = MockRepository.GenerateMock<ICountdownTimer>();
+			_pollTimer = Create.Mock<IPollTimer>();
+            _countdownChangeHandler = Create.Mock<ICountdownTimer>();
 			_pollingChangeHandler = new PollIntervalChangeHandler(_pollTimer, _countdownChangeHandler);
 		}
 
@@ -43,9 +44,9 @@ namespace Cradiator.Tests.Config
 
 			_pollingChangeHandler.ConfigUpdated(new ConfigSettings { PollFrequency = 2 });
 
-			_pollTimer.AssertWasCalled(p => p.Stop());
-			_countdownChangeHandler.AssertWasCalled(c => c.Reset());
-			_pollTimer.AssertWasCalled(p => p.Start());
+			_pollTimer.ShouldHaveBeenCalled(p => p.Stop());
+            _countdownChangeHandler.ShouldHaveBeenCalled(c => c.Reset());
+            _pollTimer.ShouldHaveBeenCalled(p => p.Start());
 
 			_pollTimer.VerifyAllExpectations();
 		}
