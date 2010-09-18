@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Cradiator.Extensions
 {
@@ -22,6 +23,11 @@ namespace Cradiator.Extensions
         public static bool EqualsIgnoreCase(this string me, string them)
         {
             return me.Equals(them, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        public static bool ContainsInvalidChars(this string me)
+        {
+            return me.IndexOfAny(Path.GetInvalidFileNameChars()) != -1;
         }
 	}
 }

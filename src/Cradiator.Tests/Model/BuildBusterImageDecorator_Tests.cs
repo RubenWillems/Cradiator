@@ -21,7 +21,6 @@ namespace Cradiator.Tests.Model
 
 			// it is very important that we don't rely on (and therefore retest) the 'decorated' BuildBuster object
 			// If we did, then that class failing would fail this test too (a classic case of fickle (and therefore bad) tests
-			_buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return("bob");
 			_appLocation.Stub(a => a.DirectoryName).Return(DirectoryName);
 
 			_buildBusterDecorator = new BuildBusterImageDecorator(_buildBuster, _appLocation);
@@ -30,10 +29,32 @@ namespace Cradiator.Tests.Model
 		[Test]
 		public void CanDecorate_WithImageExtension()
 		{
+            _buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return("bob");
+
 			// we want to test the decoration of the string 'bob' - nothing else
 			var breaker = _buildBusterDecorator.FindBreaker("don't care - the internal BuildBuster is stubbed to return 'bob'");
 
 			Assert.That(breaker, Is.EqualTo(DirectoryName + @"\images\bob.jpg"));
 		}
+
+        [Test]
+        public void CanReplace_Slash_InFilename()
+        {
+            _buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return(@"b\smith");
+
+            var breaker = _buildBusterDecorator.FindBreaker("dontcare");
+
+            Assert.That(breaker, Is.EqualTo(DirectoryName + @"\images\bsmith.jpg"));
+        }
+
+        [Test]
+        public void CanReplace_AnyInvalidFilenameChar()
+        {
+            _buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return(@"b*?<>""smith");
+
+            var breaker = _buildBusterDecorator.FindBreaker("dontcare");
+
+            Assert.That(breaker, Is.EqualTo(DirectoryName + @"\images\bsmith.jpg"));
+        }
 	}
 }
