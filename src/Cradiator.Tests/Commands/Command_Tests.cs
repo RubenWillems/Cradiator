@@ -15,7 +15,7 @@ namespace Cradiator.Tests.Commands
 		[SetUp]
 		public void SetUp()
 		{
-			_view = MockRepository.GenerateMock<ICradiatorView>();
+			_view = Create.Mock<ICradiatorView>();
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace Cradiator.Tests.Commands
 			command.Execute(null);
 
 			command.CanExecute(null).ShouldBe(true);
-			_view.AssertWasCalled(v=>v.UpdateScreen());
+			_view.ShouldHaveBeenCalled(v=>v.UpdateScreen());
 		}
 
 		[Test]
@@ -80,7 +80,7 @@ namespace Cradiator.Tests.Commands
 			command.Execute(null);
 
 			command.CanExecute(null).ShouldBe(true);
-			settingsWindow.AssertWasCalled(s => s.ShowDialog());
+            settingsWindow.ShouldHaveBeenCalled(s => s.ShowDialog());
 		}
 	}
 }

@@ -25,8 +25,7 @@ namespace Cradiator.Tests.Audio
 				    {
 						{"jbloggs", "Joe Bloggs"},
 						{"am", "Ace McAwesome"}
-				    }
-				                                                 }
+				    }}
 				);
 		}
 
