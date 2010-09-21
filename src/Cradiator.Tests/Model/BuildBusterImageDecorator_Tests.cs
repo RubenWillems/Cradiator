@@ -30,7 +30,7 @@ namespace Cradiator.Tests.Model
 		[Test]
 		public void CanDecorate_WithImageExtension()
 		{
-            _buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return("bob");
+			_buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return("bob");
 
 			// we want to test the decoration of the string 'bob' - nothing else
 			var breaker = _buildBusterDecorator.FindBreaker("don't care - the internal BuildBuster is stubbed to return 'bob'");
@@ -38,24 +38,24 @@ namespace Cradiator.Tests.Model
 			breaker.ShouldBe(DirectoryName + @"\images\bob.jpg");
 		}
 
-        [Test]
-        public void CanReplace_Slash_InFilename()
-        {
-            _buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return(@"b\smith");
+		[Test]
+		public void CanReplace_Slash_InFilename()
+		{
+			_buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return(@"b\smith");
 
-            var breaker = _buildBusterDecorator.FindBreaker("dontcare");
+			var breaker = _buildBusterDecorator.FindBreaker("dontcare");
 
-            breaker.ShouldBe(DirectoryName + @"\images\bsmith.jpg");
-        }
+			breaker.ShouldBe(DirectoryName + @"\images\bsmith.jpg");
+		}
 
-        [Test]
-        public void CanReplace_AnyInvalidFilenameChar()
-        {
-            _buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return(@"b*?<>""smith");
+		[Test]
+		public void CanReplace_AnyInvalidFilenameChar()
+		{
+			_buildBuster.Stub(b => b.FindBreaker(Arg<string>.Is.Anything)).Return(@"b*?<>""smith");
 
-            var breaker = _buildBusterDecorator.FindBreaker("dontcare");
+			var breaker = _buildBusterDecorator.FindBreaker("dontcare");
 
-            breaker.ShouldBe(DirectoryName + @"\images\bsmith.jpg");
-        }
+			breaker.ShouldBe(DirectoryName + @"\images\bsmith.jpg");
+		}
 	}
 }

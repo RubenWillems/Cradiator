@@ -18,7 +18,7 @@ namespace Cradiator.Tests.Audio
 		public void SetUp()
 		{
 			_speechSynth = Create.Mock<ISpeechSynthesizer>();
-            _appLocation = Create.Stub<IAppLocation>();
+			_appLocation = Create.Stub<IAppLocation>();
 			_appLocation.Stub(a => a.DirectoryName).Return(@"c:\bla");
 		}
 
@@ -28,7 +28,7 @@ namespace Cradiator.Tests.Audio
 			_speechSynth.Expect(s => s.GetInstalledVoices()).Return(new List<CradiatorInstalledVoice>());
 
 			var audioPlayer = new AudioPlayer(_speechSynth,
-			                                  new ConfigSettings { PlaySpeech = false },
+											  new ConfigSettings { PlaySpeech = false },
 											  new VoiceSelector(_speechSynth), _appLocation);
 			audioPlayer.Say(new PromptBuilder());
 			_speechSynth.AssertWasNotCalled(s=>s.SpeakAsync(Arg<PromptBuilder>.Is.Anything));
@@ -38,11 +38,11 @@ namespace Cradiator.Tests.Audio
 		public void DoesSay_If_PlaySpeech_IsOn()
 		{
 			_speechSynth.Expect(s => s.GetInstalledVoices()).Return(new List<CradiatorInstalledVoice>
-			                                                        {
-			                                                        	new CradiatorInstalledVoice("Bob")
-			                                                        });
+																	{
+																		new CradiatorInstalledVoice("Bob")
+																	});
 			var audioPlayer = new AudioPlayer(_speechSynth,
-			                                  new ConfigSettings { PlaySpeech = true, SpeechVoiceName = "Bob" },
+											  new ConfigSettings { PlaySpeech = true, SpeechVoiceName = "Bob" },
 											  new VoiceSelector(_speechSynth), _appLocation);
 			audioPlayer.Say(new PromptBuilder());
 			_speechSynth.ShouldHaveBeenCalled(s => s.SpeakAsync(Arg<PromptBuilder>.Is.Anything));

@@ -13,7 +13,7 @@ namespace Cradiator.Model
 
 		readonly IBuildBuster _buildBuster;
 		readonly string _imageFolder;
-	    readonly List<char> InvalidCharacterList = Path.GetInvalidFileNameChars().ToList();
+		readonly List<char> InvalidCharacterList = Path.GetInvalidFileNameChars().ToList();
 
 		public BuildBusterImageDecorator([InjectBuildBuster] IBuildBuster buildBuster, IAppLocation appLocation)
 		{
@@ -25,15 +25,15 @@ namespace Cradiator.Model
 		{
 			var username = _buildBuster.FindBreaker(currentMessage);
 
-            if (username.ContainsInvalidChars())
-            {
-                foreach (var c in username.ToCharArray().Where(InvalidCharacterList.Contains))
-                {
-                    username = username.Replace(c.ToString(), "");
-                }
-            }
+			if (username.ContainsInvalidChars())
+			{
+				foreach (var c in username.ToCharArray().Where(InvalidCharacterList.Contains))
+				{
+					username = username.Replace(c.ToString(), "");
+				}
+			}
 
-		    var imagePath = string.Format(@"{0}\{1}.jpg", _imageFolder, username).Trim();
+			var imagePath = string.Format(@"{0}\{1}.jpg", _imageFolder, username).Trim();
 
 			_log.DebugFormat("Breaker image='{0}'", imagePath);
 

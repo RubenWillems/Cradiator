@@ -40,7 +40,7 @@ namespace Cradiator.Tests.Model
 		{
 			SetUpBreaker(GuiltStrategyType.Last);
 
-            _buildBuster.FindBreaker("Breakers: bob, mary").ShouldBe("mary");
+			_buildBuster.FindBreaker("Breakers: bob, mary").ShouldBe("mary");
 		}
 
 		[Test]
@@ -111,20 +111,20 @@ namespace Cradiator.Tests.Model
 			_buildBuster.FindBreaker("Breakers: zombie, freak, smurf").ShouldBe("zombie");
 		}
 
-        [Test]
-        public void CanBust_FirstBreaker_With_3_NewMessageFormat()
-        {
-            SetUpBreaker(GuiltStrategyType.First);
+		[Test]
+		public void CanBust_FirstBreaker_With_3_NewMessageFormat()
+		{
+			SetUpBreaker(GuiltStrategyType.First);
 
-            _buildBuster.FindBreaker("zombie, freak, smurf").ShouldBe("zombie");
-        }
+			_buildBuster.FindBreaker("zombie, freak, smurf").ShouldBe("zombie");
+		}
 
-        [Test]
-        public void CanBust_LastBreaker_With_3_NewMessageFormat()
-        {
-            SetUpBreaker(GuiltStrategyType.Last);
+		[Test]
+		public void CanBust_LastBreaker_With_3_NewMessageFormat()
+		{
+			SetUpBreaker(GuiltStrategyType.Last);
 
-            _buildBuster.FindBreaker("zombie, freak, smurf").ShouldBe("smurf");
-        }
+			_buildBuster.FindBreaker("zombie, freak, smurf").ShouldBe("smurf");
+		}
 	}
 }
