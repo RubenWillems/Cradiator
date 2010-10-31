@@ -46,29 +46,29 @@ namespace Cradiator.Tests.Model
 		public void invalid_if_uri_emptystring()
 		{
 			var cruiseAddress = new CruiseAddress("");
-			cruiseAddress.Invalid.ShouldBe(true);
+			cruiseAddress.IsNotValid.ShouldBe(true);
 		}
 
 		[Test]
 		public void valid_if_url_valid()
 		{
 			var cruiseAddress = new CruiseAddress("http://valid");
-			cruiseAddress.Valid.ShouldBe(true);
+			cruiseAddress.IsValid.ShouldBe(true);
 		}
 
 		[Test]
 		public void valid_debug()
 		{
 			var cruiseAddress = new CruiseAddress("debug");
-			cruiseAddress.Valid.ShouldBe(true);
+			cruiseAddress.IsValid.ShouldBe(true);
 			cruiseAddress.IsDebug.ShouldBe(true);
 		}
 
         [Test]
         public void multi_uris()
         {
-            var cruiseAddress = new CruiseAddress("http://bla1|http://bla2");
-            cruiseAddress.Valid.ShouldBe(true);
+            var cruiseAddress = new CruiseAddress("http://bla1 http://bla2");
+            cruiseAddress.IsValid.ShouldBe(true);
             cruiseAddress.IsDebug.ShouldBe(false);
             cruiseAddress.UriList.Count().ShouldBe(2);
             cruiseAddress.UriList.First().ShouldBe(new Uri("http://bla1"));

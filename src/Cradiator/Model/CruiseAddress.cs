@@ -26,8 +26,10 @@ namespace Cradiator.Model
         {
             get
             {
-                return from url in Url.Split(new [] {'|', ' ', ';'})
-                       select new CruiseAddress(url).Uri;
+                return from url in Url.Split(' ')
+                       let ad = new CruiseAddress(url)
+                       where ad.IsValid
+                       select ad.Uri;
             }
         }
 
@@ -44,19 +46,19 @@ namespace Cradiator.Model
 			}
 		}
 
-		public bool Valid
+		public bool IsValid
 		{
 			get { return !Url.IsEmpty(); }
 		}
 
-        public bool Invalid
+        public bool IsNotValid
         {
-            get { return !Valid; }
+            get { return !IsValid; }
         }
 
 		public bool IsDebug
 		{
-			get { return Valid && Url.ToLower().StartsWith("debug"); }
+			get { return IsValid && Url.ToLower().StartsWith("debug"); }
 		}
 	}
 }

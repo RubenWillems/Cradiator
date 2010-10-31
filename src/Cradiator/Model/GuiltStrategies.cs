@@ -10,8 +10,8 @@ namespace Cradiator.Model
     
 	public class LastGuiltStrategy : BuildBusterStrategy
 	{
-		public LastGuiltStrategy() 
-			: base(new Regex(@":.*,* (.*)")) { }
+		public LastGuiltStrategy()
+            : base(new Regex(@"[: ].*,* (.*)")) { }
 	}
 
 	public class FixerStrategy : BuildBusterStrategy

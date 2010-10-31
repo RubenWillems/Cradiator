@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Cradiator.Config;
@@ -24,14 +23,14 @@ namespace Cradiator.Model
 
 		public IEnumerable<string> Fetch()
 		{
-			if (_cruiseAddress.Invalid) throw new FetchException(_cruiseAddress.Url);
+			if (_cruiseAddress.IsNotValid) throw new FetchException(_cruiseAddress.Url);
 
 			try
 			{
 			    return (from uri in _cruiseAddress.UriList
                         select _webClient.DownloadString(uri)).ToList();
 			}
-			catch (WebException webException)
+			catch (WebException webException)   //todo will this identify the specific uri attempted
 			{
 				throw new FetchException(_cruiseAddress.Url, webException);
 			}

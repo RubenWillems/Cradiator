@@ -126,5 +126,21 @@ namespace Cradiator.Tests.Model
 
 			_buildBuster.FindBreaker("zombie, freak, smurf").ShouldBe("smurf");
 		}
+
+        [Test]
+        public void CanBust_LastBreaker_With_1_NewMessageFormat()
+        {
+            SetUpBreaker(GuiltStrategyType.Last);
+
+            _buildBuster.FindBreaker("zombie").ShouldBe("zombie");
+        }
+
+        [Test]
+        public void CanBust_FirstBreaker_With_1_NewMessageFormat()
+        {
+            SetUpBreaker(GuiltStrategyType.First);
+
+            _buildBuster.FindBreaker("zombie").ShouldBe("zombie");
+        }
 	}
 }
