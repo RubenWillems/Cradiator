@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using Cradiator.Extensions;
 using Cradiator.Model;
 using NUnit.Framework;
 using Shouldly;
@@ -40,25 +43,36 @@ namespace Cradiator.Tests.Model
 		}
 
 		[Test]
-		public void isvalid_false_if_uri_emptystring()
+		public void invalid_if_uri_emptystring()
 		{
 			var cruiseAddress = new CruiseAddress("");
-			cruiseAddress.IsValid.ShouldBe(false);
+			cruiseAddress.IsNotValid.ShouldBe(true);
 		}
 
 		[Test]
-		public void isvalid_true_if_url_valid()
+		public void valid_if_url_valid()
 		{
 			var cruiseAddress = new CruiseAddress("http://valid");
 			cruiseAddress.IsValid.ShouldBe(true);
 		}
 
 		[Test]
-		public void isvalid_if_debug()
+		public void valid_debug()
 		{
 			var cruiseAddress = new CruiseAddress("debug");
 			cruiseAddress.IsValid.ShouldBe(true);
 			cruiseAddress.IsDebug.ShouldBe(true);
 		}
+
+        [Test]
+        public void multi_uris()
+        {
+            var cruiseAddress = new CruiseAddress("http://bla1 http://bla2");
+            cruiseAddress.IsValid.ShouldBe(true);
+            cruiseAddress.IsDebug.ShouldBe(false);
+            cruiseAddress.UriList.Count().ShouldBe(2);
+            cruiseAddress.UriList.First().ShouldBe(new Uri("http://bla1"));
+            cruiseAddress.UriList.Second().ShouldBe(new Uri("http://bla2"));
+        }
 	}
 }

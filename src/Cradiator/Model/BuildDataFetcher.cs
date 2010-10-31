@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using Cradiator.Config;
 using Cradiator.Services;
 
@@ -19,15 +21,16 @@ namespace Cradiator.Model
 			configSettings.AddObserver(this);
 		}
 
-		public string Fetch()
+		public IEnumerable<string> Fetch()
 		{
-			if (!_cruiseAddress.IsValid) throw new FetchException(_cruiseAddress.Url);
+			if (_cruiseAddress.IsNotValid) throw new FetchException(_cruiseAddress.Url);
 
 			try
 			{
-				return _webClient.DownloadString(_cruiseAddress.Uri);
+			    return (from uri in _cruiseAddress.UriList
+                        select _webClient.DownloadString(uri)).ToList();
 			}
-			catch (WebException webException)
+			catch (WebException webException)   //todo will this identify the specific uri attempted
 			{
 				throw new FetchException(_cruiseAddress.Url, webException);
 			}

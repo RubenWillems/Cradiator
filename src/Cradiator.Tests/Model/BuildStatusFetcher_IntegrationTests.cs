@@ -1,4 +1,5 @@
-﻿using Cradiator.Config;
+﻿using System.Linq;
+using Cradiator.Config;
 using Cradiator.Model;
 using Cradiator.Services;
 using Cradiator.Views;
@@ -55,7 +56,7 @@ namespace Cradiator.Tests.Model
 				                     _configSettings, _factory);
 
 		    var fetch = fetcher.Fetch();
-		    fetch.Length.ShouldBeGreaterThan(0);
+		    fetch.Count().ShouldBeGreaterThan(0);
 			fetch.ShouldContain(@"Project name=""CCNet""");
 		}
 	}

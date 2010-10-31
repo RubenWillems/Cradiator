@@ -7,12 +7,7 @@ using Cradiator.Extensions;
 
 namespace Cradiator.Model
 {
-	public interface IBuildDataTransformer
-	{
-		IEnumerable<ProjectStatus> Transform(string xml);
-	}
-
-	public class BuildDataTransformer : IConfigObserver, IBuildDataTransformer
+    public class BuildDataTransformer : IConfigObserver
 	{
 		Regex _projectNameRegEx;
 		Regex _categoryRegEx;
