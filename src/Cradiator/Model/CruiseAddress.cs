@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cradiator.Config;
 using Cradiator.Extensions;
 using Ninject;
@@ -7,7 +9,7 @@ namespace Cradiator.Model
 {
 	public class CruiseAddress
 	{
-		[Inject]
+	    [Inject]
 		public CruiseAddress(IConfigSettings settings)
 		{
 			Url = settings.URL;
@@ -19,6 +21,15 @@ namespace Cradiator.Model
 		}
 
 		public string Url { get; set; }
+
+        public IEnumerable<Uri> UriList
+        {
+            get
+            {
+                return from url in Url.Split(new [] {'|', ' ', ';'})
+                       select new CruiseAddress(url).Uri;
+            }
+        }
 
 		public Uri Uri
 		{
@@ -33,14 +44,19 @@ namespace Cradiator.Model
 			}
 		}
 
-		public bool IsValid
+		public bool Valid
 		{
 			get { return !Url.IsEmpty(); }
 		}
 
+        public bool Invalid
+        {
+            get { return !Valid; }
+        }
+
 		public bool IsDebug
 		{
-			get { return IsValid && Url.ToLower().StartsWith("debug"); }
+			get { return Valid && Url.ToLower().StartsWith("debug"); }
 		}
 	}
 }

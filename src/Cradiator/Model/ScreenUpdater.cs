@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Cradiator.Audio;
 using Cradiator.Views;
 
@@ -52,8 +54,8 @@ namespace Cradiator.Model
 		{
 			try
 			{
-				var xml = _fetcher.Fetch();
-				e.Result = xml;
+				var xmlResults = _fetcher.Fetch();
+				e.Result = xmlResults;
 			}
 			catch (Exception exception)
 			{
@@ -65,8 +67,8 @@ namespace Cradiator.Model
 		{
 			try
 			{
-				var xml = e.Result as string;
-				var projectData = _transformer.Transform(xml);
+				var xmlResults = e.Result as IEnumerable<string>;
+			    var projectData = xmlResults.SelectMany(xml => _transformer.Transform(xml));
 				_view.DataContext = projectData;
 				_discJockey.PlaySounds(projectData);
 			}
