@@ -4,3 +4,5 @@ obj
 *ReSharper*
 *.suo
 *.cache
+*.zip
+*.exe

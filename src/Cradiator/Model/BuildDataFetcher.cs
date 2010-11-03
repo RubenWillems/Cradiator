@@ -27,8 +27,7 @@ namespace Cradiator.Model
 
 			try
 			{
-			    return (from uri in _cruiseAddress.UriList
-                        select _webClient.DownloadString(uri)).ToList();
+			    return _cruiseAddress.UriList.Select(uri => _webClient.DownloadString(uri)).ToList();
 			}
 			catch (WebException webException)   //todo will this identify the specific uri attempted
 			{

@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Cradiator"
-!define PRODUCT_VERSION "version 2.5.1"
+!define PRODUCT_VERSION "v2.7"
 !define PRODUCT_WEB_SITE "www.codeplex.com/Cradiator"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Cradiator.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -38,7 +38,7 @@
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "Cradiator_v2.51_Setup.exe"
+OutFile "cradiator-${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\Cradiator"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
