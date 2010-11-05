@@ -11,7 +11,7 @@
     <OutputType>winexe</OutputType>
     <MinFrameworkVersionRequired>3.0</MinFrameworkVersionRequired>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <ApplicationIcon>Images\Cradiator.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\images\Cradiator.ico</ApplicationIcon>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -164,7 +164,9 @@
       <SubType>Code</SubType>
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -215,9 +217,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Cradiator.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\StackedPhotoIcon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +250,11 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\images\Cradiator.ico">
+      <Link>Images\Cradiator.ico</Link>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
