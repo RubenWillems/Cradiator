@@ -15,6 +15,7 @@ namespace Cradiator.Model
 		public string CurrentMessage { get; set; }
 		public ProjectActivity ProjectActivity { get; set; }
 		public string LastBuildStatus { get; set; }
+        public string ServerName { get; set; }  //TODO use
 
 		public ProjectStatus(string name)
 		{

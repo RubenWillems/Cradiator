@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Reflection;
 using Cradiator.Extensions;
@@ -11,15 +10,11 @@ namespace Cradiator.Config
 	/// <summary>
 	/// configuration settings
 	/// </summary>
-	public class ConfigSettings : INotifyPropertyChanged, IConfigSettings
+	public class ConfigSettings : ViewSettings, IConfigSettings
 	{
 		const int DefaultPollingFrequency = 30;
 
 		const string PollFrequencyKey = "PollFrequency";
-		const string UrlKey = "URL";
-		const string SkinKey = "Skin";
-		const string ProjectNameRegexKey = "ProjectNameRegEx";
-		const string CategoryRegexKey = "CategoryRegEx";
 		const string ShowCountdownKey = "ShowCountdown";
 		const string ShowProgressKey = "ShowProgress";
 		const string PlaySoundsKey = "PlaySounds";
@@ -35,30 +30,8 @@ namespace Cradiator.Config
 		static readonly ILog _log = LogManager.GetLogger(typeof(ConfigSettings).Name);
 		IDictionary<string, string> _usernameMap = new Dictionary<string, string>();
 		readonly UserNameMappingReader _userNameMappingReader = new UserNameMappingReader(new ConfigLocation());
-
-		private string _url;
-		public string URL
-		{
-			get { return _url; }
-			set
-			{
-				if (_url == value) return;
-				_url = value;
-				Notify("URL");
-			}
-		}
-
-		private string _skinName;
-		public string SkinName
-		{
-			get { return _skinName; }
-			set
-			{
-				if (_skinName == value) return;
-				_skinName = value;
-				Notify("SkinName");
-			}
-		}
+        readonly List<ViewSettings> _viewSettings = new List<ViewSettings>();
+		readonly ViewSettingsReader _viewSettingsReader = new ViewSettingsReader(new ConfigLocation());
 
 		/// <summary> interval at which to poll (in seconds) </summary>
 		private int  _pollFrequency;
@@ -70,30 +43,6 @@ namespace Cradiator.Config
 				if (_pollFrequency == value) return;
 				_pollFrequency = value;
 				Notify("PollFrequency");
-			}
-		}
-
-		private string _projectNameRegEx;
-		public string ProjectNameRegEx
-		{
-			get { return _projectNameRegEx.GetRegEx(); }
-			set
-			{
-				if (_projectNameRegEx == value) return;
-				_projectNameRegEx = value;
-				Notify("ProjectNameRegEx");
-			}
-		}
-
-		private string _categoryRegEx;
-		public string CategoryRegEx
-		{
-			get { return _categoryRegEx.GetRegEx(); }
-			set
-			{
-				if (_categoryRegEx == value) return;
-				_categoryRegEx = value;
-				Notify("CategoryRegEx");
 			}
 		}
 
@@ -228,15 +177,16 @@ namespace Cradiator.Config
 			{
 				var config = OpenExeConfiguration();
 
-				config.AppSettings.Settings[UrlKey].Value = URL;
-				config.AppSettings.Settings[SkinKey].Value = SkinName;
+				//config.AppSettings.Settings[UrlKey].Value = URL;
+				//config.AppSettings.Settings[SkinKey].Value = SkinName;
+				//config.AppSettings.Settings[ProjectNameRegexKey].Value = ProjectNameRegEx;
+				//config.AppSettings.Settings[CategoryRegexKey].Value = CategoryRegEx;
+
 				config.AppSettings.Settings[PollFrequencyKey].Value = PollFrequency.ToString();
-				config.AppSettings.Settings[ProjectNameRegexKey].Value = ProjectNameRegEx;
-				config.AppSettings.Settings[CategoryRegexKey].Value = CategoryRegEx;
 				config.AppSettings.Settings[ShowCountdownKey].Value = ShowCountdown.ToString();
 				config.AppSettings.Settings[ShowProgressKey].Value = ShowProgress.ToString();
-                config.AppSettings.Settings[PlaySoundsKey].Value = PlaySounds.ToString();
-                config.AppSettings.Settings[PlaySpeechKey].Value = PlaySpeech.ToString();
+				config.AppSettings.Settings[PlaySoundsKey].Value = PlaySounds.ToString();
+				config.AppSettings.Settings[PlaySpeechKey].Value = PlaySpeech.ToString();
 				config.AppSettings.Settings[BrokenBuildSoundKey].Value = BrokenBuildSound;
 				config.AppSettings.Settings[FixedBuildSoundKey].Value = FixedBuildSound;
 				config.AppSettings.Settings[BrokenBuildTextKey].Value = BrokenBuildText;
@@ -253,17 +203,25 @@ namespace Cradiator.Config
 			}
 		}
 
-	    public void Load()
+	    public int ViewCount
 	    {
-	        var config = OpenExeConfiguration();
+            get { return _viewSettings.Count; }
+	    }
 
-            URL = config.GetProperty(UrlKey).Value;
-			SkinName = config.GetProperty(SkinKey).Value;
-            PollFrequency = config.GetIntProperty(PollFrequencyKey, DefaultPollingFrequency);
-			ProjectNameRegEx = config.GetProperty(ProjectNameRegexKey).Value;
-			CategoryRegEx = config.GetProperty(CategoryRegexKey).Value;
-            ShowCountdown = config.GetBoolProperty(ShowCountdownKey);
-            ShowProgress = config.GetBoolProperty(ShowProgressKey);
+	    public void Load()
+		{
+			_viewSettings.Clear();
+            _viewSettings.AddRange(_viewSettingsReader.Read());
+
+            URL = _viewSettings[0].URL;
+            SkinName = _viewSettings[0].SkinName;
+            ProjectNameRegEx = _viewSettings[0].ProjectNameRegEx;
+            CategoryRegEx = _viewSettings[0].CategoryRegEx;
+
+			var config = OpenExeConfiguration();
+			PollFrequency = config.GetIntProperty(PollFrequencyKey, DefaultPollingFrequency);
+			ShowCountdown = config.GetBoolProperty(ShowCountdownKey);
+			ShowProgress = config.GetBoolProperty(ShowProgressKey);
 			PlaySounds = config.GetBoolProperty(PlaySoundsKey);
 			PlaySpeech = config.GetBoolProperty(PlaySpeechKey);
 			BrokenBuildSound = config.GetProperty(BrokenBuildSoundKey).Value;
@@ -273,8 +231,22 @@ namespace Cradiator.Config
 			SpeechVoiceName = config.GetProperty(SpeechVoiceNameKey).Value;
 			_breakerGuiltStrategy = config.GetProperty(BreakerGuiltStrategyKey).Value;
 
-	    	_usernameMap = _userNameMappingReader.Read();
-	    }
+			_usernameMap = _userNameMappingReader.Read();
+		}
+
+
+		/// <summary>
+		/// copies the values of the multiview from the specified index to the values of ConfigSettings
+		/// forcing the view to update its display
+		/// </summary>
+		/// <param name="index"></param>
+		public void UpdateViewSettings(int index)
+		{
+            URL = _viewSettings[index].URL;
+            SkinName = _viewSettings[index].SkinName;
+            ProjectNameRegEx = _viewSettings[index].ProjectNameRegEx;
+            CategoryRegEx = _viewSettings[index].CategoryRegEx;
+		}
 
 		private static Configuration OpenExeConfiguration()
 		{
@@ -294,14 +266,6 @@ namespace Cradiator.Config
 			}
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		void Notify(string propertyName)
-		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-
 		public override string ToString()
 		{
 			return string.Format("Url={0}, SkinName={1}, PollFrequency={2}, ProjectNameRegEx={3}, ShowCountdown={4}, ShowCountdown={5}, PlaySounds={6}, PlaySpeech={7}, BrokenBuildSound={8}, BrokenBuildText={9}, FixedBuildSound={10}, FixedBuildText={11}, SpeechVoiceName={12}, CategoryRegEx={13}, BreakerGuiltStrategy={14}",
@@ -316,9 +280,9 @@ namespace Cradiator.Config
 	}
 
 	public class ConfigSettingsException : Exception
-    {
-        public ConfigSettingsException(string key) : 
+	{
+		public ConfigSettingsException(string key) : 
 			base(string.Format("Configuration setting missing: '{0}'", key)) 
 		{  }
-    }
+	}
 }

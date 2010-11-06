@@ -97,11 +97,14 @@
     <Compile Include="Audio\VoiceSelector.cs" />
     <Compile Include="Config\ChangeHandlers\IConfigChangeHandler.cs" />
     <Compile Include="Config\ChangeHandlers\ConfigChangeHandlerFarm.cs" />
+    <Compile Include="Config\IViewSettings.cs" />
     <Compile Include="Config\IConfigObserver.cs" />
     <Compile Include="Config\IConfigSettings.cs" />
     <Compile Include="Config\ChangeHandlers\SkinChangeHandler.cs" />
     <Compile Include="App\CradiatorApp.cs" />
     <Compile Include="Config\ConfigLocation.cs" />
+    <Compile Include="Config\ViewSettings.cs" />
+    <Compile Include="Config\ViewSettingsReader.cs" />
     <Compile Include="Config\UsernameMappingReader.cs" />
     <Compile Include="Converters\InstalledVoiceConverter.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -152,7 +155,7 @@
     <Compile Include="Views\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\CruiseAddress.cs" />
+    <Compile Include="Model\CradiatorUrl.cs" />
     <Compile Include="Services\HttpWebClient.cs" />
     <Compile Include="Model\FetchException.cs" />
     <Compile Include="Model\BuildDataFetcher.cs" />
@@ -173,6 +176,10 @@
     <Resource Include="Skins\StackPhotoSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Skins\StackMultiSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
@@ -252,9 +259,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\images\Cradiator.ico">
-      <Link>Images\Cradiator.ico</Link>
-    </Resource>
+    <Resource Include="Images\Cradiator.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

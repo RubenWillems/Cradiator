@@ -7,15 +7,15 @@ using Ninject;
 
 namespace Cradiator.Model
 {
-	public class CruiseAddress
+	public class CradiatorUrl
 	{
 	    [Inject]
-		public CruiseAddress(IConfigSettings settings)
+		public CradiatorUrl(IConfigSettings settings)
 		{
 			Url = settings.URL;
 		}
 
-		public CruiseAddress(string url)
+		public CradiatorUrl(string url)
 		{
 			Url = url;
 		}
@@ -27,7 +27,7 @@ namespace Cradiator.Model
             get
             {
                 return from url in Url.Split(' ')
-                       let ad = new CruiseAddress(url)
+                       let ad = new CradiatorUrl(url)
                        where ad.IsValid
                        select ad.Uri;
             }

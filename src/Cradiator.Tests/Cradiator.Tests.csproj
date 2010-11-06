@@ -98,6 +98,7 @@
     <Compile Include="Config\PollIntervalChangeHandler_Tests.cs" />
     <Compile Include="Config\SkinChangeHandler_Tests.cs" />
     <Compile Include="Config\UsernameMappingReader_Tests.cs" />
+    <Compile Include="Config\ViewConfigReader_Tests.cs" />
     <Compile Include="Converters\BuildNameAndMessageConverter_Tests.cs" />
     <Compile Include="Converters\ConverterTestBase.cs" />
     <Compile Include="Converters\ImagePathConverter_Tests.cs" />

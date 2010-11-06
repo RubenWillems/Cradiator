@@ -13,6 +13,8 @@ namespace Cradiator.Views
 
 		int _pollFrequency;
 		bool _isShowProgressConfigured;	// named to avoid confusion with property on this view with what was a similar name
+		private IConfigSettings _configSettings;
+		private int currentMultiServerIndex;
 
 		public CradiatorWindow(IConfigSettings configSettings)
 		{
@@ -28,6 +30,7 @@ namespace Cradiator.Views
 
 			_pollFrequency = configSettings.PollFrequency;
 			_isShowProgressConfigured = configSettings.ShowProgress;
+			_configSettings = configSettings;
 			configSettings.AddObserver(this);
 		}
 
@@ -84,11 +87,27 @@ namespace Cradiator.Views
 		}
 
 		void ICradiatorView.UpdateCountdownTimer(TimeSpan timeRemaining)
-        {
-        	countdownText.Text = string.Format("{0:00}:{1:00}",
+		{
+			countdownText.Text = string.Format("{0:00}:{1:00}",
 											  timeRemaining.Minutes,
 											  timeRemaining.Seconds);
-        }
+
+			if (timeRemaining.Seconds == 0)
+			{
+				if (_configSettings.ViewCount > 0)
+				{
+					_configSettings.UpdateViewSettings(currentMultiServerIndex);
+					currentMultiServerIndex++;
+
+                    if (currentMultiServerIndex == _configSettings.ViewCount)
+					{
+						currentMultiServerIndex = 0;
+					}
+
+					_configSettings.NotifyObservers();
+				}
+			}
+		}
 
 		public void Invoke(Action action)
 		{
