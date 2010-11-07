@@ -30,7 +30,8 @@ namespace Cradiator.Config
 		static readonly ILog _log = LogManager.GetLogger(typeof(ConfigSettings).Name);
 		IDictionary<string, string> _usernameMap = new Dictionary<string, string>();
 		readonly UserNameMappingReader _userNameMappingReader = new UserNameMappingReader(new ConfigLocation());
-        readonly List<ViewSettings> _viewSettings = new List<ViewSettings>();
+		ICollection<ViewSettings> _viewSettings = new List<ViewSettings>();
+		readonly Queue<ViewSettings> _viewQueue = new Queue<ViewSettings>();
 		readonly ViewSettingsReader _viewSettingsReader = new ViewSettingsReader(new ConfigLocation());
 
 		/// <summary> interval at which to poll (in seconds) </summary>
@@ -177,6 +178,7 @@ namespace Cradiator.Config
 			{
 				var config = OpenExeConfiguration();
 
+				//todo need to pull back the ability to set the viewsettings in the ui
 				//config.AppSettings.Settings[UrlKey].Value = URL;
 				//config.AppSettings.Settings[SkinKey].Value = SkinName;
 				//config.AppSettings.Settings[ProjectNameRegexKey].Value = ProjectNameRegEx;
@@ -203,20 +205,38 @@ namespace Cradiator.Config
 			}
 		}
 
-	    public int ViewCount
-	    {
-            get { return _viewSettings.Count; }
-	    }
-
-	    public void Load()
+		/// <summary>
+		/// rotate/set the next view in the queue (if >1)
+		/// </summary>
+		public void RotateView()
 		{
-			_viewSettings.Clear();
-            _viewSettings.AddRange(_viewSettingsReader.Read());
+			if (_viewSettings.Count == 1) return;
 
-            URL = _viewSettings[0].URL;
-            SkinName = _viewSettings[0].SkinName;
-            ProjectNameRegEx = _viewSettings[0].ProjectNameRegEx;
-            CategoryRegEx = _viewSettings[0].CategoryRegEx;
+			ApplyViewSettings();
+			NotifyObservers();
+		}
+
+		void ApplyViewSettings()
+		{
+			if (_viewQueue.Count == 0)
+				_viewSettings.ForEach(_viewQueue.Enqueue);
+
+			var q = _viewQueue.Dequeue();
+			URL = q.URL;
+			SkinName = q.SkinName;
+			ProjectNameRegEx = q.ProjectNameRegEx;
+			CategoryRegEx = q.CategoryRegEx;
+		}
+
+		private void LoadViewSettings()
+		{
+			_viewSettings = _viewSettingsReader.Read();
+		}
+
+		public void Load()
+		{
+			LoadViewSettings();
+			ApplyViewSettings();
 
 			var config = OpenExeConfiguration();
 			PollFrequency = config.GetIntProperty(PollFrequencyKey, DefaultPollingFrequency);
@@ -232,20 +252,6 @@ namespace Cradiator.Config
 			_breakerGuiltStrategy = config.GetProperty(BreakerGuiltStrategyKey).Value;
 
 			_usernameMap = _userNameMappingReader.Read();
-		}
-
-
-		/// <summary>
-		/// copies the values of the multiview from the specified index to the values of ConfigSettings
-		/// forcing the view to update its display
-		/// </summary>
-		/// <param name="index"></param>
-		public void UpdateViewSettings(int index)
-		{
-            URL = _viewSettings[index].URL;
-            SkinName = _viewSettings[index].SkinName;
-            ProjectNameRegEx = _viewSettings[index].ProjectNameRegEx;
-            CategoryRegEx = _viewSettings[index].CategoryRegEx;
 		}
 
 		private static Configuration OpenExeConfiguration()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Linq;
 using Cradiator.Extensions;
@@ -16,20 +17,21 @@ namespace Cradiator.Config
 
         public string Xml { private get; set; } // todo for testing only, reconsider
 
-        public IEnumerable<ViewSettings> Read()
+        public ICollection<ViewSettings> Read()
         {
             var xDoc = Xml.HasValue() ? XDocument.Parse(Xml) : XDocument.Load(_configFile);
 
-            return (from view in xDoc.Elements("configuration")
+            return new ReadOnlyCollection<ViewSettings>(
+                (from view in xDoc.Elements("configuration")
                         .Elements("views")
                         .Elements("view")
                     select new ViewSettings
-                               {
-                                   URL = view.Attribute("url").Value,
-                                   ProjectNameRegEx = view.Attribute("project-regex").Value,
-                                   CategoryRegEx = view.Attribute("category-regex").Value,
-                                   SkinName = view.Attribute("skin").Value,
-                               });
+                    {
+                        URL = view.Attribute("url").Value,
+                        ProjectNameRegEx = view.Attribute("project-regex").Value,
+                        CategoryRegEx = view.Attribute("category-regex").Value,
+                        SkinName = view.Attribute("skin").Value,
+                    }).ToList());
         }
     }
 }

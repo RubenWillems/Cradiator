@@ -6,7 +6,7 @@ namespace Cradiator.Model
 	{
 		public const string BUILDING = "building";
 		public const string SUCCESS = "success";
-        public const string NORMAL = "normal";
+		public const string NORMAL = "normal";
 		public const string FAILURE = "failure";
 		public const string EXCEPTION = "exception";
 		public const string ERROR = "error";
@@ -15,7 +15,6 @@ namespace Cradiator.Model
 		public string CurrentMessage { get; set; }
 		public ProjectActivity ProjectActivity { get; set; }
 		public string LastBuildStatus { get; set; }
-        public string ServerName { get; set; }  //TODO use
 
 		public ProjectStatus(string name)
 		{
@@ -27,23 +26,23 @@ namespace Cradiator.Model
 			get { return (ProjectActivity == ProjectActivity.Building) ? BUILDING : LastBuildStatus; }
 		}
 
-        public bool IsBroken
-        {
-            get 
-            { 
-                return LastBuildStatus.EqualsIgnoreCase(FAILURE) || 
-                       LastBuildStatus.EqualsIgnoreCase(EXCEPTION) || 
-                       LastBuildStatus.EqualsIgnoreCase(ERROR); 
-            }
-        }
+		public bool IsBroken
+		{
+			get 
+			{ 
+				return LastBuildStatus.EqualsIgnoreCase(FAILURE) || 
+					   LastBuildStatus.EqualsIgnoreCase(EXCEPTION) || 
+					   LastBuildStatus.EqualsIgnoreCase(ERROR); 
+			}
+		}
 
 		public bool IsSuccessful
 		{
-            get 
-            { 
-                return LastBuildStatus.EqualsIgnoreCase(SUCCESS) || 
-                       LastBuildStatus.EqualsIgnoreCase(NORMAL); 
-            }
+			get 
+			{ 
+				return LastBuildStatus.EqualsIgnoreCase(SUCCESS) || 
+					   LastBuildStatus.EqualsIgnoreCase(NORMAL); 
+			}
 		}
 
 		public override bool Equals(object obj)

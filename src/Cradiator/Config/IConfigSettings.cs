@@ -23,9 +23,7 @@ namespace Cradiator.Config
 		void Load();
 		void NotifyObservers();
 		void Save();
-
-	    int ViewCount { get; }
-		void UpdateViewSettings(int index);
+	    void RotateView();
 	}
 	// ReSharper restore UnusedMemberInSuper.Global
 }
