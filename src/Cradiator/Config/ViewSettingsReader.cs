@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using Cradiator.Extensions;
 
@@ -32,6 +33,24 @@ namespace Cradiator.Config
                         CategoryRegEx = view.Attribute("category-regex").Value,
                         SkinName = view.Attribute("skin").Value,
                     }).ToList());
+        }
+
+        public string Write(ViewSettings settings)
+        {
+            var xDoc = Xml.HasValue() ? XDocument.Parse(Xml) : XDocument.Load(_configFile);
+
+            var view = xDoc.Elements("configuration")
+                .Elements("views")
+                .Elements("view").First();      // assume 1st view for now
+
+            view.Attribute("url").SetValue(settings.URL);
+            view.Attribute("project-regex").SetValue(settings.ProjectNameRegEx);
+            view.Attribute("category-regex").SetValue(settings.CategoryRegEx);
+            view.Attribute("skin").SetValue(settings.SkinName);
+
+            if (Xml.HasValue()) return xDoc.ToString(); 
+            xDoc.Save(_configFile);
+            return "";
         }
     }
 }

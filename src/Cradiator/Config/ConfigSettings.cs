@@ -176,13 +176,15 @@ namespace Cradiator.Config
 		{
 			try
 			{
-				var config = OpenExeConfiguration();
+			    _viewSettingsReader.Write(new ViewSettings
+                {
+                    URL = URL,
+                    ProjectNameRegEx = ProjectNameRegEx,
+                    CategoryRegEx = CategoryRegEx,
+                    SkinName = SkinName,
+                });
 
-				//todo need to pull back the ability to set the viewsettings in the ui
-				//config.AppSettings.Settings[UrlKey].Value = URL;
-				//config.AppSettings.Settings[SkinKey].Value = SkinName;
-				//config.AppSettings.Settings[ProjectNameRegexKey].Value = ProjectNameRegEx;
-				//config.AppSettings.Settings[CategoryRegexKey].Value = CategoryRegEx;
+				var config = OpenExeConfiguration();
 
 				config.AppSettings.Settings[PollFrequencyKey].Value = PollFrequency.ToString();
 				config.AppSettings.Settings[ShowCountdownKey].Value = ShowCountdown.ToString();
