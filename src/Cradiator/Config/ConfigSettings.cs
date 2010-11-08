@@ -176,7 +176,7 @@ namespace Cradiator.Config
 		{
 			try
 			{
-			    _viewSettingsReader.Write(new ViewSettings
+			    _viewSettingsReader.Write(ID, new ViewSettings
                 {
                     URL = URL,
                     ProjectNameRegEx = ProjectNameRegEx,
@@ -224,6 +224,7 @@ namespace Cradiator.Config
 				_viewSettings.ForEach(_viewQueue.Enqueue);
 
 			var q = _viewQueue.Dequeue();
+			ID = q.ID;
 			URL = q.URL;
 			SkinName = q.SkinName;
 			ProjectNameRegEx = q.ProjectNameRegEx;

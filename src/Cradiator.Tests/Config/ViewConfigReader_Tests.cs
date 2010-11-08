@@ -18,7 +18,7 @@ namespace Cradiator.Tests.Config
                           {
                               Xml = "<configuration>" +
                                         "<views>" +
-                                            @"<view url=""http://url1"" " +
+                                            @"<view id=""1"" url=""http://url1"" " +
                                                 @"skin=""Grid"" " +
                                                 @"project-regex=""v5.*"" " +
                                                 @"category-regex="".*""/>"" " +
@@ -28,13 +28,14 @@ namespace Cradiator.Tests.Config
         }
 
         [Test]
-        public void can_parse_views_from_xml()
+        public void can_read_view_from_xml()
         {
             var views = _reader.Read();
             views.Count().ShouldBe(1);
 
             var view1 = views.First();
 
+            view1.ID.ShouldBe("1");
             view1.URL.ShouldBe("http://url1");
             view1.SkinName.ShouldBe("Grid");
             view1.ProjectNameRegEx.ShouldBe("v5.*");
@@ -42,10 +43,10 @@ namespace Cradiator.Tests.Config
         }
 
         [Test]
-        public void can_writer_1st_view_from_xml()
+        public void can_read_then_write_modified_view_to_xml()
         {
             var views = _reader.Read();
-            var xml = _reader.Write(new ViewSettings
+            var xml = _reader.Write("1", new ViewSettings
                               {
                                 URL = "http://new",
                                 ProjectNameRegEx = "[a-z]",  
