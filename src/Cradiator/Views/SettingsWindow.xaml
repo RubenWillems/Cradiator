@@ -15,6 +15,7 @@
 
 	<Window.Resources>
 		<Converters:SecondsToTimeConverter x:Key="TimeConverter" />
+        <BooleanToVisibilityConverter x:Key="VisibilityOfBool" />
 
 		<Style x:Key="HeadingLabel" TargetType="{x:Type Label}">
 			<Setter Property="FontSize" Value="16" />
@@ -123,18 +124,18 @@
 				   Style="{StaticResource HeadingLabel}"
 				   Content="Cradiator Settings"  />
 
-			<Label Grid.Column="0" Grid.Row="1" Content="Current URL"/>
-			<TextBox Name="urlTextBox" IsReadOnly="True"
+			<Label Grid.Column="0" Grid.Row="1" Content="URL"/>
+            <TextBox Name="urlTextBox" IsReadOnly="{Binding IsMultipleViews}"
 					 Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" 
-					 TabIndex="0" Background="Snow"
+					 TabIndex="0"
 					 Style="{StaticResource UrlTextStyle}" 
 					 Text="{Binding URL}">
-			</TextBox>
+            </TextBox>
 
-			<Label Grid.Column="0" Grid.Row="2" Content="Current Filter"/>
-			<TextBox Name="projectFilterTextBox" IsReadOnly="True"
+			<Label Grid.Column="0" Grid.Row="2" Content="Filter"/>
+            <TextBox Name="projectFilterTextBox" IsReadOnly="{Binding IsMultipleViews}"
 					 Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" 
-					 Style="{StaticResource UrlTextStyle}" Background="Snow"
+					 Style="{StaticResource UrlTextStyle}"
 					 Text="{Binding ProjectNameRegEx}" >
 			</TextBox>
 
@@ -208,7 +209,7 @@
 			</ComboBox>
 
 			<Label Grid.Column="0" Grid.Row="13" Content="Current Skin"/>
-			<ListBox Name="skinListBox" IsEnabled="False"
+            <ListBox Name="skinListBox" IsEnabled="{Binding IsOneView}"
 					 Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="3" Margin="2" Padding="0"
 					 BorderThickness="0" 
 					 SelectedValuePath="Tag" 
@@ -233,6 +234,10 @@
 				</ListBoxItem>
 
 			</ListBox>
+
+            <Label Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="2" 
+                   Content="URL/Filter/Skin are readonly" 
+                   Visibility="{Binding Path=IsMultipleViews, Converter={StaticResource VisibilityOfBool}}"/>
 
             <StackPanel Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="15" 
 						HorizontalAlignment="Right"  Orientation="Horizontal" Margin="3,4">

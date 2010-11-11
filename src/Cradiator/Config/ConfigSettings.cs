@@ -18,8 +18,8 @@ namespace Cradiator.Config
 		static readonly ILog _log = LogManager.GetLogger(typeof(ConfigSettings).Name);
 		IDictionary<string, string> _usernameMap = new Dictionary<string, string>();
 		readonly UserNameMappingReader _userNameMappingReader = new UserNameMappingReader(new ConfigLocation());
-		ICollection<ViewSettings> _viewSettings = new List<ViewSettings>();
-		readonly Queue<ViewSettings> _viewQueue = new Queue<ViewSettings>();
+		ICollection<ViewSettings> _viewList = new List<ViewSettings>();
+		private readonly Queue<ViewSettings> _viewQueue = new Queue<ViewSettings>();
 		readonly ViewSettingsReader _viewSettingsReader = new ViewSettingsReader(new ConfigLocation());
 
 		public void Load()
@@ -47,6 +47,17 @@ namespace Cradiator.Config
 		{
 			try
 			{
+                if (IsOneView)
+				{
+					_viewSettingsReader.Write(new ViewSettings
+					{
+						URL = URL,
+						ProjectNameRegEx = ProjectNameRegEx,
+						CategoryRegEx = CategoryRegEx,
+						SkinName = SkinName,
+					});
+				}
+
 				var config = OpenExeConfiguration();
 
 				config.AppSettings.Settings[PollFrequencyKey].Value = PollFrequency.ToString();
@@ -75,7 +86,7 @@ namespace Cradiator.Config
 		/// </summary>
 		public void RotateView()
 		{
-			if (_viewSettings.Count == 1) return;
+			if (IsOneView) return;
 
 			ApplyViewSettings();
 			NotifyObservers();
@@ -84,7 +95,7 @@ namespace Cradiator.Config
 		void ApplyViewSettings()
 		{
 			if (_viewQueue.Count == 0)
-				_viewSettings.ForEach(_viewQueue.Enqueue);
+				_viewList.ForEach(_viewQueue.Enqueue);
 
 			var q = _viewQueue.Dequeue();
 			URL = q.URL;
@@ -95,7 +106,7 @@ namespace Cradiator.Config
 
 		private void LoadViewSettings()
 		{
-			_viewSettings = _viewSettingsReader.Read();
+			_viewList = _viewSettingsReader.Read();
 		}
 
 		public void AddObserver(IConfigObserver observer)
@@ -259,6 +270,19 @@ namespace Cradiator.Config
 		{
 			get { return TimeSpan.FromSeconds(PollFrequency); }
 		}
+
+        // ReSharper disable UnusedMember.Global
+		public bool IsMultipleViews
+		{
+			get { return _viewList.Count > 1; }
+		}
+        // ReSharper restore UnusedMember.Global
+
+
+        public bool IsOneView
+        {
+            get { return _viewList.Count == 1; }
+        }
 
 		// the placement of these variables is commensurate with their importance - low
 		const string PollFrequencyKey = "PollFrequency";
