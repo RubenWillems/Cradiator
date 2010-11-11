@@ -30,7 +30,7 @@ namespace Cradiator.Tests.Model
 
 			_webClient.Expect(w => w.DownloadString(Arg<Uri>.Is.Anything)).Return(Hello);
 
-			var fetcher = new BuildDataFetcher(new CruiseAddress("http://test"), new ConfigSettings(), _webClientFactory);
+			var fetcher = new BuildDataFetcher(new CradiatorUrl("http://test"), new ConfigSettings(), _webClientFactory);
 			var fetchValue = fetcher.Fetch();
 
 			fetchValue.First().ShouldBe(Hello);
@@ -39,7 +39,7 @@ namespace Cradiator.Tests.Model
 		[Test]
 		public void CanUpdateSettings()
 		{
-			var fetcher = new BuildDataFetcher(new CruiseAddress("http://bla"), 
+			var fetcher = new BuildDataFetcher(new CradiatorUrl("http://bla"), 
 				new ConfigSettings
 				{
 					URL = "http://bla"
@@ -56,7 +56,7 @@ namespace Cradiator.Tests.Model
 		[Test]
 		public void CanThrow_If_Invalid()
 		{
-			var fetcher = new BuildDataFetcher(new CruiseAddress(""), new ConfigSettings(), _webClientFactory);
+			var fetcher = new BuildDataFetcher(new CradiatorUrl(""), new ConfigSettings(), _webClientFactory);
 			Assert.Throws<FetchException>(() => fetcher.Fetch());
 		}
 
@@ -66,7 +66,7 @@ namespace Cradiator.Tests.Model
             _webClient.Expect(w => w.DownloadString(Arg<Uri>.Is.Anything)).Return("url1").Repeat.Once();
             _webClient.Expect(w => w.DownloadString(Arg<Uri>.Is.Anything)).Return("url2").Repeat.Once();
 
-            var fetcher = new BuildDataFetcher(new CruiseAddress("http://url1 http://url2"), 
+            var fetcher = new BuildDataFetcher(new CradiatorUrl("http://url1 http://url2"), 
                 new ConfigSettings(), _webClientFactory);
 
             var xmlResults = fetcher.Fetch().ToList();

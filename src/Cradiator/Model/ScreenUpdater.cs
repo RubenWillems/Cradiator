@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Cradiator.Audio;
+using Cradiator.Config;
 using Cradiator.Views;
 
 namespace Cradiator.Model
@@ -18,21 +19,23 @@ namespace Cradiator.Model
 		readonly DiscJockey _discJockey;
 		readonly ICountdownTimer _countdownTimer;
 		readonly IPollTimer _pollTimer;
+		private readonly IConfigSettings _configSettings;
 		readonly BuildDataFetcher _fetcher;
 		readonly BuildDataTransformer _transformer;
 		readonly FetchExceptionHandler _fetchExceptionHandler;
 		readonly BackgroundWorker _worker;
 
-		public ScreenUpdater(ICradiatorView view, DiscJockey discJockey,
-							 ICountdownTimer countdownTimer, IPollTimer pollTimer,
-		                     BuildDataFetcher buildDataFetcher, BuildDataTransformer transformer,
-		                     FetchExceptionHandler fetchExceptionHandler, BackgroundWorker worker)
+		public ScreenUpdater(ICradiatorView view, DiscJockey discJockey, ICountdownTimer countdownTimer, 
+							 IPollTimer pollTimer, IConfigSettings configSettings, 
+							 BuildDataFetcher buildDataFetcher, BuildDataTransformer transformer, 
+							 FetchExceptionHandler fetchExceptionHandler, BackgroundWorker worker)
 		{
 			_view = view;
 			_discJockey = discJockey;
 			_countdownTimer = countdownTimer;
 			_pollTimer = pollTimer;
-			_pollTimer.Tick = (sender, e) => Update();
+			_configSettings = configSettings;
+			_pollTimer.Tick = (sender, e) => PollTimeup();
 			_fetcher = buildDataFetcher;
 			_fetchExceptionHandler = fetchExceptionHandler;
 			_transformer = transformer;
@@ -42,11 +45,18 @@ namespace Cradiator.Model
 			worker.RunWorkerCompleted += DataFetched;
 		}
 
+	    private void PollTimeup()
+		{
+			_configSettings.RotateView();
+			Update();
+		}
+
 		public void Update()
 		{
 			_countdownTimer.Stop();
 			_pollTimer.Stop();
 			_view.ShowProgress = true;
+
 			_worker.RunWorkerAsync();
 		}
 
@@ -68,7 +78,7 @@ namespace Cradiator.Model
 			try
 			{
 				var xmlResults = e.Result as IEnumerable<string>;
-			    var projectData = xmlResults.SelectMany(xml => _transformer.Transform(xml));
+				var projectData = xmlResults.SelectMany(xml => _transformer.Transform(xml));
 				_view.DataContext = projectData;
 				_discJockey.PlaySounds(projectData);
 			}

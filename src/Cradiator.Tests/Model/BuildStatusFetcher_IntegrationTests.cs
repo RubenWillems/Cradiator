@@ -39,7 +39,7 @@ namespace Cradiator.Tests.Model
 			Assert.Throws<FetchException>(() =>
 			{
 			    var fetcher = new BuildDataFetcher(
-			        new CruiseAddress("http://a.b.c.d.e.foo/ccnet/XmlStatusReport.aspx"), 
+			        new CradiatorUrl("http://a.b.c.d.e.foo/ccnet/XmlStatusReport.aspx"), 
                         _configSettings, _factory);
                 fetcher.Fetch();
 			}, "Unable to contact http://a.b.c.d.e.foo/ccnet/XmlStatusReport.aspx");
@@ -52,7 +52,7 @@ namespace Cradiator.Tests.Model
 		public void can_get_projects_from_a_realaddress()
 		{
 			var fetcher = 
-				new BuildDataFetcher(new CruiseAddress("http://ccnetlive.thoughtworks.com/ccnet/XmlStatusReport.aspx"),
+				new BuildDataFetcher(new CradiatorUrl("http://ccnetlive.thoughtworks.com/ccnet/XmlStatusReport.aspx"),
 				                     _configSettings, _factory);
 
 		    var fetch = fetcher.Fetch();
