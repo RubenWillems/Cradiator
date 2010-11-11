@@ -47,7 +47,7 @@ namespace Cradiator.Config
 		{
 			try
 			{
-                if (IsOneView)
+				if (IsOneView)
 				{
 					_viewSettingsReader.Write(new ViewSettings
 					{
@@ -271,18 +271,18 @@ namespace Cradiator.Config
 			get { return TimeSpan.FromSeconds(PollFrequency); }
 		}
 
-        // ReSharper disable UnusedMember.Global
+		// ReSharper disable UnusedMember.Global
 		public bool IsMultipleViews
 		{
 			get { return _viewList.Count > 1; }
 		}
-        // ReSharper restore UnusedMember.Global
+		// ReSharper restore UnusedMember.Global
 
 
-        public bool IsOneView
-        {
-            get { return _viewList.Count == 1; }
-        }
+		public bool IsOneView
+		{
+			get { return _viewList.Count == 1; }
+		}
 
 		// the placement of these variables is commensurate with their importance - low
 		const string PollFrequencyKey = "PollFrequency";
