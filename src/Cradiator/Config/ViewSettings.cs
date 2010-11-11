@@ -5,8 +5,6 @@ namespace Cradiator.Config
 {
     public class ViewSettings : IViewSettings, INotifyPropertyChanged
     {
-        public string ID { get; set; }
-
         protected string _url;
         public string URL
         {

@@ -123,19 +123,19 @@
 				   Style="{StaticResource HeadingLabel}"
 				   Content="Cradiator Settings"  />
 
-			<Label Grid.Column="0" Grid.Row="1" Content="Cruise URL"/>
-			<TextBox Name="urlTextBox" 
+			<Label Grid.Column="0" Grid.Row="1" Content="Current URL"/>
+			<TextBox Name="urlTextBox" IsReadOnly="True"
 					 Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" 
-					 TabIndex="0" 
+					 TabIndex="0" Background="Snow"
 					 Style="{StaticResource UrlTextStyle}" 
 					 Text="{Binding URL}">
 			</TextBox>
 
-			<Label Grid.Column="0" Grid.Row="2" Content="Project Filter"/>
-			<TextBox Name="projectFilterTextBox"
+			<Label Grid.Column="0" Grid.Row="2" Content="Current Filter"/>
+			<TextBox Name="projectFilterTextBox" IsReadOnly="True"
 					 Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" 
-					 Style="{StaticResource UrlTextStyle}" 
-					 Text="{Binding ProjectNameRegEx}">
+					 Style="{StaticResource UrlTextStyle}" Background="Snow"
+					 Text="{Binding ProjectNameRegEx}" >
 			</TextBox>
 
 			<Label Grid.Column="0" Grid.Row="3" Content="Poll Interval" />
@@ -207,11 +207,8 @@
 					  SelectedValue="{Binding Path=SpeechVoiceName, Converter={Converters:InstalledVoiceConverter}}">
 			</ComboBox>
 
-			<Label Grid.Column="1" Grid.Row="12" Content="" />
-
-
-			<Label Grid.Column="0" Grid.Row="13" Content="Skin"/>
-			<ListBox Name="skinListBox"
+			<Label Grid.Column="0" Grid.Row="13" Content="Current Skin"/>
+			<ListBox Name="skinListBox" IsEnabled="False"
 					 Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="3" Margin="2" Padding="0"
 					 BorderThickness="0" 
 					 SelectedValuePath="Tag" 
@@ -237,7 +234,7 @@
 
 			</ListBox>
 
-			<StackPanel Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="15" 
+            <StackPanel Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="15" 
 						HorizontalAlignment="Right"  Orientation="Horizontal" Margin="3,4">
 				<Button Click="Save_Click" IsDefault="True" Margin="0,0,10,0" Content="Save"/>
 				<Button Click="Cancel_Click" Grid.Column="1" HorizontalAlignment="Right" Content="Cancel"/>

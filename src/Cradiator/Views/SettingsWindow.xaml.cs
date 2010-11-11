@@ -14,13 +14,13 @@ namespace Cradiator.Views
 	{
 		readonly IConfigSettings _configSettings;
 		readonly ICradiatorView _view;
-		readonly ISpeechSynthesizer _speechSynthesizer;
+		readonly ISpeechSynthesizer _speechSynth;
 
-		public SettingsWindow(IConfigSettings configSettings, ICradiatorView view, ISpeechSynthesizer speechSynthesizer)
+		public SettingsWindow(IConfigSettings configSettings, ICradiatorView view, ISpeechSynthesizer speechSynth)
 		{
 			_configSettings = configSettings;
 			_view = view;
-			_speechSynthesizer = speechSynthesizer;
+			_speechSynth = speechSynth;
 
 			InitializeComponent();
 			SetBindings();
@@ -51,7 +51,7 @@ namespace Cradiator.Views
 		void SetBindings()
 		{
 			this.DataContext = _configSettings;
-			comboInstalledVoices.ItemsSource = _speechSynthesizer.GetInstalledVoices();
+			comboInstalledVoices.ItemsSource = _speechSynth.GetInstalledVoices();
 		}
 	}
 }
