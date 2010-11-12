@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Reflection;
 using Cradiator.Extensions;
 using log4net;
@@ -14,13 +15,13 @@ namespace Cradiator.Config
 	{
 		const int DefaultPollingFrequency = 30;
 
+		static readonly ConfigLocation _configLocation = new ConfigLocation();
 		readonly IList<IConfigObserver> _configObservers = new List<IConfigObserver>();
 		static readonly ILog _log = LogManager.GetLogger(typeof(ConfigSettings).Name);
 		IDictionary<string, string> _usernameMap = new Dictionary<string, string>();
-		readonly UserNameMappingReader _userNameMappingReader = new UserNameMappingReader(new ConfigLocation());
+		readonly UserNameMappingReader _userNameMappingReader = new UserNameMappingReader(_configLocation);
 		ICollection<ViewSettings> _viewList = new List<ViewSettings>();
-		private readonly Queue<ViewSettings> _viewQueue = new Queue<ViewSettings>();
-		readonly ViewSettingsReader _viewSettingsReader = new ViewSettingsReader(new ConfigLocation());
+		readonly Queue<ViewSettings> _viewQueue = new Queue<ViewSettings>();
 
 		public void Load()
 		{
@@ -49,13 +50,23 @@ namespace Cradiator.Config
 			{
 				if (IsOneView)
 				{
-					_viewSettingsReader.Write(new ViewSettings
+					string xml;
+					using (var stream = new StreamReader(_configLocation.FileName))
 					{
-						URL = URL,
-						ProjectNameRegEx = ProjectNameRegEx,
-						CategoryRegEx = CategoryRegEx,
-						SkinName = SkinName,
-					});
+						var reader = new ViewSettingsReader(stream);
+						xml = reader.Write(new ViewSettings
+						{
+							URL = URL,
+							ProjectNameRegEx = ProjectNameRegEx,
+							CategoryRegEx = CategoryRegEx,
+							SkinName = SkinName,
+						});
+					}
+
+					using (var stream = new StreamWriter(_configLocation.FileName))
+					{
+						stream.Write(xml);
+					}
 				}
 
 				var config = OpenExeConfiguration();
@@ -106,7 +117,11 @@ namespace Cradiator.Config
 
 		private void LoadViewSettings()
 		{
-			_viewList = _viewSettingsReader.Read();
+			using (var stream = new StreamReader(_configLocation.FileName))
+			{
+				var reader = new ViewSettingsReader(stream);
+				_viewList = reader.Read();
+			}
 		}
 
 		public void AddObserver(IConfigObserver observer)
@@ -272,7 +287,7 @@ namespace Cradiator.Config
 		}
 
 		// ReSharper disable UnusedMember.Global
-		public bool IsMultipleViews
+		public bool IsMultiView
 		{
 			get { return _viewList.Count > 1; }
 		}

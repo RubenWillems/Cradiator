@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using Cradiator.Config;
 using NUnit.Framework;
@@ -10,20 +11,19 @@ namespace Cradiator.Tests.Config
     {
         ViewSettingsReader _reader;
 
+        const string XML = "<configuration>" +
+                                "<views>" +
+                                    @"<view url=""http://url1"" " +
+                                        @"skin=""Grid"" " +
+                                        @"project-regex=""v5.*"" " +
+                                        @"category-regex="".*""/>"" " +
+                                "</views>" +
+                            "</configuration>";
+
         [SetUp]
         public void SetUp()
         {
-            _reader = new ViewSettingsReader(Create.Stub<IConfigLocation>())
-                          {
-                              Xml = "<configuration>" +
-                                        "<views>" +
-                                            @"<view url=""http://url1"" " +
-                                                @"skin=""Grid"" " +
-                                                @"project-regex=""v5.*"" " +
-                                                @"category-regex="".*""/>"" " +
-                                        "</views>" +
-                                    "</configuration>"
-                          };
+            _reader = new ViewSettingsReader(new StringReader(XML));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Cradiator.Tests.Config
         public void can_read_then_write_modified_view_to_xml()
         {
             var views = _reader.Read();
-            var xml = _reader.Write(new ViewSettings
+            var xmlModified = _reader.Write(new ViewSettings
                               {
                                 URL = "http://new",
                                 ProjectNameRegEx = "[a-z]",  
@@ -52,7 +52,8 @@ namespace Cradiator.Tests.Config
                                 SkinName = "StackPhoto",  
                               });
 
-            _reader.Xml = xml;
+            _reader = new ViewSettingsReader(new StringReader(xmlModified));
+
             views = _reader.Read();
             var view1 = views.First();
 

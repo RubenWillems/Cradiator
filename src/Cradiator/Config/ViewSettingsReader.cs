@@ -1,63 +1,65 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Xml;
 using System.Xml.Linq;
-using Cradiator.Extensions;
-using log4net;
 
 namespace Cradiator.Config
 {
     public class ViewSettingsReader
     {
-        private const string ProjectRegex = "project-regex";
-        private const string CategoryRegex = "category-regex";
-        private const string Url = "url";
-        private const string Skin = "skin";
+        const string ProjectRegex = "project-regex";
+        const string CategoryRegex = "category-regex";
+        const string Url = "url";
+        const string Skin = "skin";
 
-        static readonly ILog _log = LogManager.GetLogger(typeof(ViewSettingsReader).Name);
-        private readonly string _configFile;
+        readonly XDocument _xdoc;
 
-        public ViewSettingsReader(IConfigLocation configLocation)
+        public ViewSettingsReader(TextReader xml)
         {
-            _configFile = configLocation.FileName;
+            _xdoc = XDocument.Parse(xml.ReadToEnd());
         }
-
-        public string Xml { private get; set; } // todo for testing only, reconsider
 
         public ICollection<ViewSettings> Read()
         {
-            var xDoc = Xml.HasValue() ? XDocument.Parse(Xml) : XDocument.Load(_configFile);
-
             return new ReadOnlyCollection<ViewSettings>(
-                (from view in xDoc.Elements("configuration")
-                        .Elements("views")
-                        .Elements("view")
-                    select new ViewSettings
-                    {
-                        URL = view.Attribute(Url).Value,
-                        ProjectNameRegEx = view.Attribute(ProjectRegex).Value,
-                        CategoryRegEx = view.Attribute(CategoryRegex).Value,
-                        SkinName = view.Attribute(Skin).Value,
-                    }).ToList());
+                (from view in _xdoc.Elements("configuration")
+                     .Elements("views")
+                     .Elements("view")
+                 select new ViewSettings
+                            {
+                                URL = view.Attribute(Url).Value,
+                                ProjectNameRegEx = view.Attribute(ProjectRegex).Value,
+                                CategoryRegEx = view.Attribute(CategoryRegex).Value,
+                                SkinName = view.Attribute(Skin).Value,
+                            }).ToList());
         }
 
         public string Write(ViewSettings settings)
         {
-            var xDoc = Xml.HasValue() ? XDocument.Parse(Xml) : XDocument.Load(_configFile);
-
-            var view = xDoc.Elements("configuration")
+            var view1 = _xdoc.Elements("configuration")
                 .Elements("views")
                 .Elements("view")
-                .First();
+                .First();           // we only call this, when this assumption is valid
 
-            view.Attribute(Url).SetValue(settings.URL);
-            view.Attribute(ProjectRegex).SetValue(settings.ProjectNameRegEx);
-            view.Attribute(CategoryRegex).SetValue(settings.CategoryRegEx);
-            view.Attribute(Skin).SetValue(settings.SkinName);
+            view1.Attribute(Url).Value = settings.URL;
+            view1.Attribute(ProjectRegex).Value = settings.ProjectNameRegEx;
+            view1.Attribute(CategoryRegex).Value = settings.CategoryRegEx;
+            view1.Attribute(Skin).Value = settings.SkinName;
 
-            if (Xml.HasValue()) return xDoc.ToString(); 
-            xDoc.Save(_configFile);
-            return "";      //todo need find a way here to make test code and real/saving code, both look good
+            var xml = new StringBuilder();
+            using (var xmlTextWriter = XmlWriter.Create(xml, new XmlWriterSettings
+                                                          {
+                                                              OmitXmlDeclaration = true,
+                                                              NewLineHandling = NewLineHandling.None,
+                                                              Indent = true,
+                                                          }))
+            {
+                _xdoc.WriteTo(xmlTextWriter);
+            }
+            return xml.ToString();
         }
     }
 }
