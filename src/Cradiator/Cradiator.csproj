@@ -104,7 +104,7 @@
     <Compile Include="App\CradiatorApp.cs" />
     <Compile Include="Config\ConfigLocation.cs" />
     <Compile Include="Config\ViewSettings.cs" />
-    <Compile Include="Config\ViewSettingsReader.cs" />
+    <Compile Include="Config\ViewSettingsParser.cs" />
     <Compile Include="Config\UsernameMappingReader.cs" />
     <Compile Include="Converters\InstalledVoiceConverter.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />

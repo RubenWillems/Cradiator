@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Reflection;
 using Cradiator.Extensions;
 using log4net;
@@ -50,23 +49,13 @@ namespace Cradiator.Config
 			{
 				if (IsOneView)
 				{
-					string xml;
-					using (var stream = new StreamReader(_configLocation.FileName))
+					ViewSettingsParser.Modify(_configLocation.FileName, new ViewSettings
 					{
-						var reader = new ViewSettingsReader(stream);
-						xml = reader.Write(new ViewSettings
-						{
-							URL = URL,
-							ProjectNameRegEx = ProjectNameRegEx,
-							CategoryRegEx = CategoryRegEx,
-							SkinName = SkinName,
-						});
-					}
-
-					using (var stream = new StreamWriter(_configLocation.FileName))
-					{
-						stream.Write(xml);
-					}
+						URL = URL,
+						ProjectNameRegEx = ProjectNameRegEx,
+						CategoryRegEx = CategoryRegEx,
+						SkinName = SkinName,
+					});
 				}
 
 				var config = OpenExeConfiguration();
@@ -117,11 +106,7 @@ namespace Cradiator.Config
 
 		private void LoadViewSettings()
 		{
-			using (var stream = new StreamReader(_configLocation.FileName))
-			{
-				var reader = new ViewSettingsReader(stream);
-				_viewList = reader.Read();
-			}
+		    _viewList = ViewSettingsParser.Read(_configLocation.FileName);
 		}
 
 		public void AddObserver(IConfigObserver observer)

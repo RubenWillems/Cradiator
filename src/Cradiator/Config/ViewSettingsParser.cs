@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Cradiator.Config
 {
-    public class ViewSettingsReader
+    public class ViewSettingsParser
     {
         const string ProjectRegex = "project-regex";
         const string CategoryRegex = "category-regex";
@@ -17,7 +17,21 @@ namespace Cradiator.Config
 
         readonly XDocument _xdoc;
 
-        public ICollection<ViewSettings> Read()
+        public ViewSettingsParser(TextReader xml)
+        {
+            _xdoc = XDocument.Parse(xml.ReadToEnd());
+        }
+
+        public static ICollection<ViewSettings> Read(string xmlFile)
+        {
+            using (var stream = new StreamReader(xmlFile))
+            {
+                var reader = new ViewSettingsParser(stream);
+                return reader.ParseXml();
+            }
+        }
+
+        public ICollection<ViewSettings> ParseXml()
         {
             return new ReadOnlyCollection<ViewSettings>(
                 (from view in _xdoc.Elements("configuration")
@@ -32,13 +46,18 @@ namespace Cradiator.Config
                             }).ToList());
         }
 
+        //-----
+        // modify functionality (below) is only for the settings dialog save functionality
+        // someone less enamoured with guis might be tempted to delete this & the functionality
+        //-----
+
         public static void Modify(string xmlFile, ViewSettings viewSettings)
         {
             string xmlUpdated;
             using (var stream = new StreamReader(xmlFile))
             {
-                var reader = new ViewSettingsReader(stream);
-                xmlUpdated = reader.CreateUpdatedXml(viewSettings);
+                var parser = new ViewSettingsParser(stream);
+                xmlUpdated = parser.CreateUpdatedXml(viewSettings);
             }
             using (var stream = new StreamWriter(xmlFile))
             {
@@ -46,16 +65,11 @@ namespace Cradiator.Config
             }
         }
 
-        public ViewSettingsReader(TextReader xml)
-        {
-            _xdoc = XDocument.Parse(xml.ReadToEnd());
-        }
-
         public string CreateUpdatedXml(IViewSettings settings)
         {
             var view1 = _xdoc.Elements("configuration")
                              .Elements("views")
-                             .Elements("view").First(); // we only call this, when this assumption is valid
+                             .Elements("view").First(); // the assumption that there is only 1 must be valid
 
             view1.Attribute(Url).Value = settings.URL;
             view1.Attribute(ProjectRegex).Value = settings.ProjectNameRegEx;

@@ -9,7 +9,7 @@ namespace Cradiator.Tests.Config
     [TestFixture]
     public class ViewConfigReader_Tests
     {
-        ViewSettingsReader _reader;
+        ViewSettingsParser _parser;
 
         const string XML = "<configuration>" +
                                 "<views>" +
@@ -23,13 +23,13 @@ namespace Cradiator.Tests.Config
         [SetUp]
         public void SetUp()
         {
-            _reader = new ViewSettingsReader(new StringReader(XML));
+            _parser = new ViewSettingsParser(new StringReader(XML));
         }
 
         [Test]
         public void can_read_view_from_xml()
         {
-            var views = _reader.Read();
+            var views = _parser.ParseXml();
             views.Count().ShouldBe(1);
 
             var view1 = views.First();
@@ -43,8 +43,8 @@ namespace Cradiator.Tests.Config
         [Test]
         public void can_read_then_write_modified_view_to_xml()
         {
-            var views = _reader.Read();
-            var xmlModified = _reader.Write(new ViewSettings
+            var views = _parser.ParseXml();
+            var xmlModified = _parser.CreateUpdatedXml(new ViewSettings
                               {
                                 URL = "http://new",
                                 ProjectNameRegEx = "[a-z]",  
@@ -52,9 +52,9 @@ namespace Cradiator.Tests.Config
                                 SkinName = "StackPhoto",  
                               });
 
-            _reader = new ViewSettingsReader(new StringReader(xmlModified));
+            _parser = new ViewSettingsParser(new StringReader(xmlModified));
 
-            views = _reader.Read();
+            views = _parser.ParseXml();
             var view1 = views.First();
 
             view1.URL.ShouldBe("http://new");
