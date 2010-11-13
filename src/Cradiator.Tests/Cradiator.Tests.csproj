@@ -115,7 +115,7 @@
     <Compile Include="Services\CruiseNinjaModule_Tests.cs" />
     <Compile Include="Commands\InputBindingAdder_Tests.cs" />
     <Compile Include="Model\CountdownTimer_Tests.cs" />
-    <Compile Include="Model\CruiseAddress_Tests.cs" />
+    <Compile Include="Model\ViewUrl_Tests.cs" />
     <Compile Include="Model\FetchException_Tests.cs" />
     <Compile Include="Model\SkinResourceController_Tests.cs" />
     <Compile Include="Views\Presenter_Tests.cs" />

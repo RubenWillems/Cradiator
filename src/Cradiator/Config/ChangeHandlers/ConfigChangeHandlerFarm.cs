@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using log4net;
 using Ninject;
 
 namespace Cradiator.Config.ChangeHandlers
@@ -10,8 +9,6 @@ namespace Cradiator.Config.ChangeHandlers
 	/// </summary>
 	public class ConfigChangeHandlerFarm
 	{
-		static readonly ILog _log = LogManager.GetLogger(typeof(ConfigChangeHandlerFarm).Name);
-
 		readonly List<IConfigChangeHandler> _changeHandlers = new List<IConfigChangeHandler>();
 
 		[Inject]
@@ -22,8 +19,6 @@ namespace Cradiator.Config.ChangeHandlers
 
 		public void UpdateAll(ConfigSettings newSettings)
 		{
-			_log.InfoFormat("New settings: {0}", newSettings);
-
 			foreach (var handler in _changeHandlers)
 			{
 				handler.ConfigUpdated(newSettings);

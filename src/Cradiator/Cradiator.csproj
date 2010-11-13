@@ -116,6 +116,7 @@
     <Compile Include="Model\GuiltFactory.cs" />
     <Compile Include="Model\GuiltStrategies.cs" />
     <Compile Include="Model\BuildBusterAttributes.cs" />
+    <Compile Include="Model\UrlParser.cs" />
     <Compile Include="Services\Ninjector.cs" />
     <Compile Include="Views\ICradiatorView.cs" />
     <Compile Include="Model\FetchExceptionHandler.cs" />
@@ -155,7 +156,7 @@
     <Compile Include="Views\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\CradiatorUrl.cs" />
+    <Compile Include="Model\ViewUrl.cs" />
     <Compile Include="Services\HttpWebClient.cs" />
     <Compile Include="Model\FetchException.cs" />
     <Compile Include="Model\BuildDataFetcher.cs" />

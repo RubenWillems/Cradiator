@@ -16,8 +16,8 @@ namespace Cradiator.Services
 		{
 			IWebClient webClient;
 
-			var cruiseAddress = new CradiatorUrl(url);
-			if (cruiseAddress.IsDebug)
+			var uri = new UrlParser(url);
+			if (uri.IsDebug)
 			{
 				webClient = new SandboxWebClient();
 			}
@@ -26,7 +26,7 @@ namespace Cradiator.Services
 				webClient = new HttpWebClient();
 			}
 
-			_log.InfoFormat("Using WebClient->[{0}]", webClient.GetType());
+			_log.DebugFormat("Using WebClient: {0}", webClient.GetType());
 			return webClient;
 		}
 	}

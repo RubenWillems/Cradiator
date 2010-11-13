@@ -9,15 +9,15 @@ namespace Cradiator.Tests.Model
 	[TestFixture]
 	public class BuildDataTransformer_Tests
 	{
-		CradiatorUrl _cradiatorUrl;
+		ViewUrl _viewUrl;
 		IConfigSettings _configSettings;
 		BuildDataTransformer _transformer;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_cradiatorUrl = new CradiatorUrl("http://valid/XmlStatusReport.aspx");
-			_configSettings = new ConfigSettings { URL = _cradiatorUrl.Url };
+			_viewUrl = new ViewUrl("http://valid/XmlStatusReport.aspx");
+			_configSettings = new ConfigSettings { URL = _viewUrl.Url };
 			_transformer = new BuildDataTransformer(_configSettings);
 		}
 
@@ -141,7 +141,7 @@ namespace Cradiator.Tests.Model
 			Assert.That(projectStatuses.Count(), Is.EqualTo(2));
 
 			// notify of config change and fetch again
-			var newSettings = new ConfigSettings { ProjectNameRegEx = "BarProject", URL = _cradiatorUrl.Url };
+			var newSettings = new ConfigSettings { ProjectNameRegEx = "BarProject", URL = _viewUrl.Url };
 			_transformer.ConfigUpdated(newSettings);
 			projectStatuses = _transformer.Transform(SimilarProjectXml);
 			Assert.That(projectStatuses.Count(), Is.EqualTo(1));

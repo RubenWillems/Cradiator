@@ -8,14 +8,14 @@ namespace Cradiator.Model
 {
 	public class BuildDataFetcher : IConfigObserver
 	{
-		readonly CradiatorUrl _cradiatorUrl;
+		readonly ViewUrl _viewUrl;
 		readonly IWebClientFactory _webClientFactory;
 		IWebClient _webClient;
 
-		public BuildDataFetcher(CradiatorUrl cradiatorUrl, IConfigSettings configSettings,
-		                        IWebClientFactory webClientFactory)
+		public BuildDataFetcher(ViewUrl viewUrl, IConfigSettings configSettings,
+								IWebClientFactory webClientFactory)
 		{
-			_cradiatorUrl = cradiatorUrl;
+			_viewUrl = viewUrl;
 			_webClientFactory = webClientFactory;
 			_webClient = webClientFactory.GetWebClient(configSettings.URL);
 			configSettings.AddObserver(this);
@@ -23,21 +23,19 @@ namespace Cradiator.Model
 
 		public IEnumerable<string> Fetch()
 		{
-			if (_cradiatorUrl.IsNotValid) throw new FetchException(_cradiatorUrl.Url);
-
 			try
 			{
-			    return _cradiatorUrl.UriList.Select(uri => _webClient.DownloadString(uri)).ToList();
+				return _viewUrl.UriList.Select(uri => _webClient.DownloadString(uri)).ToList();
 			}
 			catch (WebException webException)
-            {   //todo will this identify the specific uri attempted
-				throw new FetchException(_cradiatorUrl.Url, webException);
+			{   //todo will this identify the specific uri attempted
+				throw new FetchException(_viewUrl.Url, webException);
 			}
 		}
 
 		public void ConfigUpdated(ConfigSettings newSettings)
 		{
-			_cradiatorUrl.Url = newSettings.URL;
+			_viewUrl.Url = newSettings.URL;
 			_webClient = _webClientFactory.GetWebClient(newSettings.URL);
 		}
 	}

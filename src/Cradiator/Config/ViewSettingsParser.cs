@@ -69,7 +69,7 @@ namespace Cradiator.Config
         {
             var view1 = _xdoc.Elements("configuration")
                              .Elements("views")
-                             .Elements("view").First(); // the assumption that there is only 1 must be valid
+                             .Elements("view").First(); // only used to update a view when there is 1
 
             view1.Attribute(Url).Value = settings.URL;
             view1.Attribute(ProjectRegex).Value = settings.ProjectNameRegEx;
