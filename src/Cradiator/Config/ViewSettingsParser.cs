@@ -48,7 +48,6 @@ namespace Cradiator.Config
 
         //-----
         // modify functionality (below) is only for the settings dialog save functionality
-        // someone less enamoured with guis might be tempted to delete this & the functionality
         //-----
 
         public static void Modify(string xmlFile, ViewSettings viewSettings)
