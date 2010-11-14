@@ -34,7 +34,7 @@ namespace Cradiator.Model
 			{
 
 				var isValid = IsDebug ||
-								Regex.IsMatch(_url, @"((https?)://+[\w\d:#@%/;$()~_?\+-=\\\.&]*)");
+								Regex.IsMatch(_url, @"^((https?)://+[\w\d:#@%/;$()~_?\+-=\\\.&]*)");
 
 				if (!isValid) _log.WarnFormat("Skipping invalid URL: '{0}'", _url);
 				return isValid;

@@ -76,7 +76,8 @@ namespace Cradiator.Config
 			catch (Exception ex)
 			{
 				// config may be edited in the file (manually) - we cannot show an error dialog here
-				// because it's entirely reasonable that the user doesn't have access to the machine running the exe to close it
+				// because it's entirely reasonable that the user doesn't have access to the machine running 
+				// the exe, in order to close a dialog
 				_log.Error(ex.Message, ex);		
 			}
 		}
@@ -128,12 +129,21 @@ namespace Cradiator.Config
 			return ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
 		}
 
+		public void Log()
+		{
+			_log.InfoFormat("Config file updated. {0}Settings: {1}", IsMultiView ? "(non-view) " : "", this);
+		}
+
 		public override string ToString()
 		{
-			return string.Format(
-				"PollFrequency: {0}, ShowCountdown: {1}, ShowProgress: {2}, BrokenBuildSound: {3}, FixedBuildSound: {4}, BrokenBuildText: {5}, FixedBuildText: {6}, PlaySounds: {7}, PlaySpeech: {8}, SpeechVoiceName: {9}, BreakerGuiltStrategy: {10}", 
-				_pollFrequency, _showCountdown, _showProgress, _brokenBuildSound, _fixedBuildSound, _brokenBuildText, _fixedBuildText, _playSounds, _playSpeech, _speechVoiceName, _breakerGuiltStrategy);
+			if (IsOneView)
+				return string.Format("Url={0}, SkinName={1}, PollFrequency={2}, ProjectNameRegEx={3}, ShowCountdown={4}, ShowCountdown={5}, PlaySounds={6}, PlaySpeech={7}, BrokenBuildSound={8}, BrokenBuildText={9}, FixedBuildSound={10}, FixedBuildText={11}, SpeechVoiceName={12}, CategoryRegEx={13}, BreakerGuiltStrategy={14}",
+					_url, _skinName, _pollFrequency, _projectNameRegEx, _showCountdown, _showProgress, _playSounds, _playSpeech, _brokenBuildSound, _brokenBuildText, _fixedBuildSound, _fixedBuildText, _speechVoiceName, _categoryRegEx, _breakerGuiltStrategy);
+
+			return string.Format("PollFrequency={0}, ShowCountdown={1}, ShowProgress={2}, BrokenBuildSound={3}, FixedBuildSound={4}, BrokenBuildText={5}, FixedBuildText={6}, PlaySounds={7}, PlaySpeech={8}, SpeechVoiceName={9}, BreakerGuiltStrategy={10}",
+					_pollFrequency, _showCountdown, _showProgress, _brokenBuildSound, _fixedBuildSound, _brokenBuildText, _fixedBuildText, _playSounds, _playSpeech, _speechVoiceName, _breakerGuiltStrategy);
 		}
+
 
 		/// <summary> interval at which to poll (in seconds) </summary>
 		private int _pollFrequency;

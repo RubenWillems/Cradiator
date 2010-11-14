@@ -69,6 +69,13 @@ namespace Cradiator.Tests.Model
 		}
 
 		[Test]
+		public void invalid_uri_6()
+		{
+			var url = new UrlParser("//http://notvalid.com");
+			url.IsNotValid.ShouldBe(true);
+		}
+
+		[Test]
 		public void valid_url_1()
 		{
 			var url = new UrlParser("http://valid.com");
@@ -93,6 +100,13 @@ namespace Cradiator.Tests.Model
 		public void valid_url_4()
 		{
 			var url = new UrlParser("http://localhost/ccnet/XmlStatusReport.aspx?server=5");
+			url.IsValid.ShouldBe(true);
+		}
+
+		[Test]
+		public void valid_url_5()
+		{
+			var url = new UrlParser("http://localhost:8111/guestAuth/cradiator.html?projectId=project2");
 			url.IsValid.ShouldBe(true);
 		}
 

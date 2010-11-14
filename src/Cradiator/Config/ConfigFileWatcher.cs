@@ -64,8 +64,7 @@ namespace Cradiator.Config
 			{
 				_configSettings.Load();
 				_configSettings.NotifyObservers();
-
-				_log.InfoFormat("Config file changes. New settings: {0}", _configSettings);
+				_configSettings.Log();
 
 			}
 			catch (Exception exception)
