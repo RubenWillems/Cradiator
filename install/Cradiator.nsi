@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Cradiator"
-!define PRODUCT_VERSION "v2.7"
+!define PRODUCT_VERSION "v2.8"
 !define PRODUCT_WEB_SITE "www.codeplex.com/Cradiator"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Cradiator.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -61,7 +61,8 @@ Section "MainSection" SEC01
   File "..\lib\log4net.dll"
   File "..\lib\Ninject.dll"
   File "..\src\Cradiator\bin\Release\DummyProjectStatus.xml"
-  
+  File "..\src\MigrateConfig\bin\Release\Cradiator.MigrateConfig.exe"
+    
   SetOutPath "$INSTDIR\sounds"
   File "..\sounds\*.wav"
   SetOutPath "$INSTDIR"
