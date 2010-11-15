@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Cradiator.MigrateConfig</RootNamespace>
-    <AssemblyName>Cradiator.MigrateConfig</AssemblyName>
+    <AssemblyName>Cradiator.MigrateConfig.ToMultiView</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

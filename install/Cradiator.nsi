@@ -61,7 +61,7 @@ Section "MainSection" SEC01
   File "..\lib\log4net.dll"
   File "..\lib\Ninject.dll"
   File "..\src\Cradiator\bin\Release\DummyProjectStatus.xml"
-  File "..\src\MigrateConfig\bin\Release\Cradiator.MigrateConfig.exe"
+  File "..\src\MigrateConfig\bin\Release\Cradiator.MigrateConfig.ToMultiView.exe"
     
   SetOutPath "$INSTDIR\sounds"
   File "..\sounds\*.wav"

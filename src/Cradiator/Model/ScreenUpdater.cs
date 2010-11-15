@@ -5,6 +5,7 @@ using System.Linq;
 using Cradiator.Audio;
 using Cradiator.Config;
 using Cradiator.Views;
+using log4net;
 
 namespace Cradiator.Model
 {
@@ -15,6 +16,8 @@ namespace Cradiator.Model
 
 	public class ScreenUpdater : IScreenUpdater
 	{
+		static readonly ILog _log = LogManager.GetLogger(typeof(ScreenUpdater).Name);
+
 		readonly ICradiatorView _view;
 		readonly DiscJockey _discJockey;
 		readonly ICountdownTimer _countdownTimer;
@@ -66,6 +69,7 @@ namespace Cradiator.Model
 			{
 				var xmlResults = _fetcher.Fetch();
 				e.Result = xmlResults;
+				if (xmlResults == null) throw new Exception("No xml returned");
 			}
 			catch (Exception exception)
 			{
@@ -78,7 +82,22 @@ namespace Cradiator.Model
 			try
 			{
 				var xmlResults = e.Result as IEnumerable<string>;
-				var projectData = xmlResults.SelectMany(xml => _transformer.Transform(xml));
+				IEnumerable<ProjectStatus> projectData = new List<ProjectStatus>();
+				if (xmlResults != null)
+				{
+					projectData = xmlResults.SelectMany(xml =>
+					{
+						try
+						{
+							return _transformer.Transform(xml);
+						}
+						catch (Exception exception)
+						{
+							_log.Error(exception);
+							return new List<ProjectStatus>();
+						}
+					});
+				}
 				_view.DataContext = projectData;
 				_discJockey.PlaySounds(projectData);
 			}

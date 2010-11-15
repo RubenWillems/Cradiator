@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Cradiator.Config;
@@ -23,14 +24,17 @@ namespace Cradiator.Model
 
 		public IEnumerable<string> Fetch()
 		{
-			try
+			return _viewUrl.UriList.Select(url =>
 			{
-				return _viewUrl.UriList.Select(uri => _webClient.DownloadString(uri)).ToList();
-			}
-			catch (WebException webException)
-			{   //todo will this identify the specific uri attempted
-				throw new FetchException(_viewUrl.Url, webException);
-			}
+			    try
+			    {
+			    	return _webClient.DownloadString(url);
+			    }
+			    catch (WebException webException)
+			    {
+					throw new FetchException(url, webException);
+			    }
+			}).ToList();
 		}
 
 		public void ConfigUpdated(ConfigSettings newSettings)

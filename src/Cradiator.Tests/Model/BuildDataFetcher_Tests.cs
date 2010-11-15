@@ -28,7 +28,7 @@ namespace Cradiator.Tests.Model
 		{
 			const string Hello = "hello";
 
-			_webClient.Expect(w => w.DownloadString(Arg<Uri>.Is.Anything)).Return(Hello);
+			_webClient.Expect(w => w.DownloadString(Arg<string>.Is.Anything)).Return(Hello);
 
 			var fetcher = new BuildDataFetcher(new ViewUrl("http://test"), new ConfigSettings(), _webClientFactory);
 			var fetchValue = fetcher.Fetch();
@@ -46,18 +46,18 @@ namespace Cradiator.Tests.Model
 				}, _webClientFactory);
 
 			fetcher.Fetch();
-			_webClient.AssertWasCalled(w => w.DownloadString(Arg<Uri>.Is.Equal(new Uri("http://bla"))), w=>w.Repeat.Once());
+			_webClient.AssertWasCalled(w => w.DownloadString(Arg<string>.Is.Equal(new Uri("http://bla"))), w => w.Repeat.Once());
 
 			fetcher.ConfigUpdated(new ConfigSettings { URL = "http://new"});
 			fetcher.Fetch();
-			_webClient.AssertWasCalled(w => w.DownloadString(Arg<Uri>.Is.Equal(new Uri("http://new"))), w => w.Repeat.Once());
+			_webClient.AssertWasCalled(w => w.DownloadString(Arg<string>.Is.Equal(new Uri("http://new"))), w => w.Repeat.Once());
 		}
 
 		[Test]
 		public void can_fetch_multiple_urls()
 		{
-			_webClient.Expect(w => w.DownloadString(Arg<Uri>.Is.Anything)).Return("url1").Repeat.Once();
-			_webClient.Expect(w => w.DownloadString(Arg<Uri>.Is.Anything)).Return("url2").Repeat.Once();
+			_webClient.Expect(w => w.DownloadString(Arg<string>.Is.Anything)).Return("url1").Repeat.Once();
+			_webClient.Expect(w => w.DownloadString(Arg<string>.Is.Anything)).Return("url2").Repeat.Once();
 
 			var fetcher = new BuildDataFetcher(new ViewUrl("http://url1 http://url2"), 
 				new ConfigSettings(), _webClientFactory);
@@ -68,8 +68,8 @@ namespace Cradiator.Tests.Model
 			xmlResults[0].ShouldBe("url1");
 			xmlResults[1].ShouldBe("url2");
 
-			_webClient.AssertWasCalled(w=>w.DownloadString(Arg<Uri>.Is.Equal(new Uri("http://url1"))));
-			_webClient.AssertWasCalled(w=>w.DownloadString(Arg<Uri>.Is.Equal(new Uri("http://url2"))));
+			_webClient.AssertWasCalled(w => w.DownloadString(Arg<string>.Is.Equal(new Uri("http://url1"))));
+			_webClient.AssertWasCalled(w => w.DownloadString(Arg<string>.Is.Equal(new Uri("http://url2"))));
 		}
 	}
 }

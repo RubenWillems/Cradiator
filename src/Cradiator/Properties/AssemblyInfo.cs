@@ -23,8 +23,8 @@ using System.Runtime.InteropServices;
     // Specifies the location of the system non-theme specific resource dictionary:
     //     Themes\generic.xaml
     ResourceDictionaryLocation.SourceAssembly)]
-[assembly: AssemblyVersionAttribute("2.7.0.0")]
-[assembly: AssemblyFileVersionAttribute("2.7.0.0")]
+[assembly: AssemblyVersionAttribute("2.8.0.0")]
+[assembly: AssemblyFileVersionAttribute("2.8.0.0")]
 [assembly: ComVisibleAttribute(false)]
 [assembly: AssemblyCompanyAttribute("www.codeplex.com/Cradiator")]
 [assembly: AssemblyProductAttribute("Cradiator")]

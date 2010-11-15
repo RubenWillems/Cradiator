@@ -9,20 +9,11 @@ namespace Cradiator.Tests.Model
 	public class ViewUrl_Tests
 	{
 		[Test]
-		public void can_append_filename_if_doesnt_exist()
-		{
-			var url = new ViewUrl("http://mycruise/ccnet");
-
-			url.Uri.ToString().ShouldContain("/XmlStatusReport.aspx");
-			url.Uri.ToString().ShouldContain("/XmlStatusReport.aspx");
-		}
-
-		[Test]
 		public void doesnot_append_filename_if_already_exists()
 		{
 			var url = new ViewUrl("http://mycruise/ccnet/XmlStatusReport.aspx");
 
-			url.Uri.ToString().ShouldContain("mycruise/ccnet/XmlStatusReport.aspx");
+			url.Url.ShouldContain("mycruise/ccnet/XmlStatusReport.aspx");
 		}
 
 		[Test]
@@ -30,14 +21,14 @@ namespace Cradiator.Tests.Model
 		{
 			var url = new ViewUrl("http://www.spice-3d.org/cruise/xml");
 
-			url.Uri.ToString().ShouldContain("www.spice-3d.org/cruise/xml");
+			url.Url.ShouldContain("www.spice-3d.org/cruise/xml");
 		}
 
 		[Test]
 		public void doesnot_prepend_http_if_already_exists()
 		{
 			var url = new ViewUrl("http://mycruise/ccnet");
-			url.Uri.ToString().ShouldContain("http://mycruise/ccnet");
+			url.Url.ShouldContain("http://mycruise/ccnet");
 		}
 
 		[Test]

@@ -8,8 +8,6 @@ namespace Cradiator.Model
 {
 	public class ViewUrl
 	{
-		private readonly UrlParser _urlParser;
-
 		// ReSharper disable UnusedMember.Global
 		[Inject]
 		public ViewUrl(IConfigSettings settings) : this(settings.URL) {}
@@ -18,24 +16,18 @@ namespace Cradiator.Model
 		public ViewUrl(string url)
 		{
 			Url = url;
-			_urlParser = new UrlParser(Url);
 		}
 
 		public string Url { get; set; }
 
-		public Uri Uri
-		{
-			get { return _urlParser.Uri; }
-		}
-
-		public IEnumerable<Uri> UriList
+		public IEnumerable<string> UriList
 		{
 			get
 			{
 				return from url in Url.Split(' ')
 				       let u = new UrlParser(url)
 				       where u.IsValid
-				       select u.Uri;
+					   select u.Url;
 			}
 		}
 	}

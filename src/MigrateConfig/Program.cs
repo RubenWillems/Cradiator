@@ -45,7 +45,7 @@ namespace Cradiator.MigrateConfig
 				return 0;
 			}
 
-			IDictionary<string, string> config = new Dictionary<string, string>();
+			var config = new Dictionary<string, string>();
 			Console.WriteLine("removing pre multi-view xml elements...");
 			foreach (var oldElement in oldElements)
 			{

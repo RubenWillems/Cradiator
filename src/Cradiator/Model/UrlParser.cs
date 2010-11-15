@@ -15,18 +15,7 @@ namespace Cradiator.Model
 			_url = url;
 		}
 
-		public Uri Uri
-		{
-			get
-			{
-				var uri = _url.Trim();
-
-				if (uri.Contains("ccnet") && !uri.EndsWith("/XmlStatusReport.aspx"))
-					uri += "/XmlStatusReport.aspx";
-
-				return new Uri(uri);
-			}
-		}
+		public string Url { get { return _url; } }
 
 		public bool IsValid
 		{
