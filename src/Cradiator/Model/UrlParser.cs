@@ -7,7 +7,7 @@ namespace Cradiator.Model
 {
 	public class UrlParser
 	{
-		static readonly ILog _log = LogManager.GetLogger(typeof(ViewUrl).Name);
+		static readonly ILog _log = LogManager.GetLogger(typeof(UrlParser).Name);
 		private readonly string _url;
 
 		public UrlParser(string url)
@@ -20,11 +20,10 @@ namespace Cradiator.Model
 		public bool IsValid
 		{
 			get
-			{
-
+			{	
 				var isValid = IsDebug ||
 								Regex.IsMatch(_url, @"^((https?)://+[\w\d:#@%/;$()~_?\+-=\\\.&]*)");
-
+								// just to prevent basic typos and misunderstandings
 				if (!isValid) _log.WarnFormat("Skipping invalid URL: '{0}'", _url);
 				return isValid;
 			}
