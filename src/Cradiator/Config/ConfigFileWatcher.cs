@@ -62,10 +62,10 @@ namespace Cradiator.Config
 		{
 			try
 			{
-				_log.Info("Config file changed");
-
 				_configSettings.Load();
 				_configSettings.NotifyObservers();
+				_configSettings.Log();
+
 			}
 			catch (Exception exception)
 			{

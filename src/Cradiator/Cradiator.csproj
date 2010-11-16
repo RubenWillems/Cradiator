@@ -11,7 +11,7 @@
     <OutputType>winexe</OutputType>
     <MinFrameworkVersionRequired>3.0</MinFrameworkVersionRequired>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <ApplicationIcon>Images\Cradiator.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\images\Cradiator.ico</ApplicationIcon>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -97,11 +97,14 @@
     <Compile Include="Audio\VoiceSelector.cs" />
     <Compile Include="Config\ChangeHandlers\IConfigChangeHandler.cs" />
     <Compile Include="Config\ChangeHandlers\ConfigChangeHandlerFarm.cs" />
+    <Compile Include="Config\IViewSettings.cs" />
     <Compile Include="Config\IConfigObserver.cs" />
     <Compile Include="Config\IConfigSettings.cs" />
     <Compile Include="Config\ChangeHandlers\SkinChangeHandler.cs" />
     <Compile Include="App\CradiatorApp.cs" />
     <Compile Include="Config\ConfigLocation.cs" />
+    <Compile Include="Config\ViewSettings.cs" />
+    <Compile Include="Config\ViewSettingsParser.cs" />
     <Compile Include="Config\UsernameMappingReader.cs" />
     <Compile Include="Converters\InstalledVoiceConverter.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="Model\GuiltFactory.cs" />
     <Compile Include="Model\GuiltStrategies.cs" />
     <Compile Include="Model\BuildBusterAttributes.cs" />
+    <Compile Include="Model\UrlParser.cs" />
     <Compile Include="Services\Ninjector.cs" />
     <Compile Include="Views\ICradiatorView.cs" />
     <Compile Include="Model\FetchExceptionHandler.cs" />
@@ -152,7 +156,7 @@
     <Compile Include="Views\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\CruiseAddress.cs" />
+    <Compile Include="Model\ViewUrl.cs" />
     <Compile Include="Services\HttpWebClient.cs" />
     <Compile Include="Model\FetchException.cs" />
     <Compile Include="Model\BuildDataFetcher.cs" />
@@ -164,7 +168,9 @@
       <SubType>Code</SubType>
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -215,9 +221,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Cradiator.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\StackedPhotoIcon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +254,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Cradiator.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

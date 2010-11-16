@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace Cradiator.Config
 {
-	public interface IConfigSettings 
+	// ReSharper disable UnusedMemberInSuper.Global
+	public interface IConfigSettings : IViewSettings
 	{
-		string URL { get; set; }
-		string SkinName { get; set; }
 		int PollFrequency { get; set; }
-		string ProjectNameRegEx { get; set; }
 		bool ShowCountdown { get; set; }
 		TimeSpan PollFrequencyTimeSpan { get; }
 		string BrokenBuildSound { get; set; }
@@ -18,7 +16,6 @@ namespace Cradiator.Config
 		bool PlaySounds { get; set; }
 		bool PlaySpeech { get; set; }
 		string SpeechVoiceName { get; set; }
-		string CategoryRegEx { get; set; }
 		bool ShowProgress { get; set; }
 		IDictionary<string, string> UsernameMap { get; }
 		GuiltStrategyType BreakerGuiltStrategy { get; }
@@ -26,6 +23,8 @@ namespace Cradiator.Config
 		void Load();
 		void NotifyObservers();
 		void Save();
-
+	    void RotateView();
+		void Log();
 	}
+	// ReSharper restore UnusedMemberInSuper.Global
 }

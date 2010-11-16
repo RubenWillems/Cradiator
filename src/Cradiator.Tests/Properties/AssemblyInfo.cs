@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
 
-[assembly : AssemblyTitle("BigVisibleCruise.Tests")]
+[assembly: AssemblyTitle("Cradiator.Tests")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]

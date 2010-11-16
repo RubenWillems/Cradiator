@@ -13,9 +13,11 @@ namespace Cradiator.Views
 
 		int _pollFrequency;
 		bool _isShowProgressConfigured;	// named to avoid confusion with property on this view with what was a similar name
+	    private readonly IConfigSettings _configSettings;
 
-		public CradiatorWindow(IConfigSettings configSettings)
+	    public CradiatorWindow(IConfigSettings configSettings)
 		{
+		    _configSettings = configSettings;
 			try
 			{
 				InitializeComponent();
@@ -84,11 +86,11 @@ namespace Cradiator.Views
 		}
 
 		void ICradiatorView.UpdateCountdownTimer(TimeSpan timeRemaining)
-        {
-        	countdownText.Text = string.Format("{0:00}:{1:00}",
+		{
+			countdownText.Text = string.Format("{0:00}:{1:00}",
 											  timeRemaining.Minutes,
 											  timeRemaining.Seconds);
-        }
+		}
 
 		public void Invoke(Action action)
 		{

@@ -20,14 +20,14 @@ namespace Cradiator.Extensions
 			return me.ToLower().Contains(other.ToLower());
 		}
 
-        public static bool EqualsIgnoreCase(this string me, string them)
-        {
-            return me.Equals(them, StringComparison.CurrentCultureIgnoreCase);
-        }
+		public static bool EqualsIgnoreCase(this string me, string them)
+		{
+			return me.Equals(them, StringComparison.CurrentCultureIgnoreCase);
+		}
 
-        public static bool ContainsInvalidChars(this string me)
-        {
-            return me.IndexOfAny(Path.GetInvalidFileNameChars()) != -1;
-        }
+		public static bool ContainsInvalidChars(this string me)
+		{
+			return me.IndexOfAny(Path.GetInvalidFileNameChars()) != -1;
+		}
 	}
 }

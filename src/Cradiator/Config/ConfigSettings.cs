@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Reflection;
 using Cradiator.Extensions;
@@ -11,57 +10,143 @@ namespace Cradiator.Config
 	/// <summary>
 	/// configuration settings
 	/// </summary>
-	public class ConfigSettings : INotifyPropertyChanged, IConfigSettings
+	public class ConfigSettings : ViewSettings, IConfigSettings
 	{
 		const int DefaultPollingFrequency = 30;
 
-		const string PollFrequencyKey = "PollFrequency";
-		const string UrlKey = "URL";
-		const string SkinKey = "Skin";
-		const string ProjectNameRegexKey = "ProjectNameRegEx";
-		const string CategoryRegexKey = "CategoryRegEx";
-		const string ShowCountdownKey = "ShowCountdown";
-		const string ShowProgressKey = "ShowProgress";
-		const string PlaySoundsKey = "PlaySounds";
-		const string BrokenBuildSoundKey = "BrokenBuildSound";
-		const string FixedBuildSoundKey = "FixedBuildSound";
-		const string BrokenBuildTextKey = "BrokenBuildText";
-		const string FixedBuildTextKey = "FixedBuildText";
-		const string PlaySpeechKey = "PlaySpeech";
-		const string SpeechVoiceNameKey = "SpeechVoiceName";
-		const string BreakerGuiltStrategyKey = "BreakerGuiltStrategy";
-
-		readonly IList<IConfigObserver> _configObservers = new List<IConfigObserver>();
+		static readonly ConfigLocation _configLocation = new ConfigLocation();
+		readonly IList<IConfigObserver> _observers = new List<IConfigObserver>();
 		static readonly ILog _log = LogManager.GetLogger(typeof(ConfigSettings).Name);
 		IDictionary<string, string> _usernameMap = new Dictionary<string, string>();
-		readonly UserNameMappingReader _userNameMappingReader = new UserNameMappingReader(new ConfigLocation());
+		readonly UserNameMappingReader _userNameMappingReader = new UserNameMappingReader(_configLocation);
+		ICollection<ViewSettings> _viewList = new List<ViewSettings>();
+		readonly Queue<ViewSettings> _viewQueue = new Queue<ViewSettings>();
 
-		private string _url;
-		public string URL
+		public void Load()
 		{
-			get { return _url; }
-			set
+			LoadViewSettings();
+			ApplyViewSettings();
+
+			var config = OpenExeConfiguration();
+			PollFrequency = config.GetIntProperty(PollFrequencyKey, DefaultPollingFrequency);
+			ShowCountdown = config.GetBoolProperty(ShowCountdownKey);
+			ShowProgress = config.GetBoolProperty(ShowProgressKey);
+			PlaySounds = config.GetBoolProperty(PlaySoundsKey);
+			PlaySpeech = config.GetBoolProperty(PlaySpeechKey);
+			BrokenBuildSound = config.GetProperty(BrokenBuildSoundKey).Value;
+			FixedBuildSound = config.GetProperty(FixedBuildSoundKey).Value;
+			BrokenBuildText = config.GetProperty(BrokenBuildTextKey).Value;
+			FixedBuildText = config.GetProperty(FixedBuildTextKey).Value;
+			SpeechVoiceName = config.GetProperty(SpeechVoiceNameKey).Value;
+			_breakerGuiltStrategy = config.GetProperty(BreakerGuiltStrategyKey).Value;
+
+			_usernameMap = _userNameMappingReader.Read();
+		}
+
+		public void Save()
+		{
+			try
 			{
-				if (_url == value) return;
-				_url = value;
-				Notify("URL");
+				if (IsOneView)
+				{
+					ViewSettingsParser.Modify(_configLocation.FileName, new ViewSettings
+					{
+						URL = URL,
+						ProjectNameRegEx = ProjectNameRegEx,
+						CategoryRegEx = CategoryRegEx,
+						SkinName = SkinName,
+					});
+				}
+
+				var config = OpenExeConfiguration();
+
+				config.AppSettings.Settings[PollFrequencyKey].Value = PollFrequency.ToString();
+				config.AppSettings.Settings[ShowCountdownKey].Value = ShowCountdown.ToString();
+				config.AppSettings.Settings[ShowProgressKey].Value = ShowProgress.ToString();
+				config.AppSettings.Settings[PlaySoundsKey].Value = PlaySounds.ToString();
+				config.AppSettings.Settings[PlaySpeechKey].Value = PlaySpeech.ToString();
+				config.AppSettings.Settings[BrokenBuildSoundKey].Value = BrokenBuildSound;
+				config.AppSettings.Settings[FixedBuildSoundKey].Value = FixedBuildSound;
+				config.AppSettings.Settings[BrokenBuildTextKey].Value = BrokenBuildText;
+				config.AppSettings.Settings[FixedBuildTextKey].Value = FixedBuildText;
+				config.AppSettings.Settings[SpeechVoiceNameKey].Value = SpeechVoiceName;
+				config.AppSettings.Settings[BreakerGuiltStrategyKey].Value = _breakerGuiltStrategy;
+				config.Save(ConfigurationSaveMode.Minimal);
+			}
+			catch (Exception ex)
+			{
+				// config may be edited in the file (manually) - we cannot show an error dialog here
+				// because it's entirely reasonable that the user doesn't have access to the machine running 
+				// the exe, in order to close a dialog
+				_log.Error(ex.Message, ex);		
 			}
 		}
 
-		private string _skinName;
-		public string SkinName
+		/// <summary>
+		/// rotate/set the next view in the queue (if >1)
+		/// </summary>
+		public void RotateView()
 		{
-			get { return _skinName; }
-			set
+			if (IsOneView) return;
+
+			ApplyViewSettings();
+			NotifyObservers();
+		}
+
+		void ApplyViewSettings()
+		{
+			if (_viewQueue.Count == 0)
+				_viewList.ForEach(_viewQueue.Enqueue);
+
+			var q = _viewQueue.Dequeue();
+			URL = q.URL;
+			SkinName = q.SkinName;
+			ProjectNameRegEx = q.ProjectNameRegEx;
+			CategoryRegEx = q.CategoryRegEx;
+		}
+
+		private void LoadViewSettings()
+		{
+		    _viewList = ViewSettingsParser.Read(_configLocation.FileName);
+			_viewQueue.Clear();
+		}
+
+		public void AddObserver(IConfigObserver observer)
+		{
+			_observers.Add(observer);
+		}
+
+		public void NotifyObservers()
+		{
+			foreach (var observer in _observers)
 			{
-				if (_skinName == value) return;
-				_skinName = value;
-				Notify("SkinName");
+				observer.ConfigUpdated(this);
 			}
 		}
+
+		private static Configuration OpenExeConfiguration()
+		{
+			return ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+		}
+
+		public void Log()
+		{
+			_log.InfoFormat("Config file updated. {0}Settings: {1}", IsMultiView ? "(non-view) " : "", this);
+		}
+
+		public override string ToString()
+		{
+			if (IsOneView)
+				return string.Format("Url={0}, SkinName={1}, PollFrequency={2}, ProjectNameRegEx={3}, ShowCountdown={4}, ShowCountdown={5}, PlaySounds={6}, PlaySpeech={7}, BrokenBuildSound={8}, BrokenBuildText={9}, FixedBuildSound={10}, FixedBuildText={11}, SpeechVoiceName={12}, CategoryRegEx={13}, BreakerGuiltStrategy={14}",
+					_url, _skinName, _pollFrequency, _projectNameRegEx, _showCountdown, _showProgress, _playSounds, _playSpeech, _brokenBuildSound, _brokenBuildText, _fixedBuildSound, _fixedBuildText, _speechVoiceName, _categoryRegEx, _breakerGuiltStrategy);
+
+			return string.Format("PollFrequency={0}, ShowCountdown={1}, ShowProgress={2}, BrokenBuildSound={3}, FixedBuildSound={4}, BrokenBuildText={5}, FixedBuildText={6}, PlaySounds={7}, PlaySpeech={8}, SpeechVoiceName={9}, BreakerGuiltStrategy={10}",
+					_pollFrequency, _showCountdown, _showProgress, _brokenBuildSound, _fixedBuildSound, _brokenBuildText, _fixedBuildText, _playSounds, _playSpeech, _speechVoiceName, _breakerGuiltStrategy);
+		}
+
 
 		/// <summary> interval at which to poll (in seconds) </summary>
-		private int  _pollFrequency;
+		private int _pollFrequency;
 		public int PollFrequency
 		{
 			get { return _pollFrequency; }
@@ -70,30 +155,6 @@ namespace Cradiator.Config
 				if (_pollFrequency == value) return;
 				_pollFrequency = value;
 				Notify("PollFrequency");
-			}
-		}
-
-		private string _projectNameRegEx;
-		public string ProjectNameRegEx
-		{
-			get { return _projectNameRegEx.GetRegEx(); }
-			set
-			{
-				if (_projectNameRegEx == value) return;
-				_projectNameRegEx = value;
-				Notify("ProjectNameRegEx");
-			}
-		}
-
-		private string _categoryRegEx;
-		public string CategoryRegEx
-		{
-			get { return _categoryRegEx.GetRegEx(); }
-			set
-			{
-				if (_categoryRegEx == value) return;
-				_categoryRegEx = value;
-				Notify("CategoryRegEx");
 			}
 		}
 
@@ -222,91 +283,32 @@ namespace Cradiator.Config
 			get { return TimeSpan.FromSeconds(PollFrequency); }
 		}
 
-		public void Save()
+		// ReSharper disable UnusedMember.Global
+		public bool IsMultiView
 		{
-			try
-			{
-				var config = OpenExeConfiguration();
-
-				config.AppSettings.Settings[UrlKey].Value = URL;
-				config.AppSettings.Settings[SkinKey].Value = SkinName;
-				config.AppSettings.Settings[PollFrequencyKey].Value = PollFrequency.ToString();
-				config.AppSettings.Settings[ProjectNameRegexKey].Value = ProjectNameRegEx;
-				config.AppSettings.Settings[CategoryRegexKey].Value = CategoryRegEx;
-				config.AppSettings.Settings[ShowCountdownKey].Value = ShowCountdown.ToString();
-				config.AppSettings.Settings[ShowProgressKey].Value = ShowProgress.ToString();
-                config.AppSettings.Settings[PlaySoundsKey].Value = PlaySounds.ToString();
-                config.AppSettings.Settings[PlaySpeechKey].Value = PlaySpeech.ToString();
-				config.AppSettings.Settings[BrokenBuildSoundKey].Value = BrokenBuildSound;
-				config.AppSettings.Settings[FixedBuildSoundKey].Value = FixedBuildSound;
-				config.AppSettings.Settings[BrokenBuildTextKey].Value = BrokenBuildText;
-				config.AppSettings.Settings[FixedBuildTextKey].Value = FixedBuildText;
-				config.AppSettings.Settings[SpeechVoiceNameKey].Value = SpeechVoiceName;
-				config.AppSettings.Settings[BreakerGuiltStrategyKey].Value = _breakerGuiltStrategy;
-				config.Save(ConfigurationSaveMode.Minimal);
-			}
-			catch (Exception ex)
-			{
-				// config may be edited in the file (manually) - we cannot show an error dialog here
-				// because it's entirely reasonable that the user doesn't have access to the machine running the exe to close it
-				_log.Error(ex.Message, ex);		
-			}
+			get { return _viewList.Count > 1; }
 		}
+		// ReSharper restore UnusedMember.Global
 
-	    public void Load()
-	    {
-	        var config = OpenExeConfiguration();
-
-            URL = config.GetProperty(UrlKey).Value;
-			SkinName = config.GetProperty(SkinKey).Value;
-            PollFrequency = config.GetIntProperty(PollFrequencyKey, DefaultPollingFrequency);
-			ProjectNameRegEx = config.GetProperty(ProjectNameRegexKey).Value;
-			CategoryRegEx = config.GetProperty(CategoryRegexKey).Value;
-            ShowCountdown = config.GetBoolProperty(ShowCountdownKey);
-            ShowProgress = config.GetBoolProperty(ShowProgressKey);
-			PlaySounds = config.GetBoolProperty(PlaySoundsKey);
-			PlaySpeech = config.GetBoolProperty(PlaySpeechKey);
-			BrokenBuildSound = config.GetProperty(BrokenBuildSoundKey).Value;
-			FixedBuildSound = config.GetProperty(FixedBuildSoundKey).Value;
-			BrokenBuildText = config.GetProperty(BrokenBuildTextKey).Value;
-			FixedBuildText = config.GetProperty(FixedBuildTextKey).Value;
-			SpeechVoiceName = config.GetProperty(SpeechVoiceNameKey).Value;
-			_breakerGuiltStrategy = config.GetProperty(BreakerGuiltStrategyKey).Value;
-
-	    	_usernameMap = _userNameMappingReader.Read();
-	    }
-
-		private static Configuration OpenExeConfiguration()
+		// ReSharper disable MemberCanBePrivate.Global
+		public bool IsOneView
 		{
-			return ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+			get { return _viewList.Count == 1; }
 		}
+		// ReSharper restore MemberCanBePrivate.Global
 
-		public void AddObserver(IConfigObserver observer)
-		{
-			_configObservers.Add(observer);
-		}
-
-		public void NotifyObservers()
-		{
-			foreach (var observer in _configObservers)
-			{
-				observer.ConfigUpdated(this);
-			}
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		void Notify(string propertyName)
-		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-
-		public override string ToString()
-		{
-			return string.Format("Url={0}, SkinName={1}, PollFrequency={2}, ProjectNameRegEx={3}, ShowCountdown={4}, ShowCountdown={5}, PlaySounds={6}, PlaySpeech={7}, BrokenBuildSound={8}, BrokenBuildText={9}, FixedBuildSound={10}, FixedBuildText={11}, SpeechVoiceName={12}, CategoryRegEx={13}, BreakerGuiltStrategy={14}",
-								 _url, _skinName, _pollFrequency, _projectNameRegEx, _showCountdown, _showProgress, _playSounds, _playSpeech, _brokenBuildSound, _brokenBuildText, _fixedBuildSound, _fixedBuildText, _speechVoiceName, _categoryRegEx, _breakerGuiltStrategy);
-		}
+		// the placement of these variables is commensurate with their importance - low
+		const string PollFrequencyKey = "PollFrequency";
+		const string ShowCountdownKey = "ShowCountdown";
+		const string ShowProgressKey = "ShowProgress";
+		const string PlaySoundsKey = "PlaySounds";
+		const string BrokenBuildSoundKey = "BrokenBuildSound";
+		const string FixedBuildSoundKey = "FixedBuildSound";
+		const string BrokenBuildTextKey = "BrokenBuildText";
+		const string FixedBuildTextKey = "FixedBuildText";
+		const string PlaySpeechKey = "PlaySpeech";
+		const string SpeechVoiceNameKey = "SpeechVoiceName";
+		const string BreakerGuiltStrategyKey = "BreakerGuiltStrategy";
 	}
 
 	public enum GuiltStrategyType
@@ -316,9 +318,9 @@ namespace Cradiator.Config
 	}
 
 	public class ConfigSettingsException : Exception
-    {
-        public ConfigSettingsException(string key) : 
+	{
+		public ConfigSettingsException(string key) : 
 			base(string.Format("Configuration setting missing: '{0}'", key)) 
 		{  }
-    }
+	}
 }

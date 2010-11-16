@@ -9,15 +9,15 @@ namespace Cradiator.Tests.Model
 	[TestFixture]
 	public class BuildDataTransformer_Tests
 	{
-		CruiseAddress _cruiseAddress;
+		ViewUrl _viewUrl;
 		IConfigSettings _configSettings;
 		BuildDataTransformer _transformer;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_cruiseAddress = new CruiseAddress("http://valid/XmlStatusReport.aspx");
-			_configSettings = new ConfigSettings { URL = _cruiseAddress.Url };
+			_viewUrl = new ViewUrl("http://valid/XmlStatusReport.aspx");
+			_configSettings = new ConfigSettings { URL = _viewUrl.Url };
 			_transformer = new BuildDataTransformer(_configSettings);
 		}
 
@@ -27,7 +27,7 @@ namespace Cradiator.Tests.Model
 			const string xml =
 				@"<Projects>
 					<Project name='FooProject' activity='Building' lastBuildStatus='Failure' />
-                </Projects>";
+				</Projects>";
 
 			var projectStatuses = _transformer.Transform(xml);
 			Assert.That(projectStatuses.First().CurrentState, Is.EqualTo(ProjectStatus.BUILDING));
@@ -39,7 +39,7 @@ namespace Cradiator.Tests.Model
 			const string xml =
 				@"<Projects>
 					<Project name='FooProject' activity='Building' lastBuildStatus='Success' />
-                </Projects>";
+				</Projects>";
 
 			var projectStatuses = _transformer.Transform(xml);
 			Assert.That(projectStatuses.First().CurrentState, Is.EqualTo(ProjectStatus.BUILDING));
@@ -51,7 +51,7 @@ namespace Cradiator.Tests.Model
 			const string xml =
 				@"<Projects>
 					<Project name='FooProject' activity='Sleeping' lastBuildStatus='Failure' />
-                </Projects>";
+				</Projects>";
 
 			var projectStatuses = _transformer.Transform(xml);
 
@@ -64,11 +64,11 @@ namespace Cradiator.Tests.Model
 			const string xml =
 				@"<Projects>
 					<Project name='FooProject' activity='Sleeping' lastBuildStatus='Success' />
-                  </Projects>";
+				  </Projects>";
 
 			var projectStatuses = _transformer.Transform(xml);
 
-            Assert.That(projectStatuses.First().CurrentState.EqualsIgnoreCase(ProjectStatus.SUCCESS));
+			Assert.That(projectStatuses.First().CurrentState.EqualsIgnoreCase(ProjectStatus.SUCCESS));
 		}
 
 		const string SimilarProjectXml =
@@ -141,7 +141,7 @@ namespace Cradiator.Tests.Model
 			Assert.That(projectStatuses.Count(), Is.EqualTo(2));
 
 			// notify of config change and fetch again
-			var newSettings = new ConfigSettings { ProjectNameRegEx = "BarProject", URL = _cruiseAddress.Url };
+			var newSettings = new ConfigSettings { ProjectNameRegEx = "BarProject", URL = _viewUrl.Url };
 			_transformer.ConfigUpdated(newSettings);
 			projectStatuses = _transformer.Transform(SimilarProjectXml);
 			Assert.That(projectStatuses.Count(), Is.EqualTo(1));
@@ -154,7 +154,7 @@ namespace Cradiator.Tests.Model
 			const string xml =
 				@"<Projects>
 					<Project name='FooProject' CurrentMessage='A message' category='' />
-                </Projects>";
+				</Projects>";
 
 			var projectStatuses = _transformer.Transform(xml);
 
@@ -176,7 +176,7 @@ namespace Cradiator.Tests.Model
 				@"<Projects>
 					<Project name='ImportantProject' category='Important' />
 					<Project name='LowPriorityProject' category='LowPriority'/>
-                </Projects>";
+				</Projects>";
 
 			_configSettings.CategoryRegEx = "Important";
 			_transformer = new BuildDataTransformer(_configSettings);
@@ -199,7 +199,7 @@ namespace Cradiator.Tests.Model
 							<message text='FailingTasks : Step1, Step2' kind='FailingTasks'/>
 						</messages>
 					</Project>
-                </Projects>";
+				</Projects>";
 
 			_transformer = new BuildDataTransformer(_configSettings);
 			var projectStatuses = _transformer.Transform(xml);
@@ -225,7 +225,7 @@ namespace Cradiator.Tests.Model
 							<message text='FailingTasks : Step1, Step2' kind='FailingTasks'/>
 						</messages>
 					</Project>
-                </Projects>";
+				</Projects>";
 
 			_transformer = new BuildDataTransformer(_configSettings);
 			var projectStatuses = _transformer.Transform(xml);
@@ -246,7 +246,7 @@ namespace Cradiator.Tests.Model
 					<Project name='project2' CurrentMessage='' activity='Sleeping' lastBuildStatus='Success'>	
 						<messages/>							
 					</Project>
-                </Projects>";
+				</Projects>";
 
 			_transformer = new BuildDataTransformer(_configSettings);
 			var projectStatuses = _transformer.Transform(xml);
@@ -270,7 +270,7 @@ namespace Cradiator.Tests.Model
 							<message text='FailingTasks : Step1, Step2' kind='FailingTasks'/>
 						</messages>
 					</Project>
-                </Projects>";
+				</Projects>";
 
 			_transformer = new BuildDataTransformer(_configSettings);
 			var projectStatuses = _transformer.Transform(xml);

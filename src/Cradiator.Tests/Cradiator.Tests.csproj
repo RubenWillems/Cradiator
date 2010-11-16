@@ -98,6 +98,7 @@
     <Compile Include="Config\PollIntervalChangeHandler_Tests.cs" />
     <Compile Include="Config\SkinChangeHandler_Tests.cs" />
     <Compile Include="Config\UsernameMappingReader_Tests.cs" />
+    <Compile Include="Config\ViewConfigReader_Tests.cs" />
     <Compile Include="Converters\BuildNameAndMessageConverter_Tests.cs" />
     <Compile Include="Converters\ConverterTestBase.cs" />
     <Compile Include="Converters\ImagePathConverter_Tests.cs" />
@@ -114,7 +115,7 @@
     <Compile Include="Services\CruiseNinjaModule_Tests.cs" />
     <Compile Include="Commands\InputBindingAdder_Tests.cs" />
     <Compile Include="Model\CountdownTimer_Tests.cs" />
-    <Compile Include="Model\CruiseAddress_Tests.cs" />
+    <Compile Include="Model\ViewUrl_Tests.cs" />
     <Compile Include="Model\FetchException_Tests.cs" />
     <Compile Include="Model\SkinResourceController_Tests.cs" />
     <Compile Include="Views\Presenter_Tests.cs" />
