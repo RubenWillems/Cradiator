@@ -69,7 +69,6 @@ namespace Cradiator.Model
 			{
 				var xmlResults = _fetcher.Fetch();
 				e.Result = xmlResults;
-				if (xmlResults == null) throw new Exception("No xml returned");
 			}
 			catch (Exception exception)
 			{

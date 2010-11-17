@@ -108,6 +108,7 @@
     <Compile Include="Converters\StateToColorConverter_Test.cs" />
     <Compile Include="Converters\SecondsToTimeConverter_Test.cs" />
     <Compile Include="Config\ShowCountdownChangeHandler_Tests.cs" />
+    <Compile Include="MigrateConfig\Migrate_Tests.cs" />
     <Compile Include="Model\BuildBusterImageDecorator_Tests.cs" />
     <Compile Include="Model\BuildBuster_Tests.cs" />
     <Compile Include="Model\BuildDataFetcher_Tests.cs" />
@@ -131,6 +132,10 @@
     <ProjectReference Include="..\Cradiator\Cradiator.csproj">
       <Project>{4CC715FF-1B56-46BA-AD68-ECB5E1B5CDDA}</Project>
       <Name>Cradiator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MigrateConfig\MigrateConfig.csproj">
+      <Project>{04A70705-D9A6-423B-9F11-E7421F8FFC56}</Project>
+      <Name>MigrateConfig</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
