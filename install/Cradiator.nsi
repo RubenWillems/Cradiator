@@ -46,7 +46,7 @@ ShowUnInstDetails show
 
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
-  SetOverwrite ifnewer
+  SetOverwrite on
   File "..\src\Cradiator\bin\Release\Cradiator.exe"
   
   CreateDirectory "$SMPROGRAMS\Cradiator"
@@ -54,18 +54,29 @@ Section "MainSection" SEC01
   CreateDirectory "$INSTDIR\images"
   CreateShortCut "$SMPROGRAMS\Cradiator\Cradiator.lnk" "$INSTDIR\Cradiator.exe"
   CreateShortCut "$DESKTOP\Cradiator.lnk" "$INSTDIR\Cradiator.exe"
-  
-  SetOverwrite try
-  File "..\src\Cradiator\bin\Release\Cradiator.exe.config"
+
   SetOverwrite ifnewer
   File "..\lib\log4net.dll"
   File "..\lib\Ninject.dll"
   File "..\src\Cradiator\bin\Release\DummyProjectStatus.xml"
   File "..\src\MigrateConfig\bin\Release\Cradiator.MigrateConfig.ToMultiView.exe"
+
+  #migrate config
+  IfFileExists "$INSTDIR\Cradiator.exe.config" AskToMigrateConfig CopyDefaultConfig
+	  AskToMigrateConfig:
+  	  MessageBox MB_YESNO|MB_ICONQUESTION "Migrate config to the new format?$\r$\n$\r$\nThis will copy 4 config items (url/skin/regex*2) from the appSettings section in 'Cradiator.exe.config' to the new xml structure$\r$\neg <views><view url='' skin=''.../></views>" IDYES Migrate IDNO Cancel
+				Migrate:
+   	 			ExecWait "$INSTDIR\Cradiator.MigrateConfig.ToMultiView.exe"
+				Cancel:
+				  #nothing
+		CopyDefaultConfig:
+	  	SetOverwrite off
+  		File "..\src\Cradiator\bin\Release\Cradiator.exe.config"
     
   SetOutPath "$INSTDIR\sounds"
   File "..\sounds\*.wav"
   SetOutPath "$INSTDIR"
+  
 SectionEnd
 
 Section -AdditionalIcons
@@ -102,6 +113,7 @@ Section Uninstall
   Delete "$INSTDIR\Ninject.dll"
   Delete "$INSTDIR\Cradiator.exe.config"
   Delete "$INSTDIR\Cradiator.exe"
+  Delete "$INSTDIR\Cradiator.MigrateConfig.ToMultiView.exe"
 
   Delete "$SMPROGRAMS\Cradiator\Website.lnk"
   Delete "$DESKTOP\Cradiator.lnk"

@@ -45,11 +45,7 @@ namespace Cradiator.MigrateConfig
 
 			Console.WriteLine("Adding multi-view xml elements...");
 
-			var configSections = _xdoc.Element("configuration").Element("configSections");
-
-			//TODO this has to go after configuration section
-//			_xdoc.Element("configuration").AddAfterSelf(
-			configSections.AddAfterSelf(
+			_xdoc.Element("configuration").Element("configSections").AddAfterSelf(
 				new XElement("views",
 				new XElement("view",
 					new XAttribute("url", config["URL"]),
