@@ -1,5 +1,5 @@
-Cradiator's nest is at http://cradiator.codeplex.com/
-Cradiator's living quarters are now on GitHub
+Cradiator's nest is at <http://cradiator.codeplex.com/> (wiki, discussion)  
+Cradiator's now lives on GitHub (source code)
 
 ## Contributors
 
