@@ -111,14 +111,17 @@ Section Uninstall
   Delete "$INSTDIR\DummyProjectStatus.xml"
   Delete "$INSTDIR\log4net.dll"
   Delete "$INSTDIR\Ninject.dll"
-  Delete "$INSTDIR\Cradiator.exe.config"
+  #Delete "$INSTDIR\Cradiator.exe.config"
   Delete "$INSTDIR\Cradiator.exe"
   Delete "$INSTDIR\Cradiator.MigrateConfig.ToMultiView.exe"
 
   Delete "$SMPROGRAMS\Cradiator\Website.lnk"
   Delete "$DESKTOP\Cradiator.lnk"
   Delete "$SMPROGRAMS\Cradiator\Cradiator.lnk"
+  Delete "$SMPROGRAMS\Cradiator\*.log"
 
+  RMDir "$SMPROGRAMS\Cradiator\sounds"
+  RMDir "$SMPROGRAMS\Cradiator\images"
   RMDir "$SMPROGRAMS\Cradiator"
   RMDir "$INSTDIR"
 

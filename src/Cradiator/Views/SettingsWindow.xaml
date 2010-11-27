@@ -208,7 +208,7 @@
 					  SelectedValue="{Binding Path=SpeechVoiceName, Converter={Converters:InstalledVoiceConverter}}">
 			</ComboBox>
 
-			<Label Grid.Column="0" Grid.Row="13" Content="Current Skin"/>
+			<Label Grid.Column="0" Grid.Row="13" Content="Skin"/>
 			<ListBox Name="skinListBox" IsEnabled="{Binding IsOneView}"
 					 Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="3" Margin="2" Padding="0"
 					 BorderThickness="0" 

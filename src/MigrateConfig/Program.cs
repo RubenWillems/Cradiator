@@ -15,8 +15,8 @@ namespace Cradiator.MigrateConfig
 				return 1;
 			}
 
-			var migrate = new Migrate(xmlFile);
-			var returnVal = migrate.Update();
+			var migrate = new MultiviewMigrator(xmlFile);
+			var returnVal = migrate.Migrate();
 
 			return string.IsNullOrEmpty(returnVal) ? 0 : 1;
 		}

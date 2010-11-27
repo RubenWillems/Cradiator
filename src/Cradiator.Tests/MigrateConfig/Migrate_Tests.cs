@@ -7,7 +7,7 @@ namespace Cradiator.Tests.MigrateConfig
 	[TestFixture]
 	public class Migrate_Tests
 	{
-		private const string xml =
+		private const string PRE_MULTIVIEW_XML =
 			@"<?xml version=""1.0""?>
 <configuration>
 <configSections>
@@ -57,8 +57,8 @@ namespace Cradiator.Tests.MigrateConfig
 		[Test]
 		public void can_migrate()
 		{
-			var migrate = new Migrate(xml);
-			var updatedXml = migrate.Update();
+			var migrate = new MultiviewMigrator(PRE_MULTIVIEW_XML);
+			var updatedXml = migrate.Migrate();
 			var strippedXml = Regex.Replace(updatedXml, @"[\r\n\t\s]", "");
 			const string expected = @"<configuration>
 <configSections>

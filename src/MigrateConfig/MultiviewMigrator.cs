@@ -5,16 +5,16 @@ using System.Xml.Linq;
 
 namespace Cradiator.MigrateConfig
 {
-	public class Migrate
+	public class MultiviewMigrator
 	{
 		private readonly XDocWrapper _xdoc;
 
-		public Migrate(string xmlFile)
+		public MultiviewMigrator(string xmlFile)
 		{
 			_xdoc = new XDocWrapper(xmlFile);
 		}
 
-		public string Update()
+		public string Migrate()
 		{
 			var addElements = _xdoc.Element("configuration")
 									.Element("appSettings")
