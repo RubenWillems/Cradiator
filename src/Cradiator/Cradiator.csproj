@@ -117,7 +117,9 @@
     <Compile Include="Model\GuiltStrategies.cs" />
     <Compile Include="Model\BuildBusterAttributes.cs" />
     <Compile Include="Model\UrlParser.cs" />
+    <Compile Include="Services\DesignTimeCradiatorNinjaModule.cs" />
     <Compile Include="Services\Ninjector.cs" />
+    <Compile Include="ViewModels\DesignerConfigSettingViewModel.cs" />
     <Compile Include="Views\ICradiatorView.cs" />
     <Compile Include="Model\FetchExceptionHandler.cs" />
     <Compile Include="Model\PollTimer.cs" />
