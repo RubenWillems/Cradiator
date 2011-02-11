@@ -1,24 +1,29 @@
-﻿using Cradiator.Config;
-using Cradiator.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Ninject;
-using System.ComponentModel;
+using Cradiator.Services;
+using Cradiator.Model;
 
 namespace Cradiator.ViewModels
 {
     /// <summary>
-    /// A 'viewModel' for a settings class
+    /// A 'viewModel' for CradiatorWindow.xaml
     /// just added this so we can use the designer again in visual studio, and see what effect
     /// a converter has for example, or brushes.
     /// Needed because of the ninject in the converters
     /// </summary>
-    public class DesignerConfigSettingViewModel : ConfigSettings
+    public class DesignerViewDataViewModel : ViewData
     {
 
-        public DesignerConfigSettingViewModel()
+        public DesignerViewDataViewModel()
         {
-            //to get the converters works and in so the designer
+            this.Projects = new List<Model.ProjectStatus>();
+
             var cruiseDesignModule = new DesignTimeCradiatorNinjaModule();
             Ninjector.Kernel = new StandardKernel(cruiseDesignModule);
+
         }
     }
 }

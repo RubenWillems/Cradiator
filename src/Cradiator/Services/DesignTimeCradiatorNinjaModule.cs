@@ -15,7 +15,7 @@ namespace Cradiator.Services
     /// Loads the dependend items for the converters, so you can use the designer again in Visual Studio
     /// I use a MVVM like approach, setting a design object with some data so we have a designer with data
     /// Makes making screens a lot easier.
-    /// This works great in VS2010, but the design time data does not appear in VS2008 :-(
+    /// This works great in VS2010
     /// having ninject in the converters makes things a lot more complicated than it needs be.
     /// </summary>
     public class DesignTimeCradiatorNinjaModule : NinjectModule

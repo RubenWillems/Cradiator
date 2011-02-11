@@ -1,4 +1,5 @@
 ﻿using Cradiator.Extensions;
+using System;
 
 namespace Cradiator.Model
 {
@@ -11,10 +12,15 @@ namespace Cradiator.Model
 		public const string EXCEPTION = "exception";
 		public const string ERROR = "error";
 
-		public string Name { get; private set; }
+		public string Name { get;  set; } // no longer private set so we can set it from the XAML datacontext for the designer
 		public string CurrentMessage { get; set; }
 		public ProjectActivity ProjectActivity { get; set; }
 		public string LastBuildStatus { get; set; }
+
+
+        [Obsolete("Constructor for XAML")]
+        public ProjectStatus() { Name = "designer name"; }
+
 
 		public ProjectStatus(string name)
 		{

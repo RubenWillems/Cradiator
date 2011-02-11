@@ -117,6 +117,8 @@
     <Compile Include="Model\GuiltStrategies.cs" />
     <Compile Include="Model\BuildBusterAttributes.cs" />
     <Compile Include="Model\UrlParser.cs" />
+    <Compile Include="ViewModels\DesignerViewDataViewModel.cs" />
+    <Compile Include="Model\ViewData.cs" />
     <Compile Include="Services\DesignTimeCradiatorNinjaModule.cs" />
     <Compile Include="Services\Ninjector.cs" />
     <Compile Include="ViewModels\DesignerConfigSettingViewModel.cs" />
@@ -259,6 +261,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Cradiator.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\smiley.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

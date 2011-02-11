@@ -11,6 +11,8 @@ namespace Cradiator.Config
         string SkinName { get; set; }
         string ProjectNameRegEx { get; set; }
         string CategoryRegEx { get; set; }
+        string ViewName { get; set; }
+        bool ShowOnlyBroken { get; set; }
     }
     // ReSharper restore UnusedMemberInSuper.Global
 }

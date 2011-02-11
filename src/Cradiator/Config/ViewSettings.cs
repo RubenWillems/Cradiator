@@ -53,6 +53,35 @@ namespace Cradiator.Config
             }
         }
 
+
+        protected string _viewName;
+        public string ViewName
+        {
+            get { return _viewName; }
+            set
+            {
+                if (_viewName == value) return;
+                _viewName = value;
+                Notify("ViewName");
+            }
+        }
+
+
+
+        protected bool _showOnlyBroken;
+        public bool ShowOnlyBroken
+        {
+            get { return _showOnlyBroken; }
+            set
+            {
+                if (_showOnlyBroken == value) return;
+                _showOnlyBroken = value;
+                Notify("ShowOnlyBroken");
+            }
+        }
+       
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void Notify(string propertyName)

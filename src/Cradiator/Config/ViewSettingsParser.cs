@@ -14,6 +14,9 @@ namespace Cradiator.Config
         const string CategoryRegex = "category-regex";
         const string Url = "url";
         const string Skin = "skin";
+        const string ViewName = "name";
+        const string ShowOnlyBroken = "showOnlyBroken";
+
 
         readonly XDocument _xdoc;
 
@@ -43,6 +46,8 @@ namespace Cradiator.Config
                                 ProjectNameRegEx = view.Attribute(ProjectRegex).Value,
                                 CategoryRegEx = view.Attribute(CategoryRegex).Value,
                                 SkinName = view.Attribute(Skin).Value,
+                                ViewName = view.Attribute(ViewName).Value,
+                                ShowOnlyBroken = bool.Parse(view.Attribute(ShowOnlyBroken).Value)
                             }).ToList());
         }
 
@@ -74,6 +79,8 @@ namespace Cradiator.Config
             view1.Attribute(ProjectRegex).Value = settings.ProjectNameRegEx;
             view1.Attribute(CategoryRegex).Value = settings.CategoryRegEx;
             view1.Attribute(Skin).Value = settings.SkinName;
+            view1.Attribute(ViewName).Value = settings.ViewName;
+            view1.Attribute(ShowOnlyBroken).Value = settings.ShowOnlyBroken.ToString();
 
             var xml = new StringBuilder();
             using (var xmlWriter = XmlWriter.Create(xml, new XmlWriterSettings

@@ -55,6 +55,8 @@ namespace Cradiator.Config
 						ProjectNameRegEx = ProjectNameRegEx,
 						CategoryRegEx = CategoryRegEx,
 						SkinName = SkinName,
+                        ViewName = ViewName,
+                        ShowOnlyBroken = ShowOnlyBroken
 					});
 				}
 
@@ -103,6 +105,8 @@ namespace Cradiator.Config
 			SkinName = q.SkinName;
 			ProjectNameRegEx = q.ProjectNameRegEx;
 			CategoryRegEx = q.CategoryRegEx;
+            ViewName = q.ViewName;
+            ShowOnlyBroken = q.ShowOnlyBroken;
 		}
 
 		private void LoadViewSettings()

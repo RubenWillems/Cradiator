@@ -18,14 +18,14 @@
     using a MVVM approach here, so you can populate the properties, and see the effects directly in the designer,
     sometimes a compile is needed to see the effects, but no run is needed anymore.
     -->
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <vm:DesignerConfigSettingViewModel 
             CategoryRegEx=".*" 
             URL="http://ccnetlive.thoughtworks.com/ccnet/" 
             PlaySounds="True" 
             PlaySpeech="True" 
             />
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Window.Resources>
         <Converters:SecondsToTimeConverter x:Key="TimeConverter" />
