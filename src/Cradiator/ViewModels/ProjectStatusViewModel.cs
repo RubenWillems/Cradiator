@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Cradiator.ViewModels
 {
     public class ProjectStatusViewModel : NotifyingClass
     {
-
         private string _name;
         private string _currentState;
         private string _CurrentMessage;
         private string _ProjectActivity;
+        private string _serverName;
         private bool _isBroken;
         private bool _isSuccessful;
+        private Visibility _serverNameVisible;
 
         [Obsolete("only used by xaml")]
         public ProjectStatusViewModel()
@@ -29,10 +31,17 @@ namespace Cradiator.ViewModels
             this.IsSuccessful = ps.IsSuccessful;
             this.Name = ps.Name;
             this.ProjectActivity = ps.ProjectActivity.ToString();
+            this.ServerName = ps.ServerName;
 
-
+            if (vs.ShowServerName)
+            {
+                this.ServerNameVisible = Visibility.Visible;
+            }
+            else
+            {
+                this.ServerNameVisible = Visibility.Collapsed;
+            }
         }
-
 
         #region ProjectStatusProps
 
@@ -47,7 +56,6 @@ namespace Cradiator.ViewModels
             }
         }
 
-
         public string CurrentState
         {
             get { return _currentState; }
@@ -58,7 +66,6 @@ namespace Cradiator.ViewModels
                 Notify("CurrentState");
             }
         }
-
 
         public string CurrentMessage
         {
@@ -103,16 +110,36 @@ namespace Cradiator.ViewModels
                 Notify("IsSuccessful");
             }
         }
+
+
+        public string ServerName
+        {
+            get { return _serverName; }
+
+            set
+            {
+                if (_serverName == value) return;
+                _serverName = value;
+                Notify("ServerName");
+            }
+        }
+
         #endregion
 
 
         #region SettingProps
 
-        
-
+        public Visibility ServerNameVisible
+        {
+            get { return _serverNameVisible; }
+            set
+            {
+                if (_serverNameVisible == value) return;
+                _serverNameVisible = value;
+                Notify("ServerNameVisible");
+            }
+        }
 
         #endregion
-
-
     }
 }

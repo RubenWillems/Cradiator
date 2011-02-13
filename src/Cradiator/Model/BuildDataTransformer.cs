@@ -11,11 +11,9 @@ namespace Cradiator.Model
 {
     public class BuildDataTransformer : IConfigObserver
     {
-
         Regex _projectNameRegEx;
         Regex _categoryRegEx;
-        bool _showOnlyBroken;
-
+        Regex _serverNameRegEx;
 
         public BuildDataTransformer(IConfigSettings configSettings)
         {
@@ -32,16 +30,23 @@ namespace Cradiator.Model
                              (from project in XDocument.Parse(xml.Replace('\n', ' ').Trim())
                                .Elements("Projects")
                                .Elements("Project")
+
                               let name = project.Attribute("name").GetValue()
                               let category = project.Attribute("category").GetValue()
+                              let serverName = project.Attribute("serverName").GetValue()
+
                               where _projectNameRegEx.Match(name).Success
                               where _categoryRegEx.Match(category).Success
+                              where _serverNameRegEx.Match(serverName).Success
+
                               select new ProjectStatus(name)
                               {
                                   CurrentMessage = project.Attribute("CurrentMessage").GetValue(),
                                   LastBuildStatus = project.Attribute("lastBuildStatus").GetValue(),
-                                  ProjectActivity = new ProjectActivity(project.Attribute("activity").GetValue())
+                                  ProjectActivity = new ProjectActivity(project.Attribute("activity").GetValue()),
+                                  ServerName = project.Attribute("serverName").GetValue()
                               })
+                         
                          join m in
                              (from message in XDocument.Parse(xml)
                                .Elements("Projects")
@@ -54,18 +59,18 @@ namespace Cradiator.Model
                                   Message = message.Attribute("text").GetValue(),
                                   ProjectName = message.Parent.Parent.Attribute("name").GetValue(),
                               }) on p.Name equals m.ProjectName into j
+                         
                          from m in j.DefaultIfEmpty()
                          select new ProjectStatus(p.Name)
                          {
                              CurrentMessage = m != null ? m.Message : p.CurrentMessage,
                              LastBuildStatus = p.LastBuildStatus,
-                             ProjectActivity = p.ProjectActivity
-                         });
+                             ProjectActivity = p.ProjectActivity,
+                             ServerName = p.ServerName
+                         }
+                         );
 
-            if (_showOnlyBroken)
-            {
-                query = query.Where(p => p.IsBroken);
-            }
+            var x = query.ToArray();
 
             return query.ToArray();
         }
@@ -79,7 +84,7 @@ namespace Cradiator.Model
         {
             _projectNameRegEx = new Regex(newSettings.ProjectNameRegEx);
             _categoryRegEx = new Regex(newSettings.CategoryRegEx);
-            _showOnlyBroken = newSettings.ShowOnlyBroken;
+            _serverNameRegEx = new Regex(newSettings.ServerNameRegEx);
         }
     }
 }

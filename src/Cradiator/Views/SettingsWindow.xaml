@@ -146,12 +146,30 @@
 					 Text="{Binding URL}">
             </TextBox>
 
-            <Label Grid.Column="0" Grid.Row="2" Content="Filter"/>
-            <TextBox Name="projectFilterTextBox" IsReadOnly="{Binding IsMultiView}"
-					 Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" 
-					 Style="{StaticResource UrlTextStyle}"
-					 Text="{Binding ProjectNameRegEx}" >
-            </TextBox>
+            <Expander Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="30" IsExpanded="False" Header="Filters" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0"  Content="Project RegEx"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"  Text="{Binding ProjectNameRegEx}" IsReadOnly="{Binding IsMultiView}" Style="{StaticResource UrlTextStyle}" />
+
+                    <Label Grid.Row="1" Grid.Column="0"  Content="Category RegEx"/>
+                    <TextBox Grid.Row="1" Grid.Column="1"  Text="{Binding CategoryRegEx}" IsReadOnly="{Binding IsMultiView}" Style="{StaticResource UrlTextStyle}" />
+
+                    <Label Grid.Row="2" Grid.Column="0"  Content="Server RegEx"/>
+                    <TextBox Grid.Row="2" Grid.Column="1"  Text="{Binding ServerNameRegEx}" IsReadOnly="{Binding IsMultiView}" Style="{StaticResource UrlTextStyle}" />
+
+                </Grid>
+            </Expander>
 
             <Label Grid.Column="0" Grid.Row="3" Content="Poll Interval" />
             <Label Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" 
@@ -250,7 +268,7 @@
             </ListBox>
 
             <Label Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="3" 
-				   Content="MultiViews are configured - URL/Filter/Skin are readonly" 
+				   Content="MultiViews are configured - URL/Filters/Skin are readonly" 
 				   Visibility="{Binding Path=IsMultiView, Converter={StaticResource VisibilityOfBool}}"/>
 
             <StackPanel Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="15" 

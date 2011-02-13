@@ -11,15 +11,15 @@
 	Height="400" Width="600">
 
     <!--<Window.DataContext>
-        <vm:DesignerViewDataViewModel  AmountOK="15" AmountNotOK="5" OKPercentage="75"  ShowOnlyBroken="True" ShowAllOK="Visible" ShowProjects="Collapsed">
+        <vm:DesignerViewDataViewModel  AmountOK="15" AmountNotOK="5" OKPercentage="75"  AmountTotal="20" ShowOnlyBroken="True" ShowAllOK="Visible" ShowProjects="Collapsed" AmountHeader="Project count : 20">
             <vm:DesignerViewDataViewModel.Projects>
-                <model:ProjectStatus    Name="P1" />
-                <model:ProjectStatus    Name="P2" />
-                <model:ProjectStatus    Name="P3" />
+                <vm:ProjectStatusViewModel    Name="P1" />
+                <vm:ProjectStatusViewModel    Name="P2" />
+                <vm:ProjectStatusViewModel    Name="P3" />
             </vm:DesignerViewDataViewModel.Projects>
         </vm:DesignerViewDataViewModel >
     </Window.DataContext>-->
-    
+
     <Window.Resources>
         <Style x:Key="LogoStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="18" />
@@ -46,14 +46,19 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+
                 </Grid.ColumnDefinitions>
+
 
                 <TextBlock Name="titleText" Text="Cradiator" 
                            Grid.Column="0"
                            Style="{StaticResource LogoStyle}">
                 </TextBlock>
 
-                <TextBlock Grid.Column="2" VerticalAlignment="Center" Padding="2">
+                <TextBlock Grid.Column="2"   Text="{Binding AmountHeader}" Foreground="LightBlue" VerticalAlignment="Center" Margin="4" />
+
+                <TextBlock Grid.Column="3" VerticalAlignment="Center" Padding="2">
                     <Hyperlink Name="settingsLink" Style="{StaticResource HyperlinkStyle}">Settings (F12)</Hyperlink>
                 </TextBlock>
 
@@ -88,7 +93,7 @@
             </Grid.RowDefinitions>
             <Image Grid.Row="0" Source="../Images/smiley.jpg" Stretch="Uniform" />
             <Viewbox Grid.Row="1"  >
-                <Label Content="{Binding Name}" FontWeight="Bold">
+                <Label Content="{Binding ViewName}" FontWeight="Bold" >
                     <Label.Foreground>
                         <LinearGradientBrush  >
                             <GradientStop Color="OrangeRed" Offset="0.0" />

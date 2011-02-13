@@ -17,15 +17,17 @@ namespace Cradiator.ViewModels
     {
         private List<ProjectStatusViewModel> _projects = new List<ProjectStatusViewModel>();
         private decimal _okPercentage;
+        private string _AmountHeader;
+        private int _AmountTotal;
         private int _AmountOK;
         private int _AmountNotOK;
         private bool _ShowOnlyBroken;
         private Visibility _ShowProjects;
         private Visibility _ShowAllOK;
 
-        private string _name;
+        private string _viewName;
 
-        
+
         [Obsolete("only used by XAML")]
         public ViewDataViewModel()
         {
@@ -35,17 +37,15 @@ namespace Cradiator.ViewModels
         public ViewDataViewModel(IViewSettings vs, IEnumerable<ProjectStatus> projects)
         {
 
-            _name = vs.ViewName;
+            _viewName = vs.ViewName;
             _ShowOnlyBroken = vs.ShowOnlyBroken;
-
 
             List<ProjectStatusViewModel> dummy = new List<ProjectStatusViewModel>();
 
             foreach (Model.ProjectStatus p in projects)
             {
-                dummy.Add(new ProjectStatusViewModel(p,vs));
+                dummy.Add(new ProjectStatusViewModel(p, vs));
             }
-
 
             this.Projects = dummy;
         }
@@ -55,14 +55,14 @@ namespace Cradiator.ViewModels
         /// only of importance when ShowOnlyBroken is true and all projects are ok
         /// in that case the smiley is shown, so you know what view is ok
         /// </summary>
-        public string Name
+        public string ViewName
         {
-            get { return _name; }
+            get { return _viewName; }
             set
             {
-                if (_name == value) return;
-                _name = value;
-                Notify("Name");
+                if (_viewName == value) return;
+                _viewName = value;
+                Notify("ViewName");
             }
         }
 
@@ -75,7 +75,12 @@ namespace Cradiator.ViewModels
         /// </summary>
         public List<ProjectStatusViewModel> Projects
         {
-            get { return _projects; }
+            get 
+            { 
+                if (ShowOnlyBroken) return _projects.Where(p => p.IsBroken).ToList();
+                return _projects;
+            
+            }
             set
             {
                 _projects = value;
@@ -95,6 +100,31 @@ namespace Cradiator.ViewModels
                 Notify("OKPercentage");
             }
         }
+
+        public string AmountHeader
+        {
+            get { return _AmountHeader; }
+            set
+            {
+                if (_AmountHeader == value) return;
+                _AmountHeader = value;
+                Notify("AmountHeader");
+            }
+        }
+
+
+        public int AmountTotal
+        {
+            get { return _AmountTotal; }
+            set
+            {
+                if (_AmountTotal == value) return;
+                _AmountTotal = value;
+                Notify("AmountTotal");
+            }
+        }
+
+
 
         public int AmountOK
         {
@@ -164,18 +194,19 @@ namespace Cradiator.ViewModels
 
         private void CalculateProperties()
         {
-            if (this.Projects == null) this.Projects = new List<ProjectStatusViewModel>();
+            if (this._projects == null) this._projects = new List<ProjectStatusViewModel>();
 
-            AmountOK = this.Projects.Count(x => x.IsSuccessful);
-            AmountNotOK = this.Projects.Count - AmountOK;
+            AmountTotal = this._projects.Count;
+            AmountOK = this._projects.Count(x => x.IsSuccessful);
+            AmountNotOK = this._projects.Count - AmountOK;
 
-            if (this.Projects.Count == 0)
+            if (this.AmountTotal == 0)
             {
                 OKPercentage = 100;
             }
             else
             {
-                OKPercentage = AmountOK / this.Projects.Count;
+                OKPercentage = AmountOK / AmountTotal;
                 OKPercentage *= 100;
                 OKPercentage = decimal.Round(OKPercentage, 4);
             }
@@ -193,6 +224,8 @@ namespace Cradiator.ViewModels
                 ShowAllOK = Visibility.Collapsed;
                 ShowProjects = Visibility.Visible;
             }
+
+            AmountHeader = string.Format("Project Count : {0} ", this.AmountTotal);
         }
 
 

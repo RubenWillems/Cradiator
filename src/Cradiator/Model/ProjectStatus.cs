@@ -12,11 +12,11 @@ namespace Cradiator.Model
 		public const string EXCEPTION = "exception";
 		public const string ERROR = "error";
 
-		public string Name { get;  set; } // no longer private set so we can set it from the XAML datacontext for the designer
+		public string Name { get;  private set; } 
 		public string CurrentMessage { get; set; }
 		public ProjectActivity ProjectActivity { get; set; }
 		public string LastBuildStatus { get; set; }
-
+        public string ServerName { get; set; }
 
         [Obsolete("Constructor for XAML")]
         public ProjectStatus() { Name = "designer name"; }

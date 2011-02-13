@@ -79,7 +79,31 @@ namespace Cradiator.Config
                 Notify("ShowOnlyBroken");
             }
         }
-       
+
+
+        protected string _serverNameRegEx;
+        public string ServerNameRegEx
+        {
+            get { return _serverNameRegEx;}
+            set
+            {
+                if (_serverNameRegEx == value) return;
+                   _serverNameRegEx = value;
+                Notify("ServerNameRegEx");
+            }
+        }
+
+        protected bool _ShowServeName;
+        public bool ShowServerName
+        {
+            get { return _ShowServeName; }
+            set
+            {
+                if (_ShowServeName == value) return;
+                _ShowServeName = value;
+                Notify("ShowServerName");
+            }
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -89,5 +113,7 @@ namespace Cradiator.Config
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
     }
 }

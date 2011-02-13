@@ -1,3 +1,4 @@
+
 <Projects CCType="CCNet">
   <Project name="Project 1" category=""
        activity="Sleeping"
@@ -6,20 +7,21 @@
        lastBuildTime="2008-12-12T12:08:24.796875-06:00" nextBuildTime="2008-12-12T21:09:30.234375-06:00"
        webUrl="http://ccnetlive.thoughtworks.com/ccnet/"
        CurrentMessage="Breakers: bsimpson, jsmith"
-		 
+		   serverName="local"
        BuildStage="">
     <messages>
       <message text="bobble, harry" kind="Breakers"/>
     </messages>
   </Project>
 
-  <Project name="Project 2" category="finance_QA"
+  <Project name="Project 2" category=""
        activity="Sleeping"
        lastBuildStatus="Success"
        lastBuildLabel="1.0.0.39"
        lastBuildTime="2008-12-10T11:44:21.5-06:00" nextBuildTime="2008-12-12T21:05:24.09375-06:00"
        webUrl="http://ccnetlive.thoughtworks.com/ccnet/"
        CurrentMessage=""
+		   serverName="local"
        BuildStage=""/>
 
   <Project name="Project 3" category=""
@@ -29,6 +31,7 @@
        lastBuildTime="2008-12-08T09:28:47.765625-06:00" nextBuildTime="2008-12-12T21:09:26.234375-06:00"
        webUrl="http://ccnetlive.thoughtworks.com/ccnet/"
        CurrentMessage=""
+       serverName="local"
        BuildStage=""/>
 
   <Project name="Deploy (Prod)" category=""
@@ -37,6 +40,7 @@
        lastBuildLabel="469"
        lastBuildTime="2008-12-10T11:47:09.9375-06:00" nextBuildTime="2008-12-12T21:09:27.234375-06:00"
        webUrl="http://CCNETLIVE/ccnet"
+       serverName="local"
        CurrentMessage=""
        BuildStage=""/>
 
@@ -47,6 +51,7 @@
        lastBuildTime="2008-12-10T11:47:09.9375-06:00" nextBuildTime="2008-12-12T21:09:27.234375-06:00"
        webUrl="http://CCNETLIVE/ccnet"
        CurrentMessage=""
+       serverName="WinBuilder"
        BuildStage=""/>
 
   <Project name="Bookkeeping_QA" category="Finance_QA"
@@ -55,8 +60,41 @@
      lastBuildLabel="469"
      lastBuildTime="2008-12-10T11:47:09.9375-06:00" nextBuildTime="2008-12-12T21:09:27.234375-06:00"
      webUrl="http://CCNETLIVE/ccnet"
+  	 serverName="WinBuilder"
+     CurrentMessage=""
+     BuildStage=""/>
+
+  <Project name="StockOverview_QA" category="Stock_QA"
+     activity="Sleeping"
+     lastBuildStatus="Success"
+     lastBuildLabel="469"
+     lastBuildTime="2008-12-10T11:47:09.9375-06:00" nextBuildTime="2008-12-12T21:09:27.234375-06:00"
+     webUrl="http://CCNETLIVE/ccnet"
+  	 serverName="WinBuilder"
+     CurrentMessage=""
+     BuildStage=""/>
+
+  <Project name="StockOverview_QA" category="Stock_QA"
+     activity="Sleeping"
+     lastBuildStatus="Failure"
+     lastBuildLabel="469"
+     lastBuildTime="2008-12-10T11:47:09.9375-06:00" nextBuildTime="2008-12-12T21:09:27.234375-06:00"
+     webUrl="http://CCNETLIVE/ccnet"
+  	 serverName="linuxBuilder"
      CurrentMessage=""
      BuildStage=""/>
 
 
 </Projects>
+
+
+<!-- ruby version -->
+
+<!--
+<Projects>
+  <Project lastBuildStatus="Success" lastBuildLabel="c9e74f2" name="CruiseControlRB" lastBuildTime="2011-02-11T10:30:18.0000000-00:00" nextBuildTime="1970-01-01T00:00:00.000000-00:00" category="" webUrl="http://cruisecontrolrb.thoughtworks.com/projects/CruiseControlRB" activity="Sleeping"/>
+  <Project lastBuildStatus="Success" lastBuildLabel="44d860" name="jdtc" lastBuildTime="2009-02-24T11:14:27.0000000-00:00" nextBuildTime="1970-01-01T00:00:00.000000-00:00" category="" webUrl="http://cruisecontrolrb.thoughtworks.com/projects/jdtc" activity="Sleeping"/>
+  <Project lastBuildStatus="Failure" lastBuildLabel="7bfa30f" name="manifest" lastBuildTime="2010-04-16T11:28:51.0000000-00:00" nextBuildTime="1970-01-01T00:00:00.000000-00:00" category="" webUrl="http://cruisecontrolrb.thoughtworks.com/projects/manifest" activity="Sleeping"/>
+  <Project lastBuildStatus="Failure" lastBuildLabel="fd553b8" name="rspec" lastBuildTime="2011-02-11T10:25:11.0000000-00:00" nextBuildTime="1970-01-01T00:00:00.000000-00:00" category="" webUrl="http://cruisecontrolrb.thoughtworks.com/projects/rspec" activity="Sleeping"/>
+</Projects>
+-->

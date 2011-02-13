@@ -4,7 +4,8 @@
 
     <DataTemplate x:Key="SkinTemplate">
         <Border BorderBrush="Black" BorderThickness="0.5">
-            <TextBlock Padding="1" TextAlignment="Center" FontFamily="Tahoma">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Padding="1" TextAlignment="Center" FontFamily="Tahoma">
                 
                 <TextBlock.Text>
                     <MultiBinding Converter="{Converters:BuildNameToMessageConverter}">
@@ -19,8 +20,17 @@
                         <GradientStop Offset="0.5" Color="{Binding Path=CurrentState, Converter={Converters:StateToColorConverter}}"/>
                     </LinearGradientBrush>
                 </TextBlock.Background>
-                
-            </TextBlock>
+
+                </TextBlock>
+                <TextBlock Visibility="{Binding ServerNameVisible}" Text="{Binding ServerName}" TextAlignment="Center">
+                    <TextBlock.Background>
+                        <LinearGradientBrush EndPoint="0,2" >
+                            <GradientStop Offset="0" Color="AliceBlue" />
+                            <GradientStop Offset="0.5" Color="DarkBlue" />
+                        </LinearGradientBrush >
+                    </TextBlock.Background>
+                </TextBlock>
+            </StackPanel>
         </Border>
     </DataTemplate>
 
