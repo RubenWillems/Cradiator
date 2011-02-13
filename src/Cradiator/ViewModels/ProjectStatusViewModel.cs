@@ -1,0 +1,118 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Cradiator.ViewModels
+{
+    public class ProjectStatusViewModel : NotifyingClass
+    {
+
+        private string _name;
+        private string _currentState;
+        private string _CurrentMessage;
+        private string _ProjectActivity;
+        private bool _isBroken;
+        private bool _isSuccessful;
+
+        [Obsolete("only used by xaml")]
+        public ProjectStatusViewModel()
+        {
+        }
+
+
+        public ProjectStatusViewModel(Model.ProjectStatus ps, Config.IViewSettings vs)
+        {
+            this.CurrentMessage = ps.CurrentMessage;
+            this.CurrentState = ps.CurrentState;
+            this.IsBroken = ps.IsBroken;
+            this.IsSuccessful = ps.IsSuccessful;
+            this.Name = ps.Name;
+            this.ProjectActivity = ps.ProjectActivity.ToString();
+
+
+        }
+
+
+        #region ProjectStatusProps
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name == value) return;
+                _name = value;
+                Notify("Name");
+            }
+        }
+
+
+        public string CurrentState
+        {
+            get { return _currentState; }
+            set
+            {
+                if (_currentState == value) return;
+                _currentState = value;
+                Notify("CurrentState");
+            }
+        }
+
+
+        public string CurrentMessage
+        {
+            get { return _CurrentMessage; }
+            set
+            {
+                if (_CurrentMessage == value) return;
+                _CurrentMessage = value;
+                Notify("CurrentMessage");
+            }
+        }
+
+        public string ProjectActivity
+        {
+            get { return _ProjectActivity; }
+            set
+            {
+                if (_ProjectActivity == value) return;
+                _ProjectActivity = value;
+                Notify("ProjectActivity");
+            }
+        }
+
+        public bool IsBroken
+        {
+            get { return _isBroken; }
+            set
+            {
+                if (_isBroken == value) return;
+                _isBroken = value;
+                Notify("IsBroken");
+            }
+        }
+
+        public bool IsSuccessful
+        {
+            get { return _isSuccessful; }
+            set
+            {
+                if (_isSuccessful == value) return;
+                _isSuccessful = value;
+                Notify("IsSuccessful");
+            }
+        }
+        #endregion
+
+
+        #region SettingProps
+
+        
+
+
+        #endregion
+
+
+    }
+}

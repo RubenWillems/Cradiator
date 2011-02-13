@@ -4,16 +4,18 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Windows;
+using Cradiator.Model;
+using Cradiator.Config;
 
-namespace Cradiator.Model
+namespace Cradiator.ViewModels
 {
     /// <summary>
     /// Master data over a certain view
     /// so you could show some statistics or whatever besides just the project names and their states
     /// </summary>
-    public class ViewData : INotifyPropertyChanged
+    public class ViewDataViewModel : NotifyingClass
     {
-        private List<ProjectStatus> _projects = new List<ProjectStatus>();
+        private List<ProjectStatusViewModel> _projects = new List<ProjectStatusViewModel>();
         private decimal _okPercentage;
         private int _AmountOK;
         private int _AmountNotOK;
@@ -23,21 +25,35 @@ namespace Cradiator.Model
 
         private string _name;
 
-        public ViewData()
+        
+        [Obsolete("only used by XAML")]
+        public ViewDataViewModel()
         {
         }
 
 
-        public ViewData(string dataViewName, bool showOnlyBroken)
+        public ViewDataViewModel(IViewSettings vs, IEnumerable<ProjectStatus> projects)
         {
-            _name = dataViewName;
-            _ShowOnlyBroken = showOnlyBroken;
+
+            _name = vs.ViewName;
+            _ShowOnlyBroken = vs.ShowOnlyBroken;
+
+
+            List<ProjectStatusViewModel> dummy = new List<ProjectStatusViewModel>();
+
+            foreach (Model.ProjectStatus p in projects)
+            {
+                dummy.Add(new ProjectStatusViewModel(p,vs));
+            }
+
+
+            this.Projects = dummy;
         }
 
         /// <summary>
         /// The name of the view, taken from the config
-        /// only og importance when ShowOnlyBroken is true and all projects are ok
-        /// in that case the smiley is shown, so you know what view is all ok
+        /// only of importance when ShowOnlyBroken is true and all projects are ok
+        /// in that case the smiley is shown, so you know what view is ok
         /// </summary>
         public string Name
         {
@@ -57,7 +73,7 @@ namespace Cradiator.Model
         /// Whenever the list of projects is changed by setting a new value,
         /// the other properties will also be recalculated.
         /// </summary>
-        public List<Model.ProjectStatus> Projects
+        public List<ProjectStatusViewModel> Projects
         {
             get { return _projects; }
             set
@@ -148,7 +164,7 @@ namespace Cradiator.Model
 
         private void CalculateProperties()
         {
-            if (this.Projects == null) this.Projects = new List<Cradiator.Model.ProjectStatus>();
+            if (this.Projects == null) this.Projects = new List<ProjectStatusViewModel>();
 
             AmountOK = this.Projects.Count(x => x.IsSuccessful);
             AmountNotOK = this.Projects.Count - AmountOK;
@@ -180,18 +196,5 @@ namespace Cradiator.Model
         }
 
 
-
-
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        void Notify(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
     }
 }

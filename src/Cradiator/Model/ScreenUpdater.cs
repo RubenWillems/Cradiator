@@ -9,96 +9,123 @@ using log4net;
 
 namespace Cradiator.Model
 {
-	public interface IScreenUpdater 
-	{
-		void Update();
-	}
+    public interface IScreenUpdater :  IConfigObserver
+    {
+        void Update();
+    }
 
-	public class ScreenUpdater : IScreenUpdater
-	{
-		static readonly ILog _log = LogManager.GetLogger(typeof(ScreenUpdater).Name);
+    public class ScreenUpdater : IScreenUpdater
+    {
+        static readonly ILog _log = LogManager.GetLogger(typeof(ScreenUpdater).Name);
 
-		readonly ICradiatorView _view;
-		readonly DiscJockey _discJockey;
-		readonly ICountdownTimer _countdownTimer;
-		readonly IPollTimer _pollTimer;
-		private readonly IConfigSettings _configSettings;
-		readonly BuildDataFetcher _fetcher;
-		readonly BuildDataTransformer _transformer;
-		readonly FetchExceptionHandler _fetchExceptionHandler;
-		readonly BackgroundWorker _worker;
+        readonly ICradiatorView _view;
+        readonly DiscJockey _discJockey;
+        readonly ICountdownTimer _countdownTimer;
+        readonly IPollTimer _pollTimer;
+        private readonly IConfigSettings _configSettings;
+        readonly BuildDataFetcher _fetcher;
+        readonly BuildDataTransformer _transformer;
+        readonly FetchExceptionHandler _fetchExceptionHandler;
+        readonly BackgroundWorker _worker;
+        private IViewSettings _viewSettings;
 
-		public ScreenUpdater(ICradiatorView view, DiscJockey discJockey, ICountdownTimer countdownTimer, 
-							 IPollTimer pollTimer, IConfigSettings configSettings, 
-							 BuildDataFetcher buildDataFetcher, BuildDataTransformer transformer, 
-							 FetchExceptionHandler fetchExceptionHandler, BackgroundWorker worker)
-		{
-			_view = view;
-			_discJockey = discJockey;
-			_countdownTimer = countdownTimer;
-			_pollTimer = pollTimer;
-			_configSettings = configSettings;
-			_pollTimer.Tick = (sender, e) => PollTimeup();
-			_fetcher = buildDataFetcher;
-			_fetchExceptionHandler = fetchExceptionHandler;
-			_transformer = transformer;
+        public ScreenUpdater(ICradiatorView view, DiscJockey discJockey, ICountdownTimer countdownTimer,
+                             IPollTimer pollTimer, IConfigSettings configSettings,
+                             BuildDataFetcher buildDataFetcher, BuildDataTransformer transformer,
+                             FetchExceptionHandler fetchExceptionHandler, BackgroundWorker worker)
+        {
+            _view = view;
+            _discJockey = discJockey;
+            _countdownTimer = countdownTimer;
+            _pollTimer = pollTimer;
+            _configSettings = configSettings;
+            _pollTimer.Tick = (sender, e) => PollTimeup();
+            _fetcher = buildDataFetcher;
+            _fetchExceptionHandler = fetchExceptionHandler;
+            _transformer = transformer;
 
-			_worker = worker;
-			worker.DoWork += FetchData;
-			worker.RunWorkerCompleted += DataFetched;
-		}
+            SetLocalValuesFromConfig(configSettings);
 
-	    private void PollTimeup()
-		{
-			_configSettings.RotateView();
-			Update();
-		}
+            _configSettings.AddObserver(this);
 
-		public void Update()
-		{
-			_countdownTimer.Stop();
-			_pollTimer.Stop();
-			_view.ShowProgress = true;
+            _worker = worker;
+            worker.DoWork += FetchData;
+            worker.RunWorkerCompleted += DataFetched;
+        }
 
-			_worker.RunWorkerAsync();
-		}
+        private void PollTimeup()
+        {
+            _configSettings.RotateView();
+            Update();
+        }
 
-		void FetchData(object sender, DoWorkEventArgs e)
-		{
-			try
-			{
-				var xmlResults = _fetcher.Fetch();
-				e.Result = xmlResults;
-			}
-			catch (Exception exception)
-			{
-				_fetchExceptionHandler.Handle(exception);
-			}
-		}
+        public void Update()
+        {
+            _countdownTimer.Stop();
+            _pollTimer.Stop();
+            _view.ShowProgress = true;
 
-		void DataFetched(object sender, RunWorkerCompletedEventArgs e)
-		{
-			try
-			{
-				var xmlResults = e.Result as IEnumerable<string>;
-                ViewData projectData = new ViewData();
-				if (xmlResults != null)
-				{
-                    var xml = string.Join("", xmlResults.ToArray());
-                    projectData = _transformer.Transform(xml);
-				}
+            _worker.RunWorkerAsync();
+        }
 
-				_view.DataContext = projectData;
-                _discJockey.PlaySounds(projectData.Projects);
-			}
-			finally
-			{
-				_view.ShowProgress = false;
+        void FetchData(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                var xmlResults = _fetcher.Fetch();
+                e.Result = xmlResults;
+            }
+            catch (Exception exception)
+            {
+                _fetchExceptionHandler.Handle(exception);
+            }
+        }
 
-				_pollTimer.Start();
-				_countdownTimer.Reset();
-				_countdownTimer.Start();
-			}
-		}
-	}
+        void DataFetched(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                var xmlResults = e.Result as IEnumerable<string>;
+                IEnumerable<ProjectStatus> projectData = new List<ProjectStatus>();
+                if (xmlResults != null)
+                {
+                    projectData = xmlResults.SelectMany(xml =>
+                    {
+                        try
+                        {
+                            return _transformer.Transform(xml);
+                        }
+                        catch (Exception exception)
+                        {
+                            _log.Error(exception);
+                            return new List<ProjectStatus>();
+                        }
+                    });
+                }
+
+                _view.DataContext = new ViewModels.ViewDataViewModel(_viewSettings, projectData);
+                
+                _discJockey.PlaySounds(projectData);
+            }
+            finally
+            {
+                _view.ShowProgress = false;
+
+                _pollTimer.Start();
+                _countdownTimer.Reset();
+                _countdownTimer.Start();
+            }
+        }
+
+        public void ConfigUpdated(ConfigSettings newSettings)
+        {
+            SetLocalValuesFromConfig(newSettings);
+        }
+
+        void SetLocalValuesFromConfig(IConfigSettings newSettings)
+        {
+            _viewSettings = newSettings as IViewSettings;
+        }
+  
+    }
 }

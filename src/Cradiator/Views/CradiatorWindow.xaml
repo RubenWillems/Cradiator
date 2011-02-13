@@ -57,7 +57,7 @@
                     <Hyperlink Name="settingsLink" Style="{StaticResource HyperlinkStyle}">Settings (F12)</Hyperlink>
                 </TextBlock>
 
-                <TextBlock Name="countdownText" Text="00:00"
+                <TextBlock Name="countdownText" Text="00:00" HorizontalAlignment="Center"
                            Grid.Column="1" 
                            FontFamily="Verdana" FontSize="24" 
                            Margin="0,-11,0,-10"

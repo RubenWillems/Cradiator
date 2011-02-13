@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Ninject;
 using Cradiator.Services;
-using Cradiator.Model;
 
 namespace Cradiator.ViewModels
 {
@@ -14,12 +13,12 @@ namespace Cradiator.ViewModels
     /// a converter has for example, or brushes.
     /// Needed because of the ninject in the converters
     /// </summary>
-    public class DesignerViewDataViewModel : ViewData
+    public class DesignerViewDataViewModel : ViewDataViewModel
     {
 
         public DesignerViewDataViewModel()
         {
-            this.Projects = new List<Model.ProjectStatus>();
+            this.Projects = new List<ProjectStatusViewModel>();
 
             var cruiseDesignModule = new DesignTimeCradiatorNinjaModule();
             Ninjector.Kernel = new StandardKernel(cruiseDesignModule);
