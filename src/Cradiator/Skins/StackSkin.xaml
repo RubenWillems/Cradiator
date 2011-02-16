@@ -22,10 +22,10 @@
                 </TextBlock.Background>
 
                 </TextBlock>
-                <TextBlock Visibility="{Binding ServerNameVisible}" Text="{Binding ServerName}" TextAlignment="Center">
+                <TextBlock Visibility="{Binding ServerNameVisible}" Text="{Binding ServerName}" TextAlignment="Center" Foreground="WhiteSmoke">
                     <TextBlock.Background>
                         <LinearGradientBrush EndPoint="0,2" >
-                            <GradientStop Offset="0" Color="AliceBlue" />
+                            <GradientStop Offset="0" Color="LightBlue" />
                             <GradientStop Offset="0.5" Color="DarkBlue" />
                         </LinearGradientBrush >
                     </TextBlock.Background>

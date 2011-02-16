@@ -17,6 +17,7 @@ namespace Cradiator.Model
 		public ProjectActivity ProjectActivity { get; set; }
 		public string LastBuildStatus { get; set; }
         public string ServerName { get; set; }
+        public DateTime LastBuildTime { get; set; }
 
         [Obsolete("Constructor for XAML")]
         public ProjectStatus() { Name = "designer name"; }

@@ -44,7 +44,8 @@ namespace Cradiator.Model
                                   CurrentMessage = project.Attribute("CurrentMessage").GetValue(),
                                   LastBuildStatus = project.Attribute("lastBuildStatus").GetValue(),
                                   ProjectActivity = new ProjectActivity(project.Attribute("activity").GetValue()),
-                                  ServerName = project.Attribute("serverName").GetValue()
+                                  ServerName = project.Attribute("serverName").GetValue(),
+                                  LastBuildTime = System.Xml.XmlConvert.ToDateTime(project.Attribute("lastBuildTime").GetValue(), System.Xml.XmlDateTimeSerializationMode.Local)
                               })
                          
                          join m in
@@ -66,7 +67,8 @@ namespace Cradiator.Model
                              CurrentMessage = m != null ? m.Message : p.CurrentMessage,
                              LastBuildStatus = p.LastBuildStatus,
                              ProjectActivity = p.ProjectActivity,
-                             ServerName = p.ServerName
+                             ServerName = p.ServerName,
+                             LastBuildTime = p.LastBuildTime
                          }
                          );
 
