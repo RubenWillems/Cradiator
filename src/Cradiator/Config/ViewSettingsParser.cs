@@ -18,6 +18,9 @@ namespace Cradiator.Config
         const string ViewName = "name";
         const string ShowOnlyBroken = "showOnlyBroken";
         const string ShowServerName = "showServerName";
+        const string ShowOutOfDate = "showOutOfDate";
+        const string OutOfDateDifferenceInMinutes = "outOfDateDifferenceInMinutes";
+
 
         readonly XDocument _xdoc;
 
@@ -42,7 +45,7 @@ namespace Cradiator.Config
                                    .Elements("views")
                                    .Elements("view")
                  select new ViewSettings
-                            {
+                            {   
                                 URL = view.Attribute(Url).Value,
                                 ProjectNameRegEx = view.Attribute(ProjectRegex).Value,
                                 CategoryRegEx = view.Attribute(CategoryRegex).Value,
@@ -50,7 +53,9 @@ namespace Cradiator.Config
                                 SkinName = view.Attribute(Skin).Value,
                                 ViewName = view.Attribute(ViewName).Value,
                                 ShowOnlyBroken = bool.Parse(view.Attribute(ShowOnlyBroken).Value),
-                                ShowServerName = bool.Parse(view.Attribute(ShowServerName).Value)
+                                ShowServerName = bool.Parse(view.Attribute(ShowServerName).Value),
+                                ShowOutOfDate = bool.Parse(view.Attribute(ShowOutOfDate).Value),
+                                OutOfDateDifferenceInMinutes = int.Parse(view.Attribute(OutOfDateDifferenceInMinutes).Value)
                             }).ToList());
         }
 
@@ -86,6 +91,8 @@ namespace Cradiator.Config
             view1.Attribute(ViewName).Value = settings.ViewName;
             view1.Attribute(ShowOnlyBroken).Value = settings.ShowOnlyBroken.ToString();
             view1.Attribute(ShowServerName).Value = settings.ShowServerName.ToString();
+            view1.Attribute(ShowOutOfDate).Value = settings.ShowOutOfDate.ToString();
+            view1.Attribute(OutOfDateDifferenceInMinutes).Value = settings.OutOfDateDifferenceInMinutes.ToString();
 
             var xml = new StringBuilder();
             using (var xmlWriter = XmlWriter.Create(xml, new XmlWriterSettings

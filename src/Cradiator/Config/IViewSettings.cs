@@ -16,6 +16,10 @@ namespace Cradiator.Config
         bool ShowOnlyBroken { get; set; }
         bool ShowServerName { get; set; }
 
+        //extended settings
+        bool ShowOutOfDate { get; set; }
+        int OutOfDateDifferenceInMinutes { get; set; }
+
     }
     // ReSharper restore UnusedMemberInSuper.Global
 }

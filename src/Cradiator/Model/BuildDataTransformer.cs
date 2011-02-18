@@ -72,7 +72,6 @@ namespace Cradiator.Model
                          }
                          );
 
-            var x = query.ToArray();
 
             return query.ToArray();
         }

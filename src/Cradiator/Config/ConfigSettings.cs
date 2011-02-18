@@ -58,7 +58,9 @@ namespace Cradiator.Config
                         SkinName = SkinName,
                         ViewName = ViewName,
                         ShowOnlyBroken = ShowOnlyBroken,
-                        ShowServerName = ShowServerName
+                        ShowServerName = ShowServerName,
+                        ShowOutOfDate = ShowOutOfDate,
+                        OutOfDateDifferenceInMinutes = OutOfDateDifferenceInMinutes
 					});
 				}
 
@@ -111,6 +113,9 @@ namespace Cradiator.Config
             ViewName = q.ViewName;
             ShowOnlyBroken = q.ShowOnlyBroken;
             ShowServerName = q.ShowServerName;
+            ShowOutOfDate = q.ShowOutOfDate;
+            OutOfDateDifferenceInMinutes = q.OutOfDateDifferenceInMinutes;
+
 		}
 
 		private void LoadViewSettings()

@@ -93,15 +93,40 @@ namespace Cradiator.Config
             }
         }
 
-        protected bool _ShowServeName;
+        protected bool _ShowServerName;
         public bool ShowServerName
         {
-            get { return _ShowServeName; }
+            get { return _ShowServerName; }
             set
             {
-                if (_ShowServeName == value) return;
-                _ShowServeName = value;
+                if (_ShowServerName == value) return;
+                _ShowServerName = value;
                 Notify("ShowServerName");
+            }
+        }
+
+
+        private bool _showOutOfDate;
+        public bool ShowOutOfDate
+        {
+            get { return _showOutOfDate; }
+            set
+            {
+                if (_showOutOfDate == value) return;
+                _showOutOfDate = value;
+                Notify("ShowOutOfDate");
+            }
+        }
+
+        private int _outOfDateDifferenceInMinutes;
+        public int OutOfDateDifferenceInMinutes
+        {
+            get { return _outOfDateDifferenceInMinutes; }
+            set
+            {
+                if (_outOfDateDifferenceInMinutes == value) return;
+                _outOfDateDifferenceInMinutes = value;
+                Notify("OutOfDateDifferenceInMinutes");
             }
         }
 

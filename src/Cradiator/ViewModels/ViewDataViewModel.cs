@@ -22,8 +22,11 @@ namespace Cradiator.ViewModels
         private int _AmountOK;
         private int _AmountNotOK;
         private bool _ShowOnlyBroken;
+        private bool _ShowOutOfDate;
+
         private Visibility _ShowProjects;
         private Visibility _ShowAllOK;
+        private Visibility _ShowOutOfDateProjects;
 
         private string _viewName;
 
@@ -39,13 +42,28 @@ namespace Cradiator.ViewModels
 
             _viewName = vs.ViewName;
             _ShowOnlyBroken = vs.ShowOnlyBroken;
+            _ShowOutOfDate = vs.ShowOutOfDate;
 
             List<ProjectStatusViewModel> dummy = new List<ProjectStatusViewModel>();
 
-            foreach (Model.ProjectStatus p in projects)
+
+            if (vs.ShowOutOfDate)
             {
-                dummy.Add(new ProjectStatusViewModel(p, vs));
+                var highestBuildDate = projects.Max(d => d.LastBuildTime);
+
+                foreach (Model.ProjectStatus p in projects)
+                {
+                    if (highestBuildDate.Subtract(p.LastBuildTime).TotalMinutes > vs.OutOfDateDifferenceInMinutes) dummy.Add(new ProjectStatusViewModel(p, vs));
+                }
             }
+            else
+            {
+                foreach (Model.ProjectStatus p in projects)
+                {
+                    dummy.Add(new ProjectStatusViewModel(p, vs));
+                }
+            }
+
 
             this.Projects = dummy;
         }
@@ -75,11 +93,11 @@ namespace Cradiator.ViewModels
         /// </summary>
         public List<ProjectStatusViewModel> Projects
         {
-            get 
-            { 
+            get
+            {
                 if (ShowOnlyBroken) return _projects.Where(p => p.IsBroken).ToList();
                 return _projects;
-            
+
             }
             set
             {
@@ -163,6 +181,21 @@ namespace Cradiator.ViewModels
         }
 
         /// <summary>
+        /// Taken from the config and needed to show only the out of date projects or not
+        /// </summary>
+        public bool ShowOutOfDate
+        {
+            get { return _ShowOutOfDate; }
+            set
+            {
+                if (_ShowOutOfDate == value) return;
+                _ShowOutOfDate = value;
+                Notify("ShowOutOfDate");
+            }
+        }
+
+
+        /// <summary>
         /// Show the projects viewbox
         /// </summary>
         public Visibility ShowProjects
@@ -191,6 +224,22 @@ namespace Cradiator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Show out of date projects only
+        /// </summary>
+        public Visibility ShowOutOfDateProjects
+        {
+            get { return _ShowOutOfDateProjects; }
+            set
+            {
+                if (_ShowOutOfDateProjects == value) return;
+                _ShowOutOfDateProjects = value;
+                Notify("ShowOutOfDateProjects");
+            }
+        }
+
+
+
 
         private void CalculateProperties()
         {
@@ -212,18 +261,43 @@ namespace Cradiator.ViewModels
             }
 
 
-            //when showonly broken is set to true, and everything is ok, show the OK screen
-            if (ShowOnlyBroken && OKPercentage == 100)
+
+
+            if (ShowOutOfDate)
             {
-                ShowAllOK = Visibility.Visible;
-                ShowProjects = Visibility.Collapsed;
+                if (AmountTotal == 0)
+                {
+                    ShowAllOK = Visibility.Visible;
+                    ShowOutOfDateProjects = Visibility.Collapsed;
+                    ShowProjects = Visibility.Collapsed;
+                }
+
+                else
+                {
+                    ShowAllOK = Visibility.Collapsed;
+                    ShowOutOfDateProjects = Visibility.Visible;
+                    ShowProjects = Visibility.Collapsed;
+                }
 
             }
             else
             {
-                ShowAllOK = Visibility.Collapsed;
-                ShowProjects = Visibility.Visible;
+
+                //when showonly broken is set to true, and everything is ok, show the OK screen
+                if (ShowOnlyBroken && OKPercentage == 100)
+                {
+                    ShowAllOK = Visibility.Visible;
+                    ShowProjects = Visibility.Collapsed;
+                    ShowOutOfDateProjects = Visibility.Collapsed;
+                }
+                else
+                {
+                    ShowAllOK = Visibility.Collapsed;
+                    ShowProjects = Visibility.Visible;
+                    ShowOutOfDateProjects = Visibility.Collapsed;
+                }
             }
+
 
             AmountHeader = string.Format("Project Count : {0} ", this.AmountTotal);
         }

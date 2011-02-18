@@ -78,11 +78,22 @@
      activity="Sleeping"
      lastBuildStatus="Failure"
      lastBuildLabel="469"
-     lastBuildTime="2008-12-10T11:47:09.9375-06:00" nextBuildTime="2008-12-12T21:09:27.234375-06:00"
+     lastBuildTime="2008-12-10T11:48:09.9375-06:00" nextBuildTime="2008-12-12T21:09:27.234375-06:00"
      webUrl="http://CCNETLIVE/ccnet"
   	 serverName="linuxBuilder"
      CurrentMessage=""
      BuildStage=""/>
+
+
+  <Project name="StockOverview_QA" category="Stock_QA"
+   activity="Sleeping"
+   lastBuildStatus="Success"
+   lastBuildLabel="469"
+   lastBuildTime="2008-12-09T11:47:09.9375-06:00" nextBuildTime="2008-12-10T21:09:27.234375-06:00"
+   webUrl="http://CCNETLIVE/ccnet"
+   serverName="MacBuilder"
+   CurrentMessage=""
+   BuildStage=""/>
 
 
 </Projects>

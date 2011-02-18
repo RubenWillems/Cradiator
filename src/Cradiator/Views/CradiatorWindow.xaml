@@ -86,6 +86,8 @@
             <ItemsControl ItemsSource="{Binding Projects}" Style="{DynamicResource SkinStyle}" />
         </Viewbox>
 
+        
+        
         <Grid DockPanel.Dock="Top"   Visibility="{Binding ShowAllOK}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75*" />
@@ -106,5 +108,33 @@
                 </Label>
             </Viewbox>
         </Grid>
+
+
+
+        <Grid DockPanel.Dock="Top"   Visibility="{Binding ShowOutOfDateProjects}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75*" />
+                <RowDefinition Height="25*" />
+            </Grid.RowDefinitions>
+            <Viewbox Grid.Row="0"  Stretch="Fill" >
+                <ItemsControl ItemsSource="{Binding Projects}" Style="{DynamicResource SkinStyle}" />
+            </Viewbox>
+            <Viewbox Grid.Row="1"  >
+                <Label Content="{Binding ViewName}" FontWeight="Bold" >
+                    <Label.Foreground>
+                        <LinearGradientBrush  >
+                            <GradientStop Color="OrangeRed" Offset="0.0" />
+                            <GradientStop Color="Orange" Offset="0.40" />
+                            <GradientStop Color="LightGreen" Offset="0.60" />
+                            <GradientStop Color="Orange" Offset="0.80" />
+                            <GradientStop Color="OrangeRed" Offset="1.00" />
+                        </LinearGradientBrush >
+                    </Label.Foreground>
+                </Label>
+            </Viewbox>
+        </Grid>
+
+
+
     </DockPanel>
 </Window>
