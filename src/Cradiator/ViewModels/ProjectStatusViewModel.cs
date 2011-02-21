@@ -16,6 +16,7 @@ namespace Cradiator.ViewModels
         private bool _isBroken;
         private bool _isSuccessful;
         private Visibility _serverNameVisible;
+        private DateTime _lastBuildTime;
 
         [Obsolete("only used by xaml")]
         public ProjectStatusViewModel()
@@ -125,7 +126,16 @@ namespace Cradiator.ViewModels
         }
 
 
-
+        public DateTime LastBuildTime
+        {
+            get { return _lastBuildTime; }
+            set
+            {
+                if (_lastBuildTime == value) return;
+                _lastBuildTime = value;
+                Notify("LastBuildTime");
+            }
+        }
 
 
         #endregion

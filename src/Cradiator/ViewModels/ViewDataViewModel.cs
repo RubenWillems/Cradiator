@@ -29,6 +29,7 @@ namespace Cradiator.ViewModels
         private Visibility _ShowOutOfDateProjects;
 
         private string _viewName;
+        private int _outOfDateDifferenceInMinutes;
 
 
         [Obsolete("only used by XAML")]
@@ -43,27 +44,14 @@ namespace Cradiator.ViewModels
             _viewName = vs.ViewName;
             _ShowOnlyBroken = vs.ShowOnlyBroken;
             _ShowOutOfDate = vs.ShowOutOfDate;
+            _outOfDateDifferenceInMinutes = vs.OutOfDateDifferenceInMinutes;
 
             List<ProjectStatusViewModel> dummy = new List<ProjectStatusViewModel>();
 
-
-            if (vs.ShowOutOfDate)
+            foreach (Model.ProjectStatus p in projects)
             {
-                var highestBuildDate = projects.Max(d => d.LastBuildTime);
-
-                foreach (Model.ProjectStatus p in projects)
-                {
-                    if (highestBuildDate.Subtract(p.LastBuildTime).TotalMinutes > vs.OutOfDateDifferenceInMinutes) dummy.Add(new ProjectStatusViewModel(p, vs));
-                }
+                dummy.Add(new ProjectStatusViewModel(p, vs));
             }
-            else
-            {
-                foreach (Model.ProjectStatus p in projects)
-                {
-                    dummy.Add(new ProjectStatusViewModel(p, vs));
-                }
-            }
-
 
             this.Projects = dummy;
         }
@@ -96,6 +84,13 @@ namespace Cradiator.ViewModels
             get
             {
                 if (ShowOnlyBroken) return _projects.Where(p => p.IsBroken).ToList();
+
+                if (ShowOutOfDate)
+                {
+                    var highestBuildDate = _projects.Max(d => d.LastBuildTime);
+                    return _projects.Where(p => highestBuildDate.Subtract(p.LastBuildTime).TotalMinutes > OutOfDateDifferenceInMinutes).ToList();
+                }
+
                 return _projects;
 
             }
@@ -239,12 +234,22 @@ namespace Cradiator.ViewModels
         }
 
 
+        public int OutOfDateDifferenceInMinutes
+        {
+            get { return _outOfDateDifferenceInMinutes; }
+            set
+            {
+                if (_outOfDateDifferenceInMinutes == value) return;
+                _outOfDateDifferenceInMinutes = value;
+                Notify("OutOfDateDifferenceInMinutes");
+            }
+
+        }
+
 
 
         private void CalculateProperties()
         {
-            if (this._projects == null) this._projects = new List<ProjectStatusViewModel>();
-
             AmountTotal = this._projects.Count;
             AmountOK = this._projects.Count(x => x.IsSuccessful);
             AmountNotOK = this._projects.Count - AmountOK;
@@ -265,7 +270,10 @@ namespace Cradiator.ViewModels
 
             if (ShowOutOfDate)
             {
-                if (AmountTotal == 0)
+                var highestBuildDate = _projects.Max(d => d.LastBuildTime);
+                var outOfSynchs = _projects.Where(p => highestBuildDate.Subtract(p.LastBuildTime).TotalMinutes > OutOfDateDifferenceInMinutes).ToList();
+
+                if (outOfSynchs.Count == 0)
                 {
                     ShowAllOK = Visibility.Visible;
                     ShowOutOfDateProjects = Visibility.Collapsed;
