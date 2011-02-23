@@ -33,6 +33,7 @@ namespace Cradiator.ViewModels
             this.Name = ps.Name;
             this.ProjectActivity = ps.ProjectActivity.ToString();
             this.ServerName = ps.ServerName;
+            this.LastBuildTime = ps.LastBuildTime;
 
             if (vs.ShowServerName)
             {
