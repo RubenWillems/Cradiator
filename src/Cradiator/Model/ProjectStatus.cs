@@ -11,6 +11,7 @@ namespace Cradiator.Model
 		public const string FAILURE = "failure";
 		public const string EXCEPTION = "exception";
 		public const string ERROR = "error";
+        public const string UNKNOWN = "unknown";
 
 		public string Name { get;  private set; } 
 		public string CurrentMessage { get; set; }
@@ -48,7 +49,8 @@ namespace Cradiator.Model
 			get 
 			{ 
 				return LastBuildStatus.EqualsIgnoreCase(SUCCESS) || 
-					   LastBuildStatus.EqualsIgnoreCase(NORMAL); 
+					   LastBuildStatus.EqualsIgnoreCase(NORMAL) ||
+                       LastBuildStatus.EqualsIgnoreCase(UNKNOWN) ; // CCNET unknown is when is project has not build yet.
 			}
 		}
 

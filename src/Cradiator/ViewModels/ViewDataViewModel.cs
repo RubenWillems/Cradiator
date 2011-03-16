@@ -83,7 +83,11 @@ namespace Cradiator.ViewModels
         {
             get
             {
-                if (ShowOnlyBroken) return _projects.Where(p => p.IsBroken).ToList();
+                if (ShowOnlyBroken)
+                {
+                    var result = _projects.Where(p => p.IsBroken).ToList();
+                    return result;
+                }
 
                 if (ShowOutOfDate)
                 {
